@@ -1,8 +1,11 @@
 from tkinter import *
 #import für tkinter
 
-#def en Fenster 
+#def en Fenster
 window = Tk()
-window.geometry("1920x1080")
+window.geometry("692x508")
+window.title("Rechtschreib-Tool")
+window.configure(bg="#E0470A")
 
-window.mainloop
+
+window.mainloop()
