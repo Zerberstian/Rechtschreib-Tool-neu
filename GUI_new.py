@@ -26,9 +26,13 @@ window.attributes("-alpha", 0.7)
 icon = PhotoImage(file="srhIcon.png")   #changing the tk icon to srh icon
 window.iconphoto(True, icon)
 
+MenuFrame = Frame(window, bg="#E0470A")
+MenuFrame.place(x=0, y=0)
+
 #the Label for the Icon
-label1 = Label(window, image=icon)
-label1.place(x=0, y=0)
+label1 = Label(MenuFrame, image=icon)
+label1.pack(anchor="w", pady=(5, 20))
+#label1.place(x=0, y=0)
 
 label2 = Label(window,
                text="Hallo",    #adding a big Title
@@ -37,5 +41,20 @@ label2 = Label(window,
                fg="#ffffff")
 
 label2.pack()
+
+Button(MenuFrame,text="Start",
+       font=("Ariel", 30),
+       bg="#ffffff",
+       #command=
+       ).pack(anchor="w", fill="x", pady=5)
+
+Button(MenuFrame,text="Stop",
+       font=("Ariel", 30),
+       bg="#ffffff",
+       command="").pack(anchor="w", fill="x", pady=5)
+
+Button(MenuFrame,text="Exit",
+       font=("Ariel", 30),
+       bg="#ffffff").pack(anchor="w", fill="x", pady=5)
 
 window.mainloop()
