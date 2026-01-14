@@ -26,7 +26,7 @@ label1 = Label(window, image=icon)
 label1.place(x=0, y=0)
 
 label2 = Label(window, text="Hallo",    #adding a big Title
-               font=("Ariel", 30),
+               font=("Comic Sans", 30),
                bg="#E0470A",
                fg="#ffffff")
 
