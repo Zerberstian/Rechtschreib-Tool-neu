@@ -1,2 +1,8 @@
-#import tkinter as tk
-#from tkinter import *
+from tkinter import *
+#import für tkinter
+
+#def en Fenster 
+window = Tk()
+window.geometry("1920x1080")
+
+window.mainloop
