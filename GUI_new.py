@@ -3,8 +3,12 @@ from tkinter import *       #import für tkinter
 #def en Fenster
 window = Tk()
 
-window.geometry("500x300")  #seting base window sice
-window.attributes("-fullscreen", True)  #fullsc
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+
+# Set window size to screen size
+window.geometry(f"{screen_width}x{screen_height}+0+0")
+window.attributes("-fullscreen", False)  #fullsc
 window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False)) #Escape fullscreen exit
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))  #F12 fullscreen toggle
 window.title("Rechtschreib-Tool")   #changing Title from tk to Rechtschreib-Tool
