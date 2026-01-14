@@ -3,9 +3,16 @@ from tkinter import *
 
 #def en Fenster
 window = Tk()
-window.geometry("692x508")
-window.title("Rechtschreib-Tool")
-window.configure(bg="#E0470A")
 
+#seting base window sice
+window.geometry("692x508")
+window.title("Rechtschreib-Tool")   #changing Title from tk to Rechtschreib-Tool
+window.configure(bg="#E0470A")  #backround collor to SRH Collor
+
+icon = PhotoImage(file="srhIcon.png")   #changing the tk icon to srh icon
+window.iconphoto(True, icon)
+
+label1 = Label(window, image=icon)
+label1.place(x=0, y=0)
 
 window.mainloop()
