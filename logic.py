@@ -39,10 +39,18 @@ def aufgabe_open():
                     break
     print(f"Fehler {fehler}")
 
-#Function to choose a Questions
+#Function to choose a Übungsbereich
 def aufgabe_auswahl():
-    for aufgaben in aufgabenListe:
-        pass
+    while True:
+        uebungsbereichListe = uebungsbereich_auflisten()
+        auswahl =int(input("1, 2, 3, 4, 5 oder 6?"))
+        auswahl-=1
+        if auswahl < 6 and auswahl >= 0:
+            uebungsbereich = uebungsbereichListe[auswahl]
+            print(uebungsbereich)
+            break
+        else:
+            print("Ungültiger Bereich")
 
 #Function to show Questions with status "IstSpeziell" True
 def spezial_aufgaben():
@@ -59,11 +67,16 @@ def uebungsbereich_auflisten():
             pass
         else:
             uebungsbereichListe.append(uebungsbereich['Uebungsbereich'])
-    print(uebungsbereichListe)
+    x = 0
+    for i in uebungsbereichListe:
+        x+=1
+        print(f"{x}. {i}")
+    return(uebungsbereichListe)
 
 jsonladen()
 #aufgaben_titel_auflisten()
 #aufgaben_auflisten()
 #aufgabe_open()
 #spezial_aufgaben()
-uebungsbereich_auflisten()
+#uebungsbereich_auflisten()
+aufgabe_auswahl()
