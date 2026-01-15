@@ -85,15 +85,17 @@ def uebungsbereich_auflisten():
     for i in uebungsbereichListe:
         x+=1
         #print(f"{x}. {i}")
-    return(uebungsbereichListe)
+    return uebungsbereichListe
 
 #Function to list all Questiontitel based on chosen Übungsbereichen
 def list_questiontitel():
+    liste = []
     for bereich in uebungsbereich_auflisten():
         print(bereich)
         for aufgaben in aufgabenListe:
             if bereich == aufgaben['Uebungsbereich']:
-                print(aufgaben['Titel'])
+                liste.append(aufgaben['Titel'])
+    return liste
 
 
 
