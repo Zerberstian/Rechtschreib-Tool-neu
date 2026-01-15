@@ -2,7 +2,7 @@
 import json
 
 aufgabenListe = [] #Create an empty list for questions
-bereichListe = []
+bereichListe = [] #Create an empty list for topics
 
 #Function to load aufgaben.json
 def jsonladen():
@@ -40,7 +40,7 @@ def aufgabe_open():
                     break
     print(f"Fehler {fehler}")
 
-#Function to choose a Übungsbereich
+#Function to choose Übungsbereich
 def uebungsbereich_auswahl():
     while True:
         uebungsbereichListe = uebungsbereich_auflisten()
@@ -87,10 +87,15 @@ def uebungsbereich_auflisten():
         print(f"{x}. {i}")
     return(uebungsbereichListe)
 
-jsonladen()
-#aufgaben_titel_auflisten()
-#aufgaben_auflisten()
-#aufgabe_open()
-#spezial_aufgaben()
-#uebungsbereich_auflisten()
-uebungsbereich_auswahl()
+#Function to list all Questiontitel based on chosen Übungsbereichen
+def list_questiontitel():
+    pass
+if __name__ == '__main__':
+
+    jsonladen()
+    #aufgaben_titel_auflisten()
+    #aufgaben_auflisten()
+    aufgabe_open()
+    #spezial_aufgaben()
+    #uebungsbereich_auflisten()
+    uebungsbereich_auswahl()
