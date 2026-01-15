@@ -1,9 +1,10 @@
 from tkinter import *       #import for tkinter
 import os                   #import for Operating System
-import subprocess
 import sys                  #impoer system
+#from test2 import uebungsbereich_auflisten, aufgabenListe
 
-#def a Window
+##
+# def a Window
 window = Tk()
 
 window.update_idletasks()
@@ -33,11 +34,13 @@ window.iconphoto(True, icon)
 def show_select_frame():
     MenuFrame.place_forget()
     label2.pack_forget()
-    SelectFrame.place(x=0, y=0)
+    SelectFrame.place(x=0, y=0,relwidth=1, relheight=1)
+    #SelectUebungFrame.place(x=screen_width/2, y=screen_height/2)
 
 def back_to_main_frame():
     MenuFrame.place(x=0, y=0)
     SelectFrame.place_forget()
+    #SelectUebungFrame.place_forget()
     label2.pack()
 
 def open_instruktion_pdf():
@@ -46,12 +49,15 @@ def open_instruktion_pdf():
     if sys.platform.startswith("win"):
         os.startfile(pdf_path)
 
+
 #the Main Menu Frame
 MenuFrame = Frame(window, bg="#E0470A")
 MenuFrame.place(x=0, y=0)
 
 #the Frame to select your
 SelectFrame = Frame(window, bg="#E0470A")
+
+#SelectUebungFrame = Frame(SelectFrame, bg="#E0470A")
 
 #the Label for the Icon
 label1 = Label(MenuFrame, image=icon)
@@ -71,27 +77,39 @@ Button(MenuFrame,text="Start",
        font=("Ariel", 30),
        bg="#ffffff",
        command=show_select_frame,
-       ).pack(anchor="w", fill="x", pady=5)
+       ).pack(anchor="w",fill="x", pady=5)
+
 
 #Button for going back to Main Menu
+
 Button(SelectFrame,text="zurück",
        font=("Ariel", 30),
        bg="#ffffff",
        command=back_to_main_frame,
-       ).pack(anchor="w", fill="x", pady=5)
+       ).pack(anchor="w", pady=5)
 
 # Button for idk tbh
 Button(MenuFrame,text="Erklärung",
        font=("Ariel", 30),
        bg="#ffffff",
        command=open_instruktion_pdf,
-       ).pack(anchor="w", fill="x", pady=5)
+       ).pack(anchor="w",fill="x",  pady=5)
 
+'''
 # Button for idk tbh
 Button(MenuFrame,text="Exit",
        font=("Ariel", 30),
        bg="#ffffff",
        command="",
-       ).pack(anchor="w", fill="x", pady=5)
+       ).pack(anchor="w",fill="x",  pady=5)
+'''
+
+Button(SelectFrame,text= "leck eier du leleck",
+       font=("Ariel", 30),
+       bg="#ffffff",
+       command="",
+       ).place(x=screen_width/2, y=screen_height/2, anchor="center")
+
+#,relx=0.5, rely=0.5,
 
 window.mainloop()
