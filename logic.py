@@ -64,9 +64,8 @@ def dict_questiontitel():
         print(i , len(bereichdict[i]), "\n",  bereichdict[i])
     return bereichdict
 
-
+#Ich brauche mehr Plan denn ich habe kein Plan mehr
 
 if __name__ == '__main__':
-
     jsonladen()
     dict_questiontitel()
