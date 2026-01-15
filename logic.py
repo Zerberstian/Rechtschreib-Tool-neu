@@ -2,6 +2,7 @@
 import json
 
 aufgabenListe = [] #Create an empty list for questions
+bereichListe = []
 
 #Function to load aufgaben.json
 def jsonladen():
@@ -40,7 +41,7 @@ def aufgabe_open():
     print(f"Fehler {fehler}")
 
 #Function to choose a Übungsbereich
-def aufgabe_auswahl():
+def uebungsbereich_auswahl():
     while True:
         uebungsbereichListe = uebungsbereich_auflisten()
         auswahl =int(input("1, 2, 3, 4, 5 oder 6?"))
@@ -48,9 +49,22 @@ def aufgabe_auswahl():
         if auswahl < 6 and auswahl >= 0:
             uebungsbereich = uebungsbereichListe[auswahl]
             print(uebungsbereich)
+            if uebungsbereich not in bereichListe:
+                bereichListe.append(uebungsbereich)
+            else:
+                print("Bereits ausgewählt")
             break
         else:
             print("Ungültiger Bereich")
+    while True:
+        nochmal = input("Noch ein Übungsbereich auswählen? Y/N\n")
+        if nochmal.lower() == "y" :
+            uebungsbereich_auswahl()
+        elif nochmal.lower() == "n":
+            break
+        else:
+            print('You Stupid')
+    print(f"Die Ausgewählten Übungsbereiche sind {bereichListe}")
 
 #Function to show Questions with status "IstSpeziell" True
 def spezial_aufgaben():
@@ -79,4 +93,4 @@ jsonladen()
 #aufgabe_open()
 #spezial_aufgaben()
 #uebungsbereich_auflisten()
-aufgabe_auswahl()
+uebungsbereich_auswahl()
