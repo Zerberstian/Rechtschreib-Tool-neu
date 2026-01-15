@@ -1,3 +1,5 @@
-from GUI_new import *
+from  GUI_new import *
+from logic import *
 
-if __name__ == "__main__" 
+if __name__ == "__main__":
+    window.mainloop()
