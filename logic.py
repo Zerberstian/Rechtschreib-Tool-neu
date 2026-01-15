@@ -84,18 +84,26 @@ def uebungsbereich_auflisten():
     x = 0
     for i in uebungsbereichListe:
         x+=1
-        print(f"{x}. {i}")
+        #print(f"{x}. {i}")
     return(uebungsbereichListe)
 
 #Function to list all Questiontitel based on chosen Übungsbereichen
 def list_questiontitel():
-    pass
+    for bereich in uebungsbereich_auflisten():
+        print(bereich)
+        for aufgaben in aufgabenListe:
+            if bereich == aufgaben['Uebungsbereich']:
+                print(aufgaben['Titel'])
+
+
+
 if __name__ == '__main__':
 
     jsonladen()
     #aufgaben_titel_auflisten()
     #aufgaben_auflisten()
-    aufgabe_open()
+    #aufgabe_open()
     #spezial_aufgaben()
     #uebungsbereich_auflisten()
-    uebungsbereich_auswahl()
+    #uebungsbereich_auswahl()
+    list_questiontitel()
