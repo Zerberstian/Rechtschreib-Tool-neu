@@ -97,8 +97,8 @@ def dict_questiontitel():
             if bereich == aufgaben['Uebungsbereich']:
                 liste.append(aufgaben['Titel'])
             bereichdict[bereich] = liste
-
-    print(bereichdict)
+    for i in bereichdict:
+        print(i , bereichdict[i])
     return bereichdict
 
 
