@@ -1,6 +1,6 @@
 from tkinter import *       #import for tkinter
 import os                   #import for Operating System
-import sys                  #impoer system
+import sys                  #import system
 #from test2 import uebungsbereich_auflisten, aufgabenListe
 
 ##
