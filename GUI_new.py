@@ -1,6 +1,6 @@
 from tkinter import *       #import for tkinter
 import os                   #import for Operating System
-import sys                  #import system
+import sys                  #impoer system
 #from test2 import uebungsbereich_auflisten, aufgabenListe
 
 ##
@@ -111,14 +111,14 @@ Button(MenuFrame,
        command=open_instruktion_pdf,
        ).pack(anchor="w",fill="x",  pady=5)
 
-'''
+
 # Button for idk tbh
-Button(MenuFrame,text="Exit",
+Button(MenuFrame,text="Beenden",
        font=("Ariel", 30),
        bg="#ffffff",
-       command="",
+       command=sys.exit,
        ).pack(anchor="w",fill="x",  pady=5)
-'''
+
 
 Button(SelectFrame,
        text= "leck eier du leleck",
