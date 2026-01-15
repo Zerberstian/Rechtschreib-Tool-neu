@@ -10,16 +10,6 @@ def jsonladen():
         global aufgabenListe
         aufgabenListe = json.load(f)
 
-#Function to list all titel
-def aufgaben_titel_auflisten():
-    for aufgaben in aufgabenListe:
-        print(f"Aufgabe:{aufgaben["Titel"]}")
-
-#Function to list all titel with description
-def aufgaben_auflisten():
-    for aufgaben in aufgabenListe:
-        print(f"Aufgabe: {aufgaben['Titel']} \nAufgabenbeschreibung: {aufgaben['_aufgabenbeschreibung']} \nAufgabenbeschreibung: {aufgaben['Aufgabenbeschreibung']} ")
-
 #Function to show a question inside the console , answer wrong and the programm will close
 def aufgabe_open():
     fehler = 0
@@ -39,32 +29,6 @@ def aufgabe_open():
                 if x == 10:
                     break
     print(f"Fehler {fehler}")
-
-#Function to choose Übungsbereich
-def uebungsbereich_auswahl():
-    while True:
-        uebungsbereichListe = uebungsbereich_auflisten()
-        auswahl =int(input("1, 2, 3, 4, 5 oder 6?"))
-        auswahl-=1
-        if auswahl < 6 and auswahl >= 0:
-            uebungsbereich = uebungsbereichListe[auswahl]
-            print(uebungsbereich)
-            if uebungsbereich not in bereichListe:
-                bereichListe.append(uebungsbereich)
-            else:
-                print("Bereits ausgewählt")
-            break
-        else:
-            print("Ungültiger Bereich")
-    while True:
-        nochmal = input("Noch ein Übungsbereich auswählen? Y/N\n")
-        if nochmal.lower() == "y" :
-            uebungsbereich_auswahl()
-        elif nochmal.lower() == "n":
-            break
-        else:
-            print('You Stupid')
-    print(f"Die Ausgewählten Übungsbereiche sind {bereichListe}")
 
 #Function to show Questions with status "IstSpeziell" True
 def spezial_aufgaben():
@@ -91,14 +55,13 @@ def uebungsbereich_auflisten():
 def dict_questiontitel():
     bereichdict = {}
     for bereich in uebungsbereich_auflisten():
-        print(bereich)
         liste = []
         for aufgaben in aufgabenListe:
             if bereich == aufgaben['Uebungsbereich']:
                 liste.append(aufgaben['Titel'])
             bereichdict[bereich] = liste
     for i in bereichdict:
-        print(i , bereichdict[i])
+        print(i , len(bereichdict[i]), "\n",  bereichdict[i])
     return bereichdict
 
 
@@ -106,10 +69,4 @@ def dict_questiontitel():
 if __name__ == '__main__':
 
     jsonladen()
-    #aufgaben_titel_auflisten()
-    #aufgaben_auflisten()
-    #aufgabe_open()
-    #spezial_aufgaben()
-    #uebungsbereich_auflisten()
-    #uebungsbereich_auswahl()
     dict_questiontitel()
