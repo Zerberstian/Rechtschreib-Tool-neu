@@ -1,6 +1,9 @@
-from tkinter import *       #import für tkinter
+from tkinter import *       #import for tkinter
+import os                   #import for Operating System
+import subprocess
+import sys                  #impoer system
 
-#def en Fenster
+#def a Window
 window = Tk()
 
 window.update_idletasks()
@@ -8,31 +11,52 @@ window.update_idletasks()
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 
-# Set window size to screen size
-x_pos = -9 #stat point of Window
+#stat point of Window
+x_pos = -9
 y_pos = 0
-window.geometry(f"{screen_width}x{screen_height}+{x_pos}+{y_pos}")
+window.geometry(f"{screen_width}x{screen_height}+{x_pos}+{y_pos}")                      # Set window size to screen size
 
-window.attributes("-fullscreen", False)  #fullscreen
-window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False)) #Escape fullscreen exit
-window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))  #F12 fullscreen toggle
-window.title("Rechtschreib-Tool")   #changing Title from tk to Rechtschreib-Tool
-window.configure(bg="#E0470A")  #backround Farbe to SRH Farbe
+window.attributes("-fullscreen", False)                                                 #fullscreen
+window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))              #Escape fullscreen exit
+window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  #F12 fullscreen toggle
+window.title("Rechtschreib-Tool")                                                       #changing Title from tk to Rechtschreib-Tool
+window.configure(bg="#E0470A")                                                          #backround Color to SRH Color
 
 '''
 window.attributes("-alpha", 0.7)
 '''
 
-icon = PhotoImage(file="srhIcon.png")   #changing the tk icon to srh icon
+#changing the tk icon to srh icon
+icon = PhotoImage(file="srhIcon.png")
 window.iconphoto(True, icon)
 
+def show_select_frame():
+    MenuFrame.place_forget()
+    label2.pack_forget()
+    SelectFrame.place(x=0, y=0)
+
+def back_to_main_frame():
+    MenuFrame.place(x=0, y=0)
+    SelectFrame.place_forget()
+    label2.pack()
+
+def open_instruktion_pdf():
+    pdf_path = os.path.join(os.path.dirname(__file__), "A.pdf")
+
+    if sys.platform.startswith("win"):
+        os.startfile(pdf_path)
+
+#the Main Menu Frame
 MenuFrame = Frame(window, bg="#E0470A")
 MenuFrame.place(x=0, y=0)
+
+#the Frame to select your
+SelectFrame = Frame(window, bg="#E0470A")
 
 #the Label for the Icon
 label1 = Label(MenuFrame, image=icon)
 label1.pack(anchor="w", pady=(5, 20))
-#label1.place(x=0, y=0)
+
 
 label2 = Label(window,
                text="Hallo",    #adding a big Title
@@ -42,19 +66,32 @@ label2 = Label(window,
 
 label2.pack()
 
+# Button for starting the select options
 Button(MenuFrame,text="Start",
        font=("Ariel", 30),
        bg="#ffffff",
-       #command=
+       command=show_select_frame,
        ).pack(anchor="w", fill="x", pady=5)
 
-Button(MenuFrame,text="Stop",
+#Button for going back to Main Menu
+Button(SelectFrame,text="zurück",
        font=("Ariel", 30),
        bg="#ffffff",
-       command="").pack(anchor="w", fill="x", pady=5)
+       command=back_to_main_frame,
+       ).pack(anchor="w", fill="x", pady=5)
 
+# Button for idk tbh
+Button(MenuFrame,text="Erklärung",
+       font=("Ariel", 30),
+       bg="#ffffff",
+       command=open_instruktion_pdf,
+       ).pack(anchor="w", fill="x", pady=5)
+
+# Button for idk tbh
 Button(MenuFrame,text="Exit",
        font=("Ariel", 30),
-       bg="#ffffff").pack(anchor="w", fill="x", pady=5)
+       bg="#ffffff",
+       command="",
+       ).pack(anchor="w", fill="x", pady=5)
 
 window.mainloop()
