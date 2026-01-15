@@ -33,15 +33,17 @@ window.iconphoto(True, icon)
 
 def show_select_frame():
     MenuFrame.place_forget()
-    label2.pack_forget()
+    headline.pack_forget()
     SelectFrame.place(x=0, y=0,relwidth=1, relheight=1)
     #SelectUebungFrame.place(x=screen_width/2, y=screen_height/2)
+    MenuText.place_forget()
 
 def back_to_main_frame():
     MenuFrame.place(x=0, y=0)
     SelectFrame.place_forget()
     #SelectUebungFrame.place_forget()
-    label2.pack()
+    headline.pack()
+    MenuText.place(x=screen_width / 2, y=screen_height / 2, anchor="center")
 
 def open_instruktion_pdf():
     pdf_path = os.path.join(os.path.dirname(__file__), "A.pdf")
@@ -60,20 +62,33 @@ SelectFrame = Frame(window, bg="#E0470A")
 #SelectUebungFrame = Frame(SelectFrame, bg="#E0470A")
 
 #the Label for the Icon
-label1 = Label(MenuFrame, image=icon)
-label1.pack(anchor="w", pady=(5, 20))
+iconLabel = Label(MenuFrame, image=icon)
+iconLabel.pack(anchor="w", pady=(5, 20))
 
 
-label2 = Label(window,
+headline = Label(window,
                text="Hallo",    #adding a big Title
                font=("Ariel", 30),
                bg="#E0470A",
                fg="#ffffff")
 
-label2.pack()
+headline.pack()
+
+MenuText = Label(window, text= f"Die Offizelle und \n "         #adding a Label with Text in the Center
+                               f"verbesserte Version des \n "
+                               f"Rechtschreibtools der "
+                               f"\nSRH Dresden",
+                               font=("Ariel", 35),
+                               bg="#ffffff",
+                               fg="#E0470A")
+
+MenuText.place(x=screen_width/2,
+               y=screen_height/2,
+               anchor="center")
 
 # Button for starting the select options
-Button(MenuFrame,text="Start",
+Button(MenuFrame,
+       text="Start",
        font=("Ariel", 30),
        bg="#ffffff",
        command=show_select_frame,
@@ -81,15 +96,16 @@ Button(MenuFrame,text="Start",
 
 
 #Button for going back to Main Menu
-
-Button(SelectFrame,text="zurück",
+Button(SelectFrame,
+       text="zurück",
        font=("Ariel", 30),
        bg="#ffffff",
        command=back_to_main_frame,
        ).pack(anchor="w", pady=5)
 
-# Button for idk tbh
-Button(MenuFrame,text="Erklärung",
+# Button for Explaination of the Programm (it opens the PDF in same Folder as the Files)
+Button(MenuFrame,
+       text="Erklärung",
        font=("Ariel", 30),
        bg="#ffffff",
        command=open_instruktion_pdf,
@@ -104,11 +120,14 @@ Button(MenuFrame,text="Exit",
        ).pack(anchor="w",fill="x",  pady=5)
 '''
 
-Button(SelectFrame,text= "leck eier du leleck",
+Button(SelectFrame,
+       text= "leck eier du leleck",
        font=("Ariel", 30),
        bg="#ffffff",
-       command="",
-       ).place(x=screen_width/2, y=screen_height/2, anchor="center")
+       command=sys.exit,
+       ).place(x=screen_width/2,
+               y=screen_height/2,
+               anchor="center")
 
 #,relx=0.5, rely=0.5,
 
