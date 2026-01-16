@@ -14,11 +14,23 @@ def jsonladen():
 def uebungsbereich_auflisten():
     uebungsbereich_liste = []
     for uebungsbereich in aufgabenListe:
-        if uebungsbereich['Uebungsbereich'] in uebungsbereich_liste:
-            pass
-        else:
+        if uebungsbereich['Uebungsbereich'] not in uebungsbereich_liste:
             uebungsbereich_liste.append(uebungsbereich['Uebungsbereich'])
     return uebungsbereich_liste
+
+#Function to list all titels of a bereich
+def list_titels(bereich):
+    if type(bereich) == list:
+        for x in bereich:
+            for titel in aufgabenListe:
+                if x == titel['Uebungsbereich']:
+                    print(titel["Titel"])
+    elif type(bereich) == str:
+        for titel in aufgabenListe:
+            if bereich == titel['Uebungsbereich']:
+                print(titel["Titel"])
+    else:
+        return print("INVALID")
 
 #Function to list all topics with their respective titels and adds a IsChecked Status to the list
 def dict_questiontitel():
@@ -39,12 +51,10 @@ def dict_questiontitel():
         print(stuff, "\n", bereichdict[stuff])
     return bereichdict
 
-def choose_topics():
-    pass
 
 #Ich brauche mehr Plan denn ich habe kein Plan mehr
 
 if __name__ == '__main__':
     jsonladen()
-    choose_topics()
     dict_questiontitel()
+    #list_titels(uebungsbereich_auflisten())
