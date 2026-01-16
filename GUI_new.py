@@ -1,9 +1,7 @@
 from tkinter import *       #import for tkinter
 import os                   #import for Operating System
 import sys                  #impoer system
-#from test2 import uebungsbereich_auflisten, aufgabenListe
 
-##
 # def a Window
 window = Tk()
 
@@ -35,13 +33,11 @@ def show_select_frame():
     MenuFrame.place_forget()
     headline.pack_forget()
     SelectFrame.place(x=0, y=0,relwidth=1, relheight=1)
-    #SelectUebungFrame.place(x=screen_width/2, y=screen_height/2)
     MenuText.place_forget()
 
 def back_to_main_frame():
     MenuFrame.place(x=0, y=0)
     SelectFrame.place_forget()
-    #SelectUebungFrame.place_forget()
     headline.pack()
     MenuText.place(x=screen_width / 2, y=screen_height / 2, anchor="center")
 
@@ -59,28 +55,27 @@ MenuFrame.place(x=0, y=0)
 #the Frame to select your
 SelectFrame = Frame(window, bg="#E0470A")
 
-#SelectUebungFrame = Frame(SelectFrame, bg="#E0470A")
-
 #the Label for the Icon
 iconLabel = Label(MenuFrame, image=icon)
 iconLabel.pack(anchor="w", pady=(5, 20))
 
-
+#adding a big Title
 headline = Label(window,
-               text="Hallo",    #adding a big Title
+               text="Hallo",
                font=("Ariel", 30),
                bg="#E0470A",
                fg="#ffffff")
 
 headline.pack()
 
-MenuText = Label(window, text= f"Die Offizelle und \n "         #adding a Label with Text in the Center
-                               f"verbesserte Version des \n "
-                               f"Rechtschreibtools der "
-                               f"\nSRH Dresden",
+MenuText = Label(window, text= f"Die offiziell und\n"         #adding a Label with Text in the Center
+                               f"verbesserte Version\n"
+                               f"des Rechtschreibtools\n"
+                               f"der SRH Dresden",
                                font=("Ariel", 35),
-                               bg="#ffffff",
-                               fg="#E0470A")
+                               bg="#E0470A",
+                               fg="#ffffff")
+
 
 MenuText.place(x=screen_width/2,
                y=screen_height/2,
@@ -128,7 +123,5 @@ Button(SelectFrame,
        ).place(x=screen_width/2,
                y=screen_height/2,
                anchor="center")
-
-#,relx=0.5, rely=0.5,
 
 window.mainloop()
