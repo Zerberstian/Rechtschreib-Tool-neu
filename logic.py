@@ -55,17 +55,25 @@ def uebungsbereich_auflisten():
 def dict_questiontitel():
     bereichdict = {}
     for bereich in uebungsbereich_auflisten():
+        Uebungsliste = []
         liste = []
         for aufgaben in aufgabenListe:
             if bereich == aufgaben['Uebungsbereich']:
                 liste.append(aufgaben['Titel'])
-            bereichdict[bereich] = liste
-    for i in bereichdict:
-        print(i , len(bereichdict[i]), "\n",  bereichdict[i])
+        bereich2 = bereich
+        bereich2 = {}
+        bereich2[f"Titellist"] = liste
+        bereichdict[f"{bereich}"] = bereich2
+    for stuff in bereichdict:
+        print(stuff, "\n", bereichdict[stuff])
     return bereichdict
+
+def choose_topics():
+    pass
 
 #Ich brauche mehr Plan denn ich habe kein Plan mehr
 
 if __name__ == '__main__':
     jsonladen()
+    choose_topics()
     dict_questiontitel()
