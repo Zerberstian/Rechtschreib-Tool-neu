@@ -123,13 +123,13 @@ Button(SelectFrame,
                anchor="center")
 
 #creates a frame for checkboxes
-checkboxframe = Frame(SelectFrame, bg="#ffffff", width=screen_width/3-20, height=screen_height)
-checkboxframe.pack_propagate(False)
-checkboxframe.place(x=screen_width/3*2)
+maincheckboxframe = Frame(SelectFrame, bg="#ffffff", width=screen_width/3-20, height=screen_height)
+maincheckboxframe.pack_propagate(False)
+maincheckboxframe.place(x=screen_width/3*2)
 
 #Checkboxes for "Bereiche"
 for x in logic.uebungsbereich_auflisten():
-    Checkbutton(checkboxframe,
+    Checkbutton(maincheckboxframe,
                 text= f"{x}",
                 font=("Ariel", 30),
                 bg="#ffffff",
