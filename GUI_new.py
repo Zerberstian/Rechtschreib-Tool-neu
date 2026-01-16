@@ -18,7 +18,7 @@ window.geometry(f"{screen_width}x{screen_height}+{x_pos}+{y_pos}")              
 window.attributes("-fullscreen", False)                                                 #fullscreen
 window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))              #Escape fullscreen exit
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  #F12 fullscreen toggle
-window.title("Rechtschreib-Tool")                                                       #changing Title from tk to Rechtschreib-Tool
+window.title("Rechtschreibtool")                                                       #changing Title from tk to Rechtschreibtool
 window.configure(bg="#E0470A")                                                          #backround Color to SRH Color
 
 '''
@@ -47,7 +47,6 @@ def open_instruktion_pdf():
     if sys.platform.startswith("win"):
         os.startfile(pdf_path)
 
-
 #the Main Menu Frame
 MenuFrame = Frame(window, bg="#E0470A")
 MenuFrame.place(x=0, y=0)
@@ -68,14 +67,13 @@ headline = Label(window,
 
 headline.pack()
 
-MenuText = Label(window, text= f"Die offiziell und\n"         #adding a Label with Text in the Center
+MenuText = Label(window, text= f"Die offizielle und\n"         #adding a Label with Text in the Center
                                f"verbesserte Version\n"
                                f"des Rechtschreibtools\n"
                                f"der SRH Dresden",
                                font=("Ariel", 35),
                                bg="#E0470A",
                                fg="#ffffff")
-
 
 MenuText.place(x=screen_width/2,
                y=screen_height/2,
@@ -88,7 +86,6 @@ Button(MenuFrame,
        bg="#ffffff",
        command=show_select_frame,
        ).pack(anchor="w",fill="x", pady=5)
-
 
 #Button for going back to Main Menu
 Button(SelectFrame,
@@ -106,14 +103,12 @@ Button(MenuFrame,
        command=open_instruktion_pdf,
        ).pack(anchor="w",fill="x",  pady=5)
 
-
 # Button for idk tbh
 Button(MenuFrame,text="Beenden",
        font=("Ariel", 30),
        bg="#ffffff",
        command=sys.exit,
        ).pack(anchor="w",fill="x",  pady=5)
-
 
 Button(SelectFrame,
        text= "leck eier du leleck",
