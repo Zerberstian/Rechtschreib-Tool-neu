@@ -20,17 +20,9 @@ def uebungsbereich_auflisten():
 
 #Function to list all titels of a bereich
 def list_titels(bereich):
-    if type(bereich) == list:
-        for x in bereich:
-            for titel in aufgabenListe:
-                if x == titel['Uebungsbereich']:
-                    print(titel["Titel"])
-    elif type(bereich) == str:
-        for titel in aufgabenListe:
-            if bereich == titel['Uebungsbereich']:
-                print(titel["Titel"])
-    else:
-        return print("INVALID")
+    for titel in aufgabenListe:
+        if bereich == titel['Uebungsbereich']:
+            print(titel["Titel"])
 
 #Function to list all topics with their respective titels and adds a IsChecked Status to the list
 def dict_questiontitel():
