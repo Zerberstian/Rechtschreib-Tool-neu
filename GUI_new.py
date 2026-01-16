@@ -1,6 +1,9 @@
 from tkinter import *       #import for tkinter
 import os                   #import for Operating System
-import sys                  #impoer system
+import sys                  #import system
+import logic                #import logic.py
+
+logic.jsonladen()           #load aufgaben.json (must be in directory)
 
 # def a Window
 window = Tk()
@@ -118,5 +121,18 @@ Button(SelectFrame,
        ).place(x=screen_width/2,
                y=screen_height/2,
                anchor="center")
+
+#creates a frame for checkboxes
+checkboxframe = Frame(SelectFrame, bg="#ffffff", width=screen_width/3-20, height=screen_height)
+checkboxframe.pack_propagate(False)
+checkboxframe.place(x=screen_width/3*2)
+
+#Checkboxes for "Bereiche"
+for x in logic.uebungsbereich_auflisten():
+    Checkbutton(checkboxframe,
+                text= f"{x}",
+                font=("Ariel", 30),
+                bg="#ffffff",
+                ).pack(anchor="w")
 
 window.mainloop()
