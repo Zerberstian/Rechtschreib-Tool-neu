@@ -39,30 +39,28 @@ def spezial_aufgaben():
 
 #Function to list all "uebungsbereich"
 def uebungsbereich_auflisten():
-    uebungsbereichListe = []
+    uebungsbereich_liste = []
     for uebungsbereich in aufgabenListe:
-        if uebungsbereich['Uebungsbereich'] in uebungsbereichListe:
+        if uebungsbereich['Uebungsbereich'] in uebungsbereich_liste:
             pass
         else:
-            uebungsbereichListe.append(uebungsbereich['Uebungsbereich'])
-    x = 0
-    for i in uebungsbereichListe:
-        x+=1
-        #print(f"{x}. {i}")
-    return uebungsbereichListe
+            uebungsbereich_liste.append(uebungsbereich['Uebungsbereich'])
+    return uebungsbereich_liste
 
-#Function to list all topics with their respective titels
+#Function to list all topics with their respective titels and adds a IsChecked Status to the list
 def dict_questiontitel():
     bereichdict = {}
     for bereich in uebungsbereich_auflisten():
-        Uebungsliste = []
-        liste = []
-        for aufgaben in aufgabenListe:
-            if bereich == aufgaben['Uebungsbereich']:
-                liste.append(aufgaben['Titel'])
-        bereich2 = bereich
+        titeldict = {}
+        for titel in aufgabenListe:
+            if bereich == titel['Uebungsbereich']:
+                titel2 = {}
+                titel2["IsChecked"] = False
+                #titel2["Questionlist"] = Questiondict
+                titeldict[f"{titel["Titel"]}"] = titel2
         bereich2 = {}
-        bereich2[f"Titellist"] = liste
+        bereich2["IsChecked"] = False
+        bereich2["Titellist"] = titeldict
         bereichdict[f"{bereich}"] = bereich2
     for stuff in bereichdict:
         print(stuff, "\n", bereichdict[stuff])
