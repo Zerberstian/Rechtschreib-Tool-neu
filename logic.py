@@ -20,9 +20,11 @@ def uebungsbereich_auflisten():
 
 #Function to list all titels of a bereich
 def list_titels(bereich):
+    titels = []
     for titel in aufgabenListe:
         if bereich == titel['Uebungsbereich']:
-            print(titel["Titel"])
+            titels.append(titel['Titel'])
+    return titels
 
 #Function to list all topics with their respective titels and adds a IsChecked Status to the list
 def dict_questiontitel():
@@ -48,5 +50,5 @@ def dict_questiontitel():
 
 if __name__ == '__main__':
     jsonladen()
-    dict_questiontitel()
-    #list_titels(uebungsbereich_auflisten())
+    #dict_questiontitel()
+    print(list_titels(uebungsbereich_auflisten()))
