@@ -132,14 +132,14 @@ Button(MenuFrame,
        font=("Ariel", 30),
        bg="#ffffff",
        command=open_instruktion_pdf,
-       ).pack(anchor="w",fill="x",  pady=5)
+       ).pack(anchor="w",fill="x", pady=5)
 
 # Button for idk tbh
 Button(MenuFrame,text="Beenden",
        font=("Ariel", 30),
        bg="#ffffff",
        command=sys.exit,
-       ).pack(anchor="w",fill="x",  pady=5)
+       ).pack(anchor="w",fill="x", pady=5)
 
 #creates a frame for checkboxes
 BereichCheckbox.BereichCheckbox(CheckBoxFrameS).create("#ffffff")

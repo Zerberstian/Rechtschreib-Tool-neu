@@ -26,7 +26,11 @@ class BereichCheckbox:
         self.list_list.append(self.var_list8)
 
     def create(self,color):
-        main_checkbox_frame = Frame(self.master, bg=color)
+        main_checkbox_frame = Canvas(self.master, bg=color, scrollregion=(0,0,10000,10000))
+        v = Scrollbar(self.master)
+        main_checkbox_frame.config(yscrollcommand=v.set)
+        v.pack(side="right", fill="y")
+        v.config(command=main_checkbox_frame.yview)
         main_checkbox_frame.pack()
 
         # Checkboxes for "Bereiche"
@@ -35,7 +39,8 @@ class BereichCheckbox:
             x2 = x
             frame = Frame(main_checkbox_frame, bg=color)
             self.frame_list.append(frame)
-            frame.pack(anchor="w")
+            frame.columnconfigure(1, weight=1)
+            frame.pack(fill="both")
             frame2 = Frame(frame, bg=color)
             self.frame_list2.append(frame2)
             self.var_list.append(IntVar(value=0))
@@ -48,7 +53,7 @@ class BereichCheckbox:
                         offvalue=0,
                         command=partial(BereichCheckbox.checkbox,self, index, x),
                         indicatoron=False,
-                        ).grid(pady=5, padx=5, sticky=W, column=1, row=0)
+                        ).grid(pady=5, padx=5, sticky=NSEW, column=1, row=0)
             for index3, x3 in enumerate(logic.list_titels(x)):
                 i_am_a_variable = self.list_list[index]
                 i_am_a_variable.append(IntVar(value=0))
@@ -71,12 +76,11 @@ class BereichCheckbox:
                         onvalue=1,
                         offvalue=0,
                         command=partial(BereichCheckbox.checkbox2, self, index2, x2),
-                        ).grid(pady=5, padx=5, sticky=W, column=0, row=0)
+                        ).grid(pady=5, padx=5,sticky=NSEW, column=0, row=0)
 
     def checkbox(self,index,x):
-        #print(f"{x} {index}" if self.var_list[index].get() == 1 else f"xcvjl  v ")
         if self.var_list[index].get() == 1:
-            self.frame_list2[index].grid(column=1, row=1)
+            self.frame_list2[index].grid(sticky="W",column=1, row=1)
         else:
             self.frame_list2[index].grid_forget()
 

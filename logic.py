@@ -6,7 +6,7 @@ bereichListe = [] #Create an empty list for topics
 
 #Function to load aufgaben.json
 def jsonladen():
-    with open ("aufgaben.json","r",encoding= "utf-8" ) as f:
+    with open ("aufgaben_mit_ids.json","r",encoding= "utf-8" ) as f:
         global aufgabenListe
         aufgabenListe = json.load(f)
 
