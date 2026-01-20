@@ -2,6 +2,7 @@ from tkinter import *       #import for tkinter
 import os                   #import for Operating System
 import sys                  #import system
 import logic                #import logic.py
+import BereichCheckbox      #import BereichCheckbox.py
 
 logic.jsonladen()  #load aufgaben.json (must be in directory)
 
@@ -116,15 +117,6 @@ Button(MenuFrame,text="Beenden",
        ).pack(anchor="w",fill="x",  pady=5)
 
 #creates a frame for checkboxes
-maincheckboxframe = Frame(SelectFrame, bg="#99ff00", width=screen_width/3-20, height=screen_height)
-maincheckboxframe.place(x=screen_width/2, y=screen_height/2, anchor="center")
-
-#Checkboxes for "Bereiche"
-for x in logic.uebungsbereich_auflisten():
-    Checkbutton(maincheckboxframe,
-                text= f"{x}",
-                font=("Ariel", 30),
-                bg="#99ff00",
-                ).pack(anchor="w", padx=5, pady=5)
+BereichCheckbox.BereichCheckbox(SelectFrame).create("#ffffff")
 
 window.mainloop()
