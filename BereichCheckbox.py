@@ -26,12 +26,23 @@ class BereichCheckbox:
         self.list_list.append(self.var_list8)
 
     def create(self,color):
-        main_checkbox_frame = Canvas(self.master, bg=color, scrollregion=(0,0,10000,10000))
-        v = Scrollbar(self.master)
-        main_checkbox_frame.config(yscrollcommand=v.set)
+        canvas = Canvas(self.master, height=500)
+        v = Scrollbar(self.master, command=canvas.yview)
+        main_checkbox_frame = Frame(canvas, bg=color)
+        canvas.create_window((0,0),anchor="nw" ,  window=main_checkbox_frame)
+        canvas.configure(yscrollcommand=v.set)
         v.pack(side="right", fill="y")
-        v.config(command=main_checkbox_frame.yview)
-        main_checkbox_frame.pack()
+        canvas.pack(expand=True, fill="both")
+
+        def on_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+            canvas.update_idletasks()
+            canvas.config(
+                width=main_checkbox_frame.winfo_reqwidth()
+            )
+
+        main_checkbox_frame.bind("<Configure>", on_configure)
 
         # Checkboxes for "Bereiche"
         for index, x in enumerate(logic.uebungsbereich_auflisten()):
@@ -46,7 +57,7 @@ class BereichCheckbox:
             self.var_list.append(IntVar(value=0))
             Checkbutton(frame,
                         text=f"{x}",
-                        font=("Ariel", 30),
+                        font=("Arial", 30),
                         bg="#ffffff",
                         variable=self.var_list[index],
                         onvalue=1,
@@ -59,7 +70,7 @@ class BereichCheckbox:
                 i_am_a_variable.append(IntVar(value=0))
                 box = Checkbutton(self.frame_list2[index],
                             text=f"{x3}",
-                            font=("Ariel", 15),
+                            font=("Arial", 15),
                             bg="#ffffff",
                             variable=i_am_a_variable[index3],
                             onvalue=1,
@@ -70,7 +81,7 @@ class BereichCheckbox:
                 box.pack(anchor="w")
             self.var_list2.append(IntVar(value=0))
             Checkbutton(frame,
-                        font=("Ariel", 30),
+                        font=("Arial", 30),
                         bg="#ffffff",
                         variable=self.var_list2[index2],
                         onvalue=1,
