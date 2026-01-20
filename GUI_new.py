@@ -3,16 +3,19 @@ import os                   #import for Operating System
 import sys                  #import system
 import logic                #import logic.py
 
-logic.jsonladen()           #load aufgaben.json (must be in directory)
+logic.jsonladen()  #load aufgaben.json (must be in directory)
 
 # def a Window
 window = Tk()
-
 window.update_idletasks()
-
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
-
+#'''
+window.grid_rowconfigure(0, weight=2)
+window.grid_columnconfigure(0, weight=2)
+window.grid_rowconfigure(1, weight=3)
+window.grid_columnconfigure(1, weight=3)
+#'''
 #stat point of Window
 x_pos = -9
 y_pos = 0
@@ -21,7 +24,7 @@ window.geometry(f"{screen_width}x{screen_height}+{x_pos}+{y_pos}")              
 window.attributes("-fullscreen", False)                                                 #fullscreen
 window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))              #Escape fullscreen exit
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  #F12 fullscreen toggle
-window.title("Rechtschreibtool")                                                       #changing Title from tk to Rechtschreibtool
+window.title("Rechtschreibtool")                                                        #changing Title from tk to Rechtschreibtool
 window.configure(bg="#E0470A")                                                          #backround Color to SRH Color
 
 '''
@@ -33,16 +36,17 @@ icon = PhotoImage(file="srhIcon.png")
 window.iconphoto(True, icon)
 
 def show_select_frame():
-    MenuFrame.place_forget()
-    headline.pack_forget()
-    SelectFrame.place(x=0, y=0,relwidth=1, relheight=1)
-    MenuText.place_forget()
+    MenuFrame.grid_forget()
+    headline.grid_forget()
+    SelectFrame.place(x=0, y=0, relwidth=1, relheight=1)
+    MenuText.grid_forget()
 
 def back_to_main_frame():
-    MenuFrame.place(x=0, y=0)
+    MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW)
     SelectFrame.place_forget()
-    headline.pack()
-    MenuText.place(x=screen_width / 2, y=screen_height / 2, anchor="center")
+    headline.grid(row=0,column=1, sticky=N)
+    MenuText.grid(row=1,column=1, sticky=NW)
+
 
 def open_instruktion_pdf():
     pdf_path = os.path.join(os.path.dirname(__file__), "A.pdf")
@@ -52,23 +56,23 @@ def open_instruktion_pdf():
 
 #the Main Menu Frame
 MenuFrame = Frame(window, bg="#E0470A")
-MenuFrame.place(x=0, y=0)
+MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)
 
 #the Frame to select your
 SelectFrame = Frame(window, bg="#E0470A")
 
 #the Label for the Icon
 iconLabel = Label(MenuFrame, image=icon)
-iconLabel.pack(anchor="w", pady=(5, 20))
+iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
 #adding a big Title
 headline = Label(window,
                text="Hallo",
                font=("Ariel", 30),
                bg="#E0470A",
-               fg="#ffffff")
+               fg="#E0470A")
 
-headline.pack()
+headline.grid(row=0,column=1, sticky=N)
 
 MenuText = Label(window, text= f"Die offizielle und\n"         #adding a Label with Text in the Center
                                f"verbesserte Version\n"
@@ -78,9 +82,7 @@ MenuText = Label(window, text= f"Die offizielle und\n"         #adding a Label w
                                bg="#E0470A",
                                fg="#ffffff")
 
-MenuText.place(x=screen_width/2,
-               y=screen_height/2,
-               anchor="center")
+MenuText.grid(row=1,column=1, sticky=NW)
 
 # Button for starting the select options
 Button(MenuFrame,
@@ -96,7 +98,7 @@ Button(SelectFrame,
        font=("Ariel", 30),
        bg="#ffffff",
        command=back_to_main_frame,
-       ).pack(anchor="w", pady=5)
+       ).place(x=0, y=0)
 
 # Button for Explaination of the Programm (it opens the PDF in same Folder as the Files)
 Button(MenuFrame,
@@ -113,26 +115,16 @@ Button(MenuFrame,text="Beenden",
        command=sys.exit,
        ).pack(anchor="w",fill="x",  pady=5)
 
-Button(SelectFrame,
-       text= "leck eier du leleck",
-       font=("Ariel", 30),
-       bg="#ffffff",
-       command=sys.exit,
-       ).place(x=screen_width/2,
-               y=screen_height/2,
-               anchor="center")
-
 #creates a frame for checkboxes
-maincheckboxframe = Frame(SelectFrame, bg="#ffffff", width=screen_width/3-20, height=screen_height)
-maincheckboxframe.pack_propagate(False)
-maincheckboxframe.place(x=screen_width/3*2)
+maincheckboxframe = Frame(SelectFrame, bg="#99ff00", width=screen_width/3-20, height=screen_height)
+maincheckboxframe.place(x=screen_width/2, y=screen_height/2, anchor="center")
 
 #Checkboxes for "Bereiche"
 for x in logic.uebungsbereich_auflisten():
     Checkbutton(maincheckboxframe,
                 text= f"{x}",
                 font=("Ariel", 30),
-                bg="#ffffff",
-                ).pack(anchor="w")
+                bg="#99ff00",
+                ).pack(anchor="w", padx=5, pady=5)
 
 window.mainloop()
