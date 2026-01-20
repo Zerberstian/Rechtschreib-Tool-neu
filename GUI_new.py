@@ -55,12 +55,27 @@ def open_instruktion_pdf():
     if sys.platform.startswith("win"):
         os.startfile(pdf_path)
 
-#the Main Menu Frame
-MenuFrame = Frame(window, bg="#E0470A")
-MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)
-
-#the Frame to select your
-SelectFrame = Frame(window, bg="#E0470A")
+# Frames
+####################################################################################
+                                                                                   #
+#the Main Menu Frame                                                               #
+MenuFrame = Frame(window, bg="#E0470A")                                            #
+MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)                     #
+                                                                                   #
+#the Frame to select your                                                          #
+SelectFrame = Frame(window, bg="#E0470A")                                          #
+                                                                                   #
+#Frame for manageing grid                                                          #
+CheckBoxFrameS = Frame(SelectFrame, bg="#E0470A")                                  #
+CheckBoxFrameS.grid(row=1, column=1, sticky=SE)                                    #
+                                                                                   #
+#Frame for manageing grid                                                          #
+ButtonFrameSB = Frame(SelectFrame, bg="#E0470A")                                   #
+ButtonFrameSB.grid(row=0, column=0, sticky=NW)                                     #
+                                                                                   #
+SBBFrame = Frame(SelectFrame, bg="#E0470A")                                        #
+SBBFrame.grid(row=3, column=2, sticky=NW)                                          #
+####################################################################################
 
 #the Label for the Icon
 iconLabel = Label(MenuFrame, image=icon)
@@ -94,12 +109,22 @@ Button(MenuFrame,
        ).pack(anchor="w",fill="x", pady=5)
 
 #Button for going back to Main Menu
-Button(SelectFrame,
+Button(ButtonFrameSB,
        text="zurück",
        font=("Ariel", 30),
        bg="#ffffff",
        command=back_to_main_frame,
-       ).place(x=0, y=0)
+       ).pack(anchor="w" ,fill="x", pady=2)
+'''
+########################################################################
+'''
+#Button for going back to Main Menu
+Button(SBBFrame,
+       text="Start",
+       font=("Ariel", 30),
+       bg="#ffffff",
+       command=back_to_main_frame,
+       ).pack(anchor="w", fill="x", pady=2)
 
 # Button for Explaination of the Programm (it opens the PDF in same Folder as the Files)
 Button(MenuFrame,
@@ -117,6 +142,7 @@ Button(MenuFrame,text="Beenden",
        ).pack(anchor="w",fill="x",  pady=5)
 
 #creates a frame for checkboxes
-BereichCheckbox.BereichCheckbox(SelectFrame).create("#ffffff")
+BereichCheckbox.BereichCheckbox(CheckBoxFrameS).create("#ffffff")
+
 
 window.mainloop()
