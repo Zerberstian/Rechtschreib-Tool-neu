@@ -1,10 +1,33 @@
-from tkinter import *       #import for tkinter
-import os                   #import for Operating System
-import sys                  #import system
-import logic                #import logic.py
-import BereichCheckbox      #import BereichCheckbox.py
+from tkinter import *               #import for tkinter
+from tkinter import messagebox      #import messagebox
+import os                           #import for Operating System
+import sys                          #import system
+import logic                        #import logic.py
+import BereichCheckbox              #import BereichCheckbox.py
 
 logic.jsonladen()  #load aufgaben.json (must be in directory)
+
+
+def on_value_change():
+    global value
+    global spinbox
+    try:
+        value = int(spinbox.get())
+        if value>100:
+            value = 100
+            spinbox.delete(0, END)
+            spinbox.insert(0, 100)
+        elif value<=0:
+            value = 1
+            spinbox.delete(0, END)
+            spinbox.insert(0, 1)
+        #message_label.config(text=f"Select value: {value}")
+
+    except ValueError:
+        #message_label.config(text=f"Select value: {value}")
+        messagebox.showerror("Invalid Input", "Please enter a valid integer.")
+        spinbox.delete(0, END)
+        spinbox.insert(0, 10)
 
 # def a Window
 window = Tk()
@@ -16,6 +39,8 @@ window.grid_rowconfigure(0, weight=2)
 window.grid_columnconfigure(0, weight=2)
 window.grid_rowconfigure(1, weight=3)
 window.grid_columnconfigure(1, weight=3)
+
+
 #'''
 #stat point of Window
 x_pos = -9
@@ -67,15 +92,28 @@ SelectFrame = Frame(window, bg="#E0470A")                                       
                                                                                    #
 #Frame for manageing grid                                                          #
 CheckBoxFrameS = Frame(SelectFrame, bg="#E0470A")                                  #
-CheckBoxFrameS.grid(row=1, column=1, sticky=SE)                                    #
+CheckBoxFrameS.grid(row=1, column=1, )#sticky=SE)                                    #
                                                                                    #
 #Frame for manageing grid                                                          #
 ButtonFrameSB = Frame(SelectFrame, bg="#E0470A")                                   #
 ButtonFrameSB.grid(row=0, column=0, sticky=NW)                                     #
                                                                                    #
 SBBFrame = Frame(SelectFrame, bg="#E0470A")                                        #
-SBBFrame.grid(row=3, column=2, sticky=NW)                                          #
+SBBFrame.grid(row=1, column=2, rowspan=2 )#sticky=NW)                                          #
 ####################################################################################
+
+SelectFrame.grid_rowconfigure(0, weight=1)
+SelectFrame.grid_columnconfigure(0, weight=1)
+
+SelectFrame.grid_rowconfigure(1, weight=2)
+SelectFrame.grid_columnconfigure(1, weight=2)
+
+SelectFrame.grid_rowconfigure(2, weight=1)
+SelectFrame.grid_columnconfigure(2, weight=0)
+
+
+voidLabel = Label(SelectFrame, bg="#E0470A")
+voidLabel.grid(row=0, column=1, sticky=NW)
 
 #the Label for the Icon
 iconLabel = Label(MenuFrame, image=icon)
@@ -124,7 +162,38 @@ Button(SBBFrame,
        font=("Ariel", 30),
        bg="#ffffff",
        command=back_to_main_frame,
-       ).pack(anchor="w", fill="x", pady=2)
+       ).grid(row=3, column=3, padx=5, pady=5)
+
+def callback_value_10():
+    global value
+    value = 10
+    print(value)
+    spinbox.delete(0, END)
+    spinbox.insert(0, 10)
+
+def callback_value_100():
+    global value
+    value = 100
+    print(value)
+    spinbox.delete(0, END)
+    spinbox.insert(0, 100)
+
+Button(SBBFrame,
+       text="10",
+       font=("Ariel", 30),
+       bg="#ffffff",
+       command=callback_value_10,
+       ).grid(row=3, column=0, padx=5,pady=5)
+
+Button(SBBFrame,
+       text="100",
+       font=("Ariel", 30),
+       bg="#ffffff",
+       command=callback_value_100,
+       ).grid(row=3, 
+              column=1, 
+              padx=5,
+              pady=5)
 
 # Button for Explaination of the Programm (it opens the PDF in same Folder as the Files)
 Button(MenuFrame,
@@ -132,14 +201,49 @@ Button(MenuFrame,
        font=("Ariel", 30),
        bg="#ffffff",
        command=open_instruktion_pdf,
-       ).pack(anchor="w",fill="x", pady=5)
+       ).pack(anchor="w",
+              fill="x",  
+              pady=5)
 
 # Button for idk tbh
-Button(MenuFrame,text="Beenden",
+Button(MenuFrame,
+       text="Beenden",
        font=("Ariel", 30),
        bg="#ffffff",
        command=sys.exit,
-       ).pack(anchor="w",fill="x", pady=5)
+       ).pack(anchor="w",
+              fill="x",  
+              pady=5)
+
+Label(SBBFrame,
+      bg="#ffffff",
+      text=f"Choose a number (1-100):",
+      font=("Arial", 20)).grid(row=0,
+                               column=1,
+                               columnspan=2,
+                               pady=5)
+
+spinbox = Spinbox(SBBFrame,
+                  from_=0,
+                  to=100,
+                  increment=1,
+                  width=10,
+                  font=("Ariel", 20),
+                  command=on_value_change)
+spinbox.grid(row=2, 
+             column=1,
+             columnspan=2)
+
+Button(SBBFrame,
+       bg="#ffffff",
+       text="festlegen",
+       font=("Ariel", 30),
+       command=on_value_change).grid(row=3,
+                                     column=2,
+                                     padx=5)
+
+#message_label = Label(SBBFrame, text="", font=("Arial", 12))
+#message_label.grid(row=2, column=1)
 
 #creates a frame for checkboxes
 BereichCheckbox.BereichCheckbox(CheckBoxFrameS).create("#ffffff")
