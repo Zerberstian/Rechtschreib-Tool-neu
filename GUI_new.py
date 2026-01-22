@@ -40,6 +40,7 @@ def start_logic():
 def combined_command():
         on_value_change()
         print(spinbox.get())
+        #BereichCheckbox.get_active()
         start_logic()
 
 def to_start():
