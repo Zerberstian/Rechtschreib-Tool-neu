@@ -99,10 +99,10 @@ class BereichCheckbox:
 
 def get_active():
     aktiv = []
-    for a, b in unter_dict.items():
-        for n, var in b.items():
+    for bereich, titelliste in unter_dict.items():
+        for titel, var in titelliste.items():
             if var.get() == 1:
-                aktiv.append(n)
+                aktiv.append(titel)
     for a in aktiv:
         print(a)
     return aktiv
