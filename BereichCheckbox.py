@@ -1,32 +1,22 @@
+#used to create the BereichCheckbox as packable Widget
 from functools import partial
 from tkinter import *
 import logic
 
+ober_dict = {}
+unter_dict = {}
 
 class BereichCheckbox:
     def __init__(self, master):
         self.master = master
-        self.var_list = []
-        self.frame_list = []
-        self.frame_list2 = []
-        self.var_list2 = []
-        self.var_list3 = []
-        self.var_list4 = []
-        self.var_list5 = []
-        self.var_list6 = []
-        self.var_list7 = []
-        self.var_list8 = []
+        self.frame_dict = {}
+        self.ausgeklappt_dict = {}
         self.checkbox_list = []
-        self.list_list = []
-        self.list_list.append(self.var_list3)
-        self.list_list.append(self.var_list4)
-        self.list_list.append(self.var_list5)
-        self.list_list.append(self.var_list6)
-        self.list_list.append(self.var_list7)
-        self.list_list.append(self.var_list8)
+
+        #opinojnondodbdonehtusphhnhodhtso 9thboxthibzst xibu hstiubgth rto9gh Ich muss das ändern
 
     def create(self,color):
-        canvas = Canvas(self.master, height=500)
+        canvas = Canvas(self.master, height=700)
         v = Scrollbar(self.master, command=canvas.yview)
         main_checkbox_frame = Frame(canvas, bg=color)
         canvas.create_window((0,0),anchor="nw" ,  window=main_checkbox_frame)
@@ -46,61 +36,76 @@ class BereichCheckbox:
 
         # Checkboxes for "Bereiche"
         for index, x in enumerate(logic.uebungsbereich_auflisten()):
-            index2 = index
-            x2 = x
             frame = Frame(main_checkbox_frame, bg=color)
-            self.frame_list.append(frame)
+            self.frame_dict[f"{x}"] = frame
             frame.columnconfigure(1, weight=1)
             frame.pack(fill="both")
-            frame2 = Frame(frame, bg=color)
-            self.frame_list2.append(frame2)
-            self.var_list.append(IntVar(value=0))
+            frame2 = Frame(frame, bg="white")
+            self.frame_dict[f"{x}2"] = frame2
+            self.ausgeklappt_dict[f"{x}"]=IntVar(value=0)
             Checkbutton(frame,
                         text=f"{x}",
                         font=("Arial", 30),
                         bg="#ffffff",
-                        variable=self.var_list[index],
+                        variable=self.ausgeklappt_dict[f"{x}"],
                         onvalue=1,
                         offvalue=0,
-                        command=partial(BereichCheckbox.checkbox,self, index, x),
+                        command=partial(BereichCheckbox.ausklappen,self, x),
                         indicatoron=False,
                         ).grid(pady=5, padx=5, sticky=NSEW, column=1, row=0)
+
+            ober_dict[f"{x}"] = IntVar(value=0)
+            unter_dict[f"{x}"] = {}
+            Checkbutton(frame,
+                        bg="#ffffff",
+                        variable=ober_dict[f"{x}"],
+                        onvalue=1,
+                        offvalue=0,
+                        command=partial(BereichCheckbox.toggle_unter_dict, self, x),
+                        ).grid(pady=5, padx=5,sticky=NSEW, column=0, row=0)
             for index3, x3 in enumerate(logic.list_titels(x)):
-                i_am_a_variable = self.list_list[index]
-                i_am_a_variable.append(IntVar(value=0))
-                box = Checkbutton(self.frame_list2[index],
+                var = IntVar(value=0)
+                unter_dict[f"{x}"][f"{x3}"] = var
+                box = Checkbutton(self.frame_dict[f"{x}2"],
                             text=f"{x3}",
                             font=("Arial", 15),
                             bg="#ffffff",
-                            variable=i_am_a_variable[index3],
+                            variable=var,
                             onvalue=1,
                             offvalue=0,
-                            command=partial(BereichCheckbox.checkbox3, self,index, index3, x3),
+                            command=partial(BereichCheckbox.update_hauptkategorie, self, x),
                                   )
                 self.checkbox_list.append(box)
                 box.pack(anchor="w")
-            self.var_list2.append(IntVar(value=0))
-            Checkbutton(frame,
-                        font=("Arial", 30),
-                        bg="#ffffff",
-                        variable=self.var_list2[index2],
-                        onvalue=1,
-                        offvalue=0,
-                        command=partial(BereichCheckbox.checkbox2, self, index2, x2),
-                        ).grid(pady=5, padx=5,sticky=NSEW, column=0, row=0)
 
-    def checkbox(self,index,x):
-        if self.var_list[index].get() == 1:
-            self.frame_list2[index].grid(sticky="W",column=1, row=1)
+
+    def ausklappen(self,x):
+        if self.ausgeklappt_dict[f"{x}"].get() == 1:
+            self.frame_dict[f"{x}2"].grid(sticky="W",column=1, row=1)
         else:
-            self.frame_list2[index].grid_forget()
+            self.frame_dict[f"{x}2"].grid_forget()
 
-    def checkbox2(self,index2,x2):
-        print(f"{x2} {index2}" if self.var_list2[index2].get() == 1 else f"omg")
+    def toggle_unter_dict(self,x2):
+        wert = ober_dict[f"{x2}"].get()
+        for var in unter_dict[f"{x2}"].values():
+            var.set(wert)
 
-    def checkbox3(self,index, index3,x3):
-        i_am_a_variable = self.list_list[index]
-        print(f"{x3} {index3}" if i_am_a_variable[index3].get() == 1 else f"omg")
+    def update_hauptkategorie(self, haupt):
+        if all(var.get() for var in unter_dict[haupt].values()):
+            ober_dict[haupt].set(1)
+        else:
+            ober_dict[haupt].set(0)
+
+
+def get_active():
+    aktiv = []
+    for a, b in unter_dict.items():
+        for n, var in b.items():
+            if var.get() == 1:
+                aktiv.append(n)
+    for a in aktiv:
+        print(a)
+    return aktiv
 
 if __name__ == "__main__":
     logic.jsonladen()

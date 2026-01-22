@@ -123,7 +123,7 @@ Button(SBBFrame,
        text="Start",
        font=("Ariel", 30),
        bg="#ffffff",
-       command=back_to_main_frame,
+       command=BereichCheckbox.get_active,
        ).pack(anchor="w", fill="x", pady=2)
 
 # Button for Explaination of the Programm (it opens the PDF in same Folder as the Files)
