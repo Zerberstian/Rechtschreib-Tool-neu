@@ -34,11 +34,12 @@ def on_value_change():
 
 def start_logic():
     print("Start Logic")
+    lokal_var = value
+    print(lokal_var)
 
 def combined_command():
         on_value_change()
         print(spinbox.get())
-        BereichCheckbox.get_active()
         start_logic()
 
 def to_start():
@@ -122,6 +123,8 @@ SBBFrame = Frame(SelectFrame, bg="#E0470A")                                     
 SBBFrame.grid(row=1, column=2, rowspan=1, sticky=NW)                               #
                                                                                    #
 logicFrame  =   Frame(window, bg="#E0470A")                                        #
+
+AufgabenFrameSeite = Frame(window, bg="#E0470A")
                                                                                    #
 '''#################################################################################
 '''
@@ -176,11 +179,11 @@ Button(ButtonFrameSB,
         font=("Ariel", 30),
         bg="#ffffff",
         command=back_to_main_frame,
-        ).pack(anchor="w" ,fill="x", pady=2)
+        ).pack(anchor="w" ,fill="x", pady=5, padx=5)
 
 #Button for going back to Main Menu
 Button(logicFrame,
-       text="Start",
+       text="zurück",
        font=("Ariel", 30),
        bg="#ffffff",
        command=back_to_main_frame,
@@ -238,7 +241,7 @@ Button(MenuFrame,
 
 Label(SBBFrame,
       bg="#ffffff",
-      text=f"Gieb die Menge\n "
+      text=f"Gib die Menge\n "
            f"an Aufgaben an:\n "
            f"(1-100)",
       font=("Arial", 18)).grid(row=0,
@@ -278,4 +281,5 @@ Button(SBBFrame,
 #creates a frame for checkboxes
 BereichCheckbox.BereichCheckbox(CheckBoxFrameS).create("#ffffff")
 
-window.mainloop()
+if __name__ == "__main__":
+    window.mainloop()
