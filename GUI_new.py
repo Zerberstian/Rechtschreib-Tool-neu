@@ -38,6 +38,7 @@ def start_logic():
 def combined_command():
         on_value_change()
         print(spinbox.get())
+        BereichCheckbox.get_active()
         start_logic()
 
 def to_start():
@@ -182,7 +183,7 @@ Button(logicFrame,
        text="Start",
        font=("Ariel", 30),
        bg="#ffffff",
-       command=BereichCheckbox.get_active,
+       command=back_to_main_frame,
        ).grid(row=3, column=3, padx=5, pady=5)
 
 def callback_value_10():
