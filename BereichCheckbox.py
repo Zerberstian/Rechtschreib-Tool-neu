@@ -16,7 +16,7 @@ class BereichCheckbox:
         #opinojnondodbdonehtusphhnhodhtso 9thboxthibzst xibu hstiubgth rto9gh Ich muss das ändern
 
     def create(self,color):
-        canvas = Canvas(self.master, height=700)
+        canvas = Canvas(self.master, height=432)
         v = Scrollbar(self.master, command=canvas.yview)
         main_checkbox_frame = Frame(canvas, bg=color)
         canvas.create_window((0,0),anchor="nw" ,  window=main_checkbox_frame)
