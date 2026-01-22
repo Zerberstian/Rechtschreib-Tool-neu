@@ -36,16 +36,20 @@ def start_logic():
     print("Start Logic")
     lokal_var = value
     print(lokal_var)
+    show_start_frame()
 
 def combined_command():
         on_value_change()
         print(spinbox.get())
-        BereichCheckbox.get_active()
-        start_logic()
+        aktiv = BereichCheckbox.get_active()
+        if not aktiv  == []:
+            start_logic()
+        else:
+            print("Hs")
 
 def to_start():
     combined_command()
-    show_start_frame()
+
 
 # def a Window
 window = Tk()
