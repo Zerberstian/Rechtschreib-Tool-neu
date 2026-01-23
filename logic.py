@@ -1,64 +1,54 @@
 #logic for Rechtschreib-Tool
 import json
 
-aufgabenListe = [] #Create an empty list for questions
+geladeneAufgaben = [] #Create an empty list for questions
 bereichListe = [] #Create an empty list for topics
 
 #Function to load aufgaben.json
 def jsonladen():
     with open ("aufgaben_mit_ids.json","r",encoding= "utf-8" ) as f:
-        global aufgabenListe
-        aufgabenListe = json.load(f)
+        global geladeneAufgaben
+        geladeneAufgaben = json.load(f)
 
 #Function to list all "uebungsbereich"
 def uebungsbereich_auflisten():
     uebungsbereich_liste = []
-    for uebungsbereich in aufgabenListe:
+    for uebungsbereich in geladeneAufgaben:
         if uebungsbereich['Uebungsbereich'] not in uebungsbereich_liste:
             uebungsbereich_liste.append(uebungsbereich['Uebungsbereich'])
     return uebungsbereich_liste
 
 #Function to list all titels of a bereich
-def list_titels(bereich):
+def list_titels(bereiche):
     titels = []
-    if not type(bereich) == list:
-        for titel in aufgabenListe:
-            if bereich == titel['Uebungsbereich']:
+    if not type(bereiche) == list:
+        for titel in geladeneAufgaben:
+            if bereiche == titel['Uebungsbereich']:
                 titels.append(titel['Titel'])
     else:
-        for b in bereich:
-            for titel in aufgabenListe:
-                if b == titel['Uebungsbereich']:
+        for bereich in bereiche:
+            for titel in geladeneAufgaben:
+                if bereich == titel['Uebungsbereich']:
                     titels.append(titel['Titel'])
     return titels
 
 #Function to list all "Übungen" of a titel
 def list_uebungen(titels):
-    uebungen = []
+    aufgaben_liste = []
     if not type(titels) == list:
-        for uebung in aufgabenListe:
-            if titels ==uebung['Titel']:
-                for u in uebung['UebungenListe']:
-                    uebungen.append(u)
+        for aufgabe in geladeneAufgaben:
+            if titels == aufgabe['Titel']:
+                for uebung in aufgabe['UebungenListe']:
+                    aufgaben_liste.append(uebung)
     else:
         for titel in titels:
-            for uebung in aufgabenListe:
-                if titel == uebung['Titel']:
-                    for u in uebung['UebungenListe']:
-                        uebungen.append(u)
-    print(len(uebungen))
-    return uebungen
+            for aufgabe in geladeneAufgaben:
+                if titel == aufgabe['Titel']:
+                    for uebung in aufgabe['UebungenListe']:
+                        aufgaben_liste.append(uebung)
+    print(len(aufgaben_liste))
+    return aufgaben_liste
 
 if __name__ == '__main__':
     jsonladen()
-    #print(uebungsbereich_auflisten())
-    #print(list_titels(uebungsbereich_auflisten()))
-    print(list_uebungen(['Kommasetzung', 'Fremdworte Teil 1']))
-    #dict_questiontitel()
-    '''
-    for a in list_uebungen(list_titels('Fremdworte')):
-        print(list_uebungen(list_titels('Fremdworte')))
-    
-    for a in list_uebungen(list_titels(uebungsbereich_auflisten())):
-        for uid in a: print(uid)
-'''
+    print(list_uebungen(list_titels('Andere Probleme')))
