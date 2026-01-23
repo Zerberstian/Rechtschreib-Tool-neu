@@ -51,6 +51,8 @@ def combined_command():
 def to_start():
     combined_command()
 
+BG_Farbe = "#E0470A"
+Btn_BG_Farbe = "#ffffff"
 
 # def a Window
 window = Tk()
@@ -73,7 +75,7 @@ window.attributes("-fullscreen", False)                                         
 window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))              #Escape fullscreen exit
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  #F12 fullscreen toggle
 window.title("Rechtschreibtool")                                                        #changing Title from tk to Rechtschreibtool
-window.configure(bg="#E0470A")                                                          #backround Color to SRH Color
+window.configure(bg=BG_Farbe)                                                          #backround Color to SRH Color
 
 '''
 window.attributes("-alpha", 0.7)
@@ -111,26 +113,26 @@ def open_instruktion_pdf():
 '''#################################################################################
 '''                                                                                #
 #the Main Menu Frame                                                               #
-MenuFrame = Frame(window, bg="#E0470A")                                            #
+MenuFrame = Frame(window, bg=BG_Farbe)                                            #
 MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)                     #
                                                                                    #
 #the Frame to select your                                                          #
-SelectFrame = Frame(window, bg="#E0470A")                                          #
+SelectFrame = Frame(window, bg=BG_Farbe)                                          #
                                                                                    #
 #Frame for manageing grid                                                          #
-CheckBoxFrameS = Frame(SelectFrame, bg="#E0470A")                                  #
+CheckBoxFrameS = Frame(SelectFrame, bg=BG_Farbe)                                  #
 CheckBoxFrameS.grid(row=1, column=1, sticky=N)                                     #
                                                                                    #
 #Frame for manageing grid                                                          #
-ButtonFrameSB = Frame(SelectFrame, bg="#E0470A")                                   #
+ButtonFrameSB = Frame(SelectFrame, bg=BG_Farbe)                                   #
 ButtonFrameSB.grid(row=0, column=0, sticky=NW)                                     #
                                                                                    #
-SBBFrame = Frame(SelectFrame, bg="#E0470A")                                        #
+SBBFrame = Frame(SelectFrame, bg=BG_Farbe)                                        #
 SBBFrame.grid(row=1, column=2, rowspan=1, sticky=NW)                               #
                                                                                    #
-logicFrame  =   Frame(window, bg="#E0470A")                                        #
+logicFrame  =   Frame(window, bg=BG_Farbe)                                        #
 
-AufgabenFrameSeite = Frame(window, bg="#E0470A")
+AufgabenFrameSeite = Frame(window, bg=BG_Farbe)
                                                                                    #
 '''#################################################################################
 '''
@@ -144,19 +146,22 @@ SelectFrame.grid_rowconfigure(2, weight=1)
 SelectFrame.grid_columnconfigure(2, weight=0)
 
 
-voidLabel = Label(SelectFrame, bg="#E0470A")
+voidLabel = Label(SelectFrame, bg=BG_Farbe)
 voidLabel.grid(row=0, column=1, sticky=NW)
 
 #the Label for the Icon
 iconLabel = Label(MenuFrame, image=icon)
 iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
+BtnFontGröße = 30
+
+
 #adding a big Title
 headline = Label(window,
                 text="Hallo",
-                font=("Ariel", 30),
-                bg="#E0470A",
-                fg="#E0470A")
+                font=("Ariel", BtnFontGröße),
+                bg=BG_Farbe,
+                fg=BG_Farbe)
 
 headline.grid(row=0,column=1, sticky=N)
 
@@ -166,7 +171,7 @@ MenuText = Label(window,
                        f"des Rechtschreibtools\n"
                        f"der SRH Dresden",
                 font=("Ariel", 35),
-                bg="#E0470A",
+                bg=BG_Farbe,
                 fg="#ffffff")
 
 MenuText.grid(row=1,column=1, sticky=NW)
@@ -174,24 +179,24 @@ MenuText.grid(row=1,column=1, sticky=NW)
 # Button for starting the select options
 Button(MenuFrame,
         text="Start",
-        font=("Ariel", 30),
-        bg="#ffffff",
+        font=("Ariel", BtnFontGröße),
+        bg=Btn_BG_Farbe,
         command=show_select_frame,
         ).pack(anchor="w",fill="x", pady=5)
 
 #Button for going back to Main Menu
 Button(ButtonFrameSB,
         text="zurück",
-        font=("Ariel", 30),
-        bg="#ffffff",
+        font=("Ariel", BtnFontGröße),
+        bg=Btn_BG_Farbe,
         command=back_to_main_frame,
         ).pack(anchor="w" ,fill="x", pady=5, padx=5)
 
 #Button for going back to Main Menu
 Button(logicFrame,
        text="zurück",
-       font=("Ariel", 30),
-       bg="#ffffff",
+       font=("Ariel", BtnFontGröße),
+       bg=Btn_BG_Farbe,
        command=back_to_main_frame,
        ).grid(row=3, column=3, padx=5, pady=5)
 
@@ -211,15 +216,15 @@ def callback_value_100():
 
 Button(SBBFrame,
        text="10",
-       font=("Ariel", 30),
-       bg="#ffffff",
+       font=("Ariel", BtnFontGröße),
+       bg=Btn_BG_Farbe,
        command=callback_value_10,
        ).grid(row=3, column=0, padx=5, pady=5, ipadx=15)
 
 Button(SBBFrame,
        text="100",
-       font=("Ariel", 30),
-       bg="#ffffff",
+       font=("Ariel", BtnFontGröße),
+       bg=Btn_BG_Farbe,
        command=callback_value_100,
        ).grid(row=3,
               column=1,
@@ -229,8 +234,8 @@ Button(SBBFrame,
 # Button for Explaination of the Programm (it opens the PDF in same Folder as the Files)
 Button(MenuFrame,
        text="Erklärung",
-       font=("Ariel", 30),
-       bg="#ffffff",
+       font=("Ariel", BtnFontGröße),
+       bg=Btn_BG_Farbe,
        command=open_instruktion_pdf,
        ).pack(anchor="w",
               fill="x",
@@ -239,8 +244,8 @@ Button(MenuFrame,
 # Button for idk tbh
 Button(MenuFrame,
        text="Beenden",
-       font=("Ariel", 30),
-       bg="#ffffff",
+       font=("Ariel", BtnFontGröße),
+       bg=Btn_BG_Farbe,
        command=sys.exit,).pack(anchor="w",
                                fill="x",
                                pady=5)
@@ -274,9 +279,9 @@ spinbox.grid(row=2,
              ipadx=23)
 
 Button(SBBFrame,
-       bg="#ffffff",
+       bg=Btn_BG_Farbe,
        text="Start",
-       font=("Ariel", 30),
+       font=("Ariel", BtnFontGröße),
        command=to_start).grid(row=4,
                               column=0,
                               columnspan=2,
