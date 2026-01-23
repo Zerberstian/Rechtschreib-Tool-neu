@@ -21,10 +21,8 @@ def on_value_change():
             value = 1
             spinbox.delete(0, END)
             spinbox.insert(0, 1)
-        #message_label.config(text=f"Select value: {value}")
 
     except ValueError:
-        #message_label.config(text=f"Select value: {value}")
         messagebox.showerror("Ungültige Eingabe",
                              "Start mit Standardwert für Aufgabenmenge (10).")
 
@@ -51,8 +49,10 @@ def combined_command():
 def to_start():
     combined_command()
 
+# Konstanten für großen und Farben
 BG_Farbe = "#E0470A"
 Btn_BG_Farbe = "#ffffff"
+BtnFontGröße = 30
 
 # def a Window
 window = Tk()
@@ -60,22 +60,23 @@ window.update_idletasks()
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 
-#'''
+#ausrichtung im Window
 window.grid_rowconfigure(0, weight=2)
 window.grid_columnconfigure(0, weight=2)
 window.grid_rowconfigure(1, weight=3)
 window.grid_columnconfigure(1, weight=3)
-#'''
+
 #stat point of Window
 x_pos = -9
 y_pos = 0
 window.geometry(f"{screen_width}x{screen_height}+{x_pos}+{y_pos}")                      # Set window size to screen size
+window.minsize(1100, 650)
 
 window.attributes("-fullscreen", False)                                                 #fullscreen
 window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))              #Escape fullscreen exit
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  #F12 fullscreen toggle
 window.title("Rechtschreibtool")                                                        #changing Title from tk to Rechtschreibtool
-window.configure(bg=BG_Farbe)                                                          #backround Color to SRH Color
+window.configure(bg=BG_Farbe)                                                           #backround Color to SRH Color
 
 '''
 window.attributes("-alpha", 0.7)
@@ -85,16 +86,19 @@ window.attributes("-alpha", 0.7)
 icon = PhotoImage(file="srhIcon.png")
 window.iconphoto(True, icon)
 
+#zwischen frames wechseln
 def show_start_frame():
     logicFrame.grid(row=0, column=0, sticky=NW)
     SelectFrame.place_forget()
 
+#zwischen frames wechseln
 def show_select_frame():
     MenuFrame.grid_forget()
     headline.grid_forget()
     SelectFrame.place(x=0, y=0, relwidth=1, relheight=1)
     MenuText.grid_forget()
 
+#zwischen frames wechseln
 def back_to_main_frame():
     MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW)
     SelectFrame.place_forget()
@@ -109,9 +113,8 @@ def open_instruktion_pdf():
         os.startfile(pdf_path)
 
 # Frames
-
-'''#################################################################################
-'''                                                                                #
+#################################################################################
+#
 #the Main Menu Frame                                                               #
 MenuFrame = Frame(window, bg=BG_Farbe)                                            #
 MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)                     #
@@ -126,7 +129,7 @@ CheckBoxFrameS.grid(row=1, column=1, sticky=N)                                  
 #Frame for manageing grid                                                          #
 ButtonFrameSB = Frame(SelectFrame, bg=BG_Farbe)                                   #
 ButtonFrameSB.grid(row=0, column=0, sticky=NW)                                     #
-                                                                                   #
+#Frame für Spinbox und Btn
 SBBFrame = Frame(SelectFrame, bg=BG_Farbe)                                        #
 SBBFrame.grid(row=1, column=2, rowspan=1, sticky=NW)                               #
                                                                                    #
@@ -134,8 +137,8 @@ logicFrame  =   Frame(window, bg=BG_Farbe)                                      
 
 AufgabenFrameSeite = Frame(window, bg=BG_Farbe)
                                                                                    #
-'''#################################################################################
-'''
+#####################################################################################
+
 SelectFrame.grid_rowconfigure(0, weight=1)
 SelectFrame.grid_columnconfigure(0, weight=1)
 
@@ -145,7 +148,7 @@ SelectFrame.grid_columnconfigure(1, weight=4)
 SelectFrame.grid_rowconfigure(2, weight=1)
 SelectFrame.grid_columnconfigure(2, weight=0)
 
-
+#Ein Label was nur aus Ausrichtungszwecken existiert
 voidLabel = Label(SelectFrame, bg=BG_Farbe)
 voidLabel.grid(row=0, column=1, sticky=NW)
 
@@ -153,7 +156,7 @@ voidLabel.grid(row=0, column=1, sticky=NW)
 iconLabel = Label(MenuFrame, image=icon)
 iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
-BtnFontGröße = 30
+
 
 
 #adding a big Title
@@ -200,6 +203,7 @@ Button(logicFrame,
        command=back_to_main_frame,
        ).grid(row=3, column=3, padx=5, pady=5)
 
+#max Aufgaben 10 als quickselct (Logic)
 def callback_value_10():
     global value
     value = 10
@@ -207,6 +211,7 @@ def callback_value_10():
     spinbox.delete(0, END)
     spinbox.insert(0, 10)
 
+#max Aufgaben 100 als quickselct (Logic)
 def callback_value_100():
     global value
     value = 100
@@ -214,6 +219,7 @@ def callback_value_100():
     spinbox.delete(0, END)
     spinbox.insert(0, 100)
 
+#max Aufgaben 10 als quickselct (Button)
 Button(SBBFrame,
        text="10",
        font=("Ariel", BtnFontGröße),
@@ -221,6 +227,7 @@ Button(SBBFrame,
        command=callback_value_10,
        ).grid(row=3, column=0, padx=5, pady=5, ipadx=15)
 
+#max Aufgaben 100 als quickselct (Button)
 Button(SBBFrame,
        text="100",
        font=("Ariel", BtnFontGröße),
@@ -241,7 +248,7 @@ Button(MenuFrame,
               fill="x",
               pady=5)
 
-# Button for idk tbh
+# sys Exit
 Button(MenuFrame,
        text="Beenden",
        font=("Ariel", BtnFontGröße),
@@ -249,7 +256,7 @@ Button(MenuFrame,
        command=sys.exit,).pack(anchor="w",
                                fill="x",
                                pady=5)
-
+#Siehe Text
 Label(SBBFrame,
       bg="#ffffff",
       text=f"Gib die Menge\n "
@@ -261,6 +268,7 @@ Label(SBBFrame,
                                pady=5,
                                ipadx=13)
 
+# Spinbox
 spinbox = Spinbox(SBBFrame,
                   from_=1,
                   to=100,
@@ -269,6 +277,7 @@ spinbox = Spinbox(SBBFrame,
                   font=("Ariel", 20),
                   command=on_value_change)
 
+#bei inizialisierung wird der Standardwert 10 festgelegt
 spinbox.delete(0, END)
 spinbox.insert(0, 10)
 
@@ -278,6 +287,7 @@ spinbox.grid(row=2,
              pady=5,
              ipadx=23)
 
+#start der logik + extras
 Button(SBBFrame,
        bg=Btn_BG_Farbe,
        text="Start",
