@@ -21,34 +21,38 @@ def uebungsbereich_auflisten():
 #Function to list all titels of a bereich
 def list_titels(bereich):
     titels = []
-    for titel in aufgabenListe:
-        if bereich == titel['Uebungsbereich']:
-            titels.append(titel['Titel'])
-    return titels
-
-#Function to list all topics with their respective titels and adds a IsChecked Status to the list
-def dict_questiontitel():
-    bereichdict = {}
-    for bereich in uebungsbereich_auflisten():
-        titeldict = {}
+    if not type(bereich) == list:
         for titel in aufgabenListe:
             if bereich == titel['Uebungsbereich']:
-                titel2 = {}
-                titel2["IsChecked"] = False
-                #titel2["Questionlist"] = Questiondict
-                titeldict[f"{titel["Titel"]}"] = titel2
-        bereich2 = {}
-        bereich2["IsChecked"] = False
-        bereich2["Titellist"] = titeldict
-        bereichdict[f"{bereich}"] = bereich2
-    for stuff in bereichdict:
-        print(stuff, "\n", bereichdict[stuff])
-    return bereichdict
+                titels.append(titel['Titel'])
+    else:
+        for b in bereich:
+            for titel in aufgabenListe:
+                if b == titel['Uebungsbereich']:
+                    titels.append(titel['Titel'])
+    return titels
 
-
-#Ich brauche mehr Plan denn ich habe kein Plan mehr
+#Function to list all "Übungen" of a titel
+def list_uebungen(titels):
+    uebungen = []
+    if not type(titels) == list:
+        for uebung in aufgabenListe:
+            if titels ==uebung['Titel']:
+                uebungen.append(uebung['Uebungsbereich'])
+    else:
+        for titel in titels:
+            for uebung in aufgabenListe:
+                if titel == uebung['Titel']:
+                    uebungen.append(uebung['UebungenListe'])
+    return uebungen
 
 if __name__ == '__main__':
     jsonladen()
     #dict_questiontitel()
-    print(list_titels(uebungsbereich_auflisten()))
+    for a in list_uebungen(list_titels('Fremdworte')):
+        print(list_uebungen(list_titels('Fremdworte')))
+    '''
+    for a in list_uebungen(list_titels(uebungsbereich_auflisten())):
+        print(a)
+        #for uid in a: print(uid['uid'])
+    '''
