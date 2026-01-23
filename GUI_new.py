@@ -44,6 +44,7 @@ def combined_command():
         aktiv = BereichCheckbox.get_active()
         if not aktiv  == []:
             start_logic()
+            for a in logic.list_uebungen(aktiv): print(a)
         else:
             print("Hs")
 
@@ -282,7 +283,6 @@ Button(SBBFrame,
                               ipadx=50,
                               padx=5,
                               pady=5)
-
 #creates a frame for checkboxes
 BereichCheckbox.BereichCheckbox(CheckBoxFrameS).create("#ffffff")
 
