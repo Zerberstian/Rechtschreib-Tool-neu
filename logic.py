@@ -38,21 +38,27 @@ def list_uebungen(titels):
     if not type(titels) == list:
         for uebung in aufgabenListe:
             if titels ==uebung['Titel']:
-                uebungen.append(uebung['Uebungsbereich'])
+                for u in uebung['UebungenListe']:
+                    uebungen.append(u)
     else:
         for titel in titels:
             for uebung in aufgabenListe:
                 if titel == uebung['Titel']:
-                    uebungen.append(uebung['UebungenListe'])
+                    for u in uebung['UebungenListe']:
+                        uebungen.append(u)
+    print(len(uebungen))
     return uebungen
 
 if __name__ == '__main__':
     jsonladen()
+    #print(uebungsbereich_auflisten())
+    #print(list_titels(uebungsbereich_auflisten()))
+    print(list_uebungen(['Kommasetzung', 'Fremdworte Teil 1']))
     #dict_questiontitel()
+    '''
     for a in list_uebungen(list_titels('Fremdworte')):
         print(list_uebungen(list_titels('Fremdworte')))
-    '''
+    
     for a in list_uebungen(list_titels(uebungsbereich_auflisten())):
-        print(a)
-        #for uid in a: print(uid['uid'])
-    '''
+        for uid in a: print(uid)
+'''
