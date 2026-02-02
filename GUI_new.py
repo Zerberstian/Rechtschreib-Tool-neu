@@ -2,10 +2,10 @@ from tkinter import *               #import for tkinter
 from tkinter import messagebox      #import messagebox
 import os                           #import for Operating System
 import sys                          #import system
-import logic2                        #import logic.py
+import logic2                       #import logic.py
 import BereichCheckbox              #import BereichCheckbox.py
 
-logic2.jsonladen()  #load aufgaben.json (must be in directory)
+logic.jsonladen()  #load aufgaben.json (must be in directory)
 
 def on_value_change():
     global value
@@ -42,7 +42,7 @@ def combined_command():
         aktiv = BereichCheckbox.get_active()
         if not aktiv  == []:
             start_logic()
-            for a in logic2.list_uebungen(aktiv): print(a)
+            for a in logic.list_uebungen(aktiv): print(a)
         else:
             print("Hs")
 
@@ -114,7 +114,7 @@ def open_instruktion_pdf():
 
 # Frames
 #################################################################################
-#
+                                                                                    #
 #the Main Menu Frame                                                               #
 MenuFrame = Frame(window, bg=BG_Farbe)                                            #
 MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)                     #
@@ -298,6 +298,7 @@ Button(SBBFrame,
                               ipadx=50,
                               padx=5,
                               pady=5)
+
 #creates a frame for checkboxes
 BereichCheckbox.BereichCheckbox(CheckBoxFrameS).create("#ffffff")
 
