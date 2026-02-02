@@ -74,7 +74,7 @@ class BereichCheckbox:
                             onvalue=1,
                             offvalue=0,
                             command=partial(BereichCheckbox.update_hauptkategorie, self, bereich),
-                                  )
+                                )
                 self.checkbox_list.append(box)
                 box.pack(anchor="w")
 
@@ -99,12 +99,12 @@ class BereichCheckbox:
 
 def get_active():
     aktiv = []
-    for a, b in unter_dict.items():
-        for n, var in b.items():
+    for bereich, titel_var in unter_dict.items():
+        for titel, var in titel_var.items():
             if var.get() == 1:
-                aktiv.append(n)
-    for a in aktiv:
-        print(a)
+                aktiv.append(titel)
+    #for titel in aktiv:
+    #    print(titel)
     return aktiv
 
 if __name__ == "__main__":
