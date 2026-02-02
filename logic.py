@@ -1,4 +1,4 @@
-#logic for Rechtschreib-Tool
+#logic for Rechtschreib-Tool (aufgaben.json)
 import json
 
 geladeneAufgaben = [] #Create an empty list for questions
@@ -6,7 +6,7 @@ bereichListe = [] #Create an empty list for topics
 
 #Function to load aufgaben.json
 def jsonladen():
-    with open ("aufgaben_mit_ids.json","r",encoding= "utf-8" ) as f:
+    with open ("aufgaben.json","r",encoding= "utf-8" ) as f:
         global geladeneAufgaben
         geladeneAufgaben = json.load(f)
 
