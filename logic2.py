@@ -49,7 +49,7 @@ def list_uebungen(titels):
                     if titel == objekt['Titel']:
                         for uebung in objekt['UebungenListe']:
                             aufgaben_liste.append(uebung["Uebung_id"])
-    print(len(aufgaben_liste))
+    print(len(aufgaben_liste), "= len(aufgaben_liste)")
     return aufgaben_liste
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ def on_value_change():
     global spinbox
     try:
         value = int(spinbox.get())
-        print(value)
+        print(f"{value} = erster spinbox.get")
         if value>100:
             value = 100
             spinbox.delete(0, END)
@@ -28,17 +28,17 @@ def on_value_change():
 
         spinbox.delete(0, END)
         spinbox.insert(0, 10)
-        print(spinbox.get())
+        print(spinbox.get(), "bei falsch spinbox.get print")
 
 def start_logic():
-    print("Start Logic")
+    print("Start Logic part\n")
     lokal_var = value
-    print(lokal_var)
+    print(lokal_var, "= (value check 2)")
     show_start_frame()
 
 def combined_command():
         on_value_change()
-        print(spinbox.get())
+        print(spinbox.get(), "= (value check 1)")
         aktiv = BereichCheckbox.get_active()
         if not aktiv  == []:
             start_logic()
