@@ -12,7 +12,7 @@ def on_value_change():
     global spinbox
     try:
         value = int(spinbox.get())
-        print(f"{value} = erster spinbox.get")
+        print(f"{value} = print für value (spinbox.get())")
         if value>100:
             value = 100
             spinbox.delete(0, END)
@@ -31,7 +31,7 @@ def on_value_change():
         print(spinbox.get(), "bei falsch spinbox.get print")
 
 def start_logic():
-    print("Start Logic part\n")
+    print("Start der logik")
     lokal_var = value
     print(lokal_var, "= (value check 2)")
     show_start_frame()
@@ -44,7 +44,7 @@ def combined_command():
             start_logic()
             for a in logic2.list_uebungen(aktiv): print(a)
         else:
-            print("Hs")
+            print("\nkeine Checkboxen ausgewählt:\n   start_logic() wird nicht ausgeführt!!!\n")
 
 def to_start():
     combined_command()
