@@ -48,7 +48,7 @@ def list_uebungen(titels):
                 for objekt in aufgabe['Teilgebiet']:
                     if titel == objekt['Titel']:
                         for uebung in objekt['UebungenListe']:
-                            aufgaben_liste.append(uebung)
+                            aufgaben_liste.append(uebung["Uebung_id"])
     print(len(aufgaben_liste))
     return aufgaben_liste
 
