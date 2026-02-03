@@ -39,12 +39,16 @@ def start_logic():
 def combined_command():
         on_value_change()
         print(spinbox.get(), "= (value check 1)")
-        aktiv = BereichCheckbox.get_active()
+        start_logic()
+        #aktiv = BereichCheckbox.get_active()
+
+'''
         if not aktiv  == []:
             start_logic()
             for a in logic2.list_uebungen(aktiv): print(a)
         else:
             print("\nkeine Checkboxen ausgewählt:\n   start_logic() wird nicht ausgeführt!!!\n")
+'''
 
 def to_start():
     combined_command()
