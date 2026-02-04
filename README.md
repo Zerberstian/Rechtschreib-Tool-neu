@@ -1,2 +1,3 @@
-# Rechtschreib-Tool-neu
-Tool wie im Rahmen der Praktischen Ausbildung entwickeln.
+# Überarbeitete Version des Rechtschreibtools für die SRH Dresden
+
+Dieses Tool wurde im Rahmen der Praktischen Ausbildung von der FI25a entwickelt.
