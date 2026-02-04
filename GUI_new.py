@@ -5,7 +5,7 @@ import sys                          #import system
 import logic2                       #import logic.py
 import BereichCheckbox              #import BereichCheckbox.py
 
-logic2.jsonladen()  #load aufgaben.json (must be in directory)
+#logic2.jsonladen()  #load aufgaben.json (must be in directory)
 
 def on_value_change():
     global value

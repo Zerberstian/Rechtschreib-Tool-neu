@@ -39,9 +39,10 @@ def list_uebungen(titels):
     aufgaben_liste = []
     if not type(titels) == list:
         for aufgabe in geladeneAufgaben:
-            if titels == aufgabe['Titel']:
-                for uebung in aufgabe['UebungenListe']:
-                    aufgaben_liste.append(uebung)
+            for objekt in aufgabe['Teilgebiet']:
+                if titels == objekt['Titel']:
+                    for uebung in objekt['UebungenListe']:
+                        aufgaben_liste.append(uebung["Uebung_id"])
     else:
         for titel in titels:
             for aufgabe in geladeneAufgaben:
@@ -52,6 +53,28 @@ def list_uebungen(titels):
     print(len(aufgaben_liste), "= len(aufgaben_liste)")
     return aufgaben_liste
 
+def aufgabe_lesen(aufgaben_id):
+    for bereich in geladeneAufgaben:
+        for teilgebiet in bereich['Teilgebiet']:
+            for aufgabe in teilgebiet['UebungenListe']:
+                if aufgaben_id == aufgabe["Uebung_id"]:
+                    return aufgabe
+
+def get_spezial_status(teilgebiet_id):
+    for bereich in geladeneAufgaben:
+        for teilgebiet in bereich['Teilgebiet']:
+            if teilgebiet_id == teilgebiet['Teilgebiet_id']:
+                return teilgebiet['IstSpeziell']
+
+def get_aufgaben_beschreibung(teilgebiet_id):
+    for bereich in geladeneAufgaben:
+        for teilgebiet in bereich['Teilgebiet']:
+            if teilgebiet_id == teilgebiet['Teilgebiet_id']:
+                return teilgebiet['Aufgabenbeschreibung']
+
+jsonladen()
 if __name__ == '__main__':
-    jsonladen()
-    print(list_uebungen(list_titels(uebungsbereich_auflisten())))
+    #print(list_uebungen(list_titels(uebungsbereich_auflisten())))
+    #for eintrag in list_uebungen(list_titels(uebungsbereich_auflisten())):
+    #    print(aufgabe_lesen(eintrag))
+    print(aufgabe_lesen("1.1.1"))
