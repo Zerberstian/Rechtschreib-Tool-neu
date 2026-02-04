@@ -1,4 +1,4 @@
-#>> NOTIZEN / TO-DO'S <<
+# >> NOTIZEN / TO-DO'S <<
 # Diese Anwendung soll später auf eine json-Datei die auf Github liegt zugreifen können, anstatt nur lokal zu funktionieren
 # Folgende Sachen sollen mit der Terminalanwendung abänderbar und editierbar sein.
 # - Die Möglichkeiten
@@ -34,5 +34,16 @@
 #       1.3.1 Aufgaben-ID eingeben
 #           1.3.2. Zu löschende Aufgabe anzeigen und erneut nach Bestätigung fragen
 #--------------------------------
-#>> DONE <<#
+# >>PRIORISIERUNG<<
+#   Muss:
+#	    - Bearbeiten von Aufgaben, Anzeigen der Änderungen	
+#	Soll:
+#	    - Alles andere
+#--------------------------------
+# >> DONE <<
+#
+#
+#
+#
+#--------------------------------
 
