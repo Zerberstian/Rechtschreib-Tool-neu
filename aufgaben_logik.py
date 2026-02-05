@@ -36,7 +36,7 @@ def aufgabe_aufgabieren(aufgabe):
     print(aufgabe.aufgabenbeschreibung, '\n')
     print(aufgabe.uebungs_beschreibung, "\n")
     aufgabe_stellen(aufgabe)
-    if aufgabe_beantworten(int(input("Schreiben Sie die Zahl der richtigen Antwort")), aufgabe):
+    if aufgabe_beantworten(int_input(), aufgabe):
         print("Richtig")
     else:
         print("Falsch")
@@ -51,6 +51,14 @@ def aufgabe_beantworten(antwort, aufgabe):
     else:
         return False
 
+def int_input():
+    while True:
+        try :
+            ant = input("Schreiben Sie die Zahl der richtigen Antwort")
+            int(ant)
+            break
+        except ValueError:
+            print("Der Antwort ist nicht gefund!")
 
 if __name__ == "__main__":
     Aufgabe("5.5.69")
