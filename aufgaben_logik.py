@@ -55,7 +55,7 @@ def int_input():
     while True:
         try :
             ant = input("Schreiben Sie die Zahl der richtigen Antwort")
-            int(ant)
+            return int(ant)
             break
         except ValueError:
             print("Der Antwort ist nicht gefund!")
