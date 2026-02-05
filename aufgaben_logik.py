@@ -1,6 +1,9 @@
 from logic2 import *
+from BereichCheckbox import *
+import random
 
-aufgaben_dict = {}
+aufgaben_dict_ausgewahlt = {} # Objekte der Klasse Aufgabe werden hier gemerkt und können mit der Uebung_id ist key
+zuloesende_aufgaben_dict = {} # ^ diese sind aber die welche noch beantwortet werden müssen
 
 class Aufgabe:
     def __init__(self, uebung_id):
@@ -14,7 +17,7 @@ class Aufgabe:
         self.spezial_type = self.spezial_check()
         self.aufgabenbeschreibung = self.aufgabenbeschreibung()
 
-        aufgaben_dict[self.uebung_id] = self
+        aufgaben_dict_ausgewahlt[self.uebung_id] = self
 
     def aufgabenbeschreibung(self):
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
@@ -23,9 +26,9 @@ class Aufgabe:
     def spezial_check(self):
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
         x = get_spezial_status(gekuerzte_uebung_id)
-        print(x)
         if not x:
             return x
+        print("Diese Aufgabe ist \"Speziell\"")
         if len(self.moeglichkeiten[0].split()) == 1:
             print("Das ist ein Wort")
         else:
@@ -37,9 +40,9 @@ def aufgabe_aufgabieren(aufgabe):
     print(aufgabe.uebungs_beschreibung, "\n")
     aufgabe_stellen(aufgabe)
     if aufgabe_beantworten(int_input(), aufgabe):
-        print("Richtig")
+        print("Die Antwort ist Richtig")
     else:
-        print("Falsch")
+        print("Die Antwort ist Falsch")
 
 def aufgabe_stellen(aufgabe):
     for index, entry in enumerate(aufgabe.moeglichkeiten):
@@ -56,14 +59,31 @@ def int_input():
         try :
             ant = input("Schreiben Sie die Zahl der richtigen Antwort")
             return int(ant)
-            break
         except ValueError:
             print("Der Antwort ist nicht gefund!")
 
+def akitve_aufgaben_objekte_erstellen():
+    aktiv = get_active()
+    for eintrag in list_uebungen(aktiv):
+        Aufgabe(eintrag)
+
+def alle_aufgaben_objekte():
+    for index, aufgabe in enumerate(aufgaben_dict_ausgewahlt):
+        print(aufgaben_dict_ausgewahlt[aufgabe].moeglichkeiten)
+
+def do_stuff():
+    akitve_aufgaben_objekte_erstellen()
+    alle_aufgaben_objekte()
+
+def aufgaben_picken(limit):
+    x = 0
+    while x <= limit:
+        x += 1
+        pass
+
 if __name__ == "__main__":
-    Aufgabe("5.5.69")
-    aufgabe_aufgabieren(aufgaben_dict["5.5.69"])
-    Aufgabe("5.3.99")
-    aufgabe_aufgabieren(aufgaben_dict["5.3.99"])
-    Aufgabe("1.1.1")
-    aufgabe_aufgabieren(aufgaben_dict["1.1.1"])
+    root = Tk()
+    BereichCheckbox(root).create("#ffffff")
+    asdasdasd = Button(root, text="Test", command=do_stuff)
+    asdasdasd.pack()
+    root.mainloop()
