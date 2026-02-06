@@ -3,7 +3,12 @@ from BereichCheckbox import *
 import random
 
 aufgaben_dict_ausgewahlt = {} # Objekte der Klasse Aufgabe werden hier gemerkt und können mit der Uebung_id ist key
-zuloesende_aufgaben_dict = {} # ^ diese sind aber die welche noch beantwortet werden müssen
+zuloesende_aufgaben_dict = {} # ^ diese sind aber die, welche noch beantwortet werden müssen
+
+
+'''
+Hier sind eine paar Funktionen, welche ihren Sinn im laufe der Programmierung wieder verlieren.
+'''
 
 class Aufgabe:
     def __init__(self, uebung_id):
@@ -73,12 +78,15 @@ def alle_aufgaben_objekte():
 
 def do_stuff():
     akitve_aufgaben_objekte_erstellen()
-    alle_aufgaben_objekte()
+    aufgaben_picken(20)
+    #alle_aufgaben_objekte()
 
 def aufgaben_picken(limit):
     x = 0
-    while x <= limit:
+    while x < limit:
         x += 1
+        test = random.choice(list(aufgaben_dict_ausgewahlt.keys()))
+        print(test)
         pass
 
 if __name__ == "__main__":
