@@ -1,7 +1,7 @@
 
 # Aufgabeneditor
 
-##  TO-DOs
+## TO-DOs
 
 - **Ziel**: Anwendung soll auf GitHub JSON zugreifen können (statt nur lokal)
 
@@ -20,7 +20,7 @@
 1. Hauptmenü: Was soll gemacht werden?
    ├── 1.1 Aufgabe bearbeiten
    │    ├── 1.1.1 Aufgaben-ID eingeben (immer sichtbar/kopierbar)
-   │    ├── 1.1.2 Fehlerhafte Teile auswählen (Mehrfachauswahl)
+   │    ├── 1.1.2 Fehlerhafte Teile auswählen
    │    └── 1.1.3 Bearbeitung:
    │         ├── Anzahl Möglichkeiten ± (richtige Antwort nicht löschbar)
    │         ├── Korrekte Antwort ändern
@@ -40,8 +40,8 @@
 
 | Status | Aufgaben |
 | --- | --- |
-| **Muss** | Aufgabe bearbeiten + Änderungen anzeigen |
-| **Soll** | Hinzufügen, Entfernen, GitHub-Integration |
+| **Muss** | Aufgabe bearbeiten + Änderungen anzeigen, Updates über Github möglich machen |
+| **Soll** | Hinzufügen, Entfernen |
 
 ---
 
@@ -122,10 +122,11 @@ JSON-Feld + auto increment ist einfach und verwirrungsfrei.
 
 >Problem:
 
-IDs sollen stabil bleiben (auch bei Löschungen/Hinzufügungen)
+- IDs sollen stabil bleiben (auch bei Löschungen/Hinzufügungen)
+
 >Lösung:
 
-Neue Aufgaben bekommen ID basierend auf Vorgängeraufgabe desselben Typs
+- Neue Aufgaben bekommen ID basierend auf Vorgängeraufgabe desselben Typs
 
 ---
 
