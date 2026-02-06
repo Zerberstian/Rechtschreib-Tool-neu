@@ -4,7 +4,8 @@ import random
 
 aufgaben_dict_ausgewahlt = {} # Objekte der Klasse Aufgabe werden hier gemerkt und können mit der Uebung_id ist key
 zuloesende_aufgaben_dict = {} # ^ diese sind aber die, welche noch beantwortet werden müssen
-
+boese_liste = []
+gute_liste = []
 
 '''
 Hier sind eine paar Funktionen, welche ihren Sinn im laufe der Programmierung wieder verlieren.
@@ -40,14 +41,16 @@ class Aufgabe:
     def release_me(self):
         aufgaben_dict_ausgewahlt.pop(self.uebung_id)
 
-def aufgabe_aufgabieren(aufgabe):
+def aufgabe_loesen(aufgabe):
     print(aufgabe.aufgabenbeschreibung, '\n')
     print(aufgabe.uebungs_beschreibung, "\n")
     aufgabe_stellen(aufgabe)
     if aufgabe_beantworten(int_input(), aufgabe):
         print("Die Antwort ist Richtig")
+        richtige_merken(aufgabe)
     else:
         print("Die Antwort ist Falsch")
+        falsche_merken(aufgabe)
 
 def aufgabe_stellen(aufgabe):
     for index, entry in enumerate(aufgabe.moeglichkeiten):
@@ -72,14 +75,15 @@ def akitve_aufgaben_objekte_erstellen():
     for eintrag in list_uebungen(aktiv):
         Aufgabe(eintrag)
 
-def alle_aufgaben_objekte():
-    for index, aufgabe in enumerate(aufgaben_dict_ausgewahlt):
-        print(aufgaben_dict_ausgewahlt[aufgabe].moeglichkeiten)
 
 def do_stuff():
     akitve_aufgaben_objekte_erstellen()
-    aufgaben_picken(10)
-    #alle_aufgaben_objekte()
+    aufgaben_picken(5)
+    for aufgabe in zuloesende_aufgaben_dict:
+        print(aufgabe)
+        aufgabe_loesen(zuloesende_aufgaben_dict[aufgabe])
+    print(len(gute_liste), " Richtige Antworten")
+    print(len(boese_liste), " Falschen Antworten")
 
 def temp_do_stuff():
     for aufgabe in aufgaben_dict_ausgewahlt.copy():
@@ -97,10 +101,20 @@ def aufgaben_picken(limit):
             list_test.append(test)
             zuloesende_aufgaben_dict[test] = aufgaben_dict_ausgewahlt[test]
             print(zuloesende_aufgaben_dict[test].uebung_id)
-            x += 1
         elif len(list_test) == len(list(aufgaben_dict_ausgewahlt.keys())):
-            print("67")
+            print("Alle Verfügbaren Aufgaben geloaden")
             break
+        x += 1
+    return None
+
+def neu_aufgabe_random_wieder_ins_dictionary(neue_aufgabe):
+    pass
+
+def richtige_merken(aufgabe):
+    gute_liste.append(aufgabe.uebung_id)
+
+def falsche_merken(aufgabe):
+    boese_liste.append(aufgabe.uebung_id)
 
 if __name__ == "__main__":
     root = Tk()
