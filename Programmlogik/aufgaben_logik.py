@@ -18,7 +18,6 @@ class Aufgabe:
         self.moeglichkeiten = aufgabe["Moeglichkeiten"]
         self.korrekt = aufgabe["KorrekteAntwort"]
         self.infotext = aufgabe["Infotext"]
-        self.fremdwort = aufgabe["Fremdwort"]
         self.uebungs_beschreibung = aufgabe["UebungsBeschreibung"]
         self.spezial_type = self.spezial_check()
         self.aufgabenbeschreibung = self.aufgabenbeschreibung()
