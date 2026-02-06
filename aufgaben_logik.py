@@ -32,13 +32,13 @@ class Aufgabe:
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
         x = get_spezial_status(gekuerzte_uebung_id)
         if not x:
-            return x
-        print("Diese Aufgabe ist \"Speziell\"")
+            return "Nicht Speziell"
         if len(self.moeglichkeiten[0].split()) == 1:
-            print("Das ist ein Wort")
+            return "Speziell Wort"
         else:
-            print("Das ist ein Satz")
-        return x
+            return "Speziell Satz"
+    def release_me(self):
+        aufgaben_dict_ausgewahlt.pop(self.uebung_id)
 
 def aufgabe_aufgabieren(aufgabe):
     print(aufgabe.aufgabenbeschreibung, '\n')
@@ -78,20 +78,41 @@ def alle_aufgaben_objekte():
 
 def do_stuff():
     akitve_aufgaben_objekte_erstellen()
-    aufgaben_picken(20)
+    aufgaben_picken(10)
     #alle_aufgaben_objekte()
 
+def temp_do_stuff():
+    for aufgabe in aufgaben_dict_ausgewahlt.copy():
+        print(aufgabe)
+        aufgaben_dict_ausgewahlt[aufgabe].release_me()
+
 def aufgaben_picken(limit):
+    if aufgaben_dict_ausgewahlt == {}:
+        return print("Das Dict ist Leer. Haben Sie nichts ausgewählt?")
     x = 0
+    list_test = []
     while x < limit:
-        x += 1
         test = random.choice(list(aufgaben_dict_ausgewahlt.keys()))
-        print(test)
-        pass
+        if test not in list_test:
+            list_test.append(test)
+            zuloesende_aufgaben_dict[test] = aufgaben_dict_ausgewahlt[test]
+            print(zuloesende_aufgaben_dict[test].uebung_id)
+            x += 1
+        elif len(list_test) == len(list(aufgaben_dict_ausgewahlt.keys())):
+            print("67")
+            break
 
 if __name__ == "__main__":
     root = Tk()
     BereichCheckbox(root).create("#ffffff")
-    asdasdasd = Button(root, text="Test", command=do_stuff)
-    asdasdasd.pack()
+    start = Button(root, text="Start", command=do_stuff)
+    start.pack()
+    reset = Button(root, text="Reset", command=temp_do_stuff)
+    reset.pack()
     root.mainloop()
+
+'''
+Es fehlt noch das die "Auswahl" entfernt wird falls man noch mal Übungen machen will.
+Zur Zeit muss man neustarten um eine neue Auswahl in der Checkbox zu machen.
+eg wenn man zurück geht sollen alle Aufgaben Objekte vergessen werden. 
+'''
