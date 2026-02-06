@@ -104,7 +104,7 @@ def check_json_version():
         return local_data
     
 # Updaten der Version, und Überspeicherung der Cache, wenn neue Version vorhanden
-    print("🧭Neue Aufgabenversion gefunden, Lade herunter...")
+    print("🧭 Neue Aufgabenversion gefunden, Lade herunter...")
     try:
         response = requests.get(RAW_URL, timeout=10)
         remote_data = response.json()
@@ -115,7 +115,7 @@ def check_json_version():
         
         cache = {
             'version': remote_version,
-            'lastUpdated': datetime.now().isoformat(),
+            'lastUpdated': datetime.now().isoformat(), # Die Update Zeit ebenfalls in der GitHub json festhalten, damit es auch hier wieder keine Abweichungen von Benutzer zu Benutzer gibt
             'etag': remote_etag,
             'totalAufgaben': aufgaben_anzahl,
             'size': file_size,
@@ -150,7 +150,6 @@ def load_local_cache():
 
 if __name__ == "__main__":
     print("═" * 60); print("Aufgabeneditor".center(60)); print("═" * 60+"\n")
-    
     aufgaben_data = check_json_version()
     total_aufgaben = count_aufgaben(aufgaben_data)
     

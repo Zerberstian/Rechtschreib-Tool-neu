@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "lastUpdated": "2026-02-05T14:41:15.555689",
-  "etag": "W/\"ece17b00ff986e32efaa3d5157ecad84fa26ec705a78e0e762ddcce7017e771e\"",
+  "lastUpdated": "2026-02-06T10:00:54.307211",
+  "etag": "W/\"9153c7a541e4e3d702495a91ec3fdc2ed03836b2a986bc0295a063164c6c7512\"",
   "totalAufgaben": 7385,
-  "size": 2558024,
+  "size": 2558025,
   "data": [
     {
-      "Uebungsbereich": "Groß- und Testschreibung",
+      "Uebungsbereich": "Groß- und Kleinschreibung",
       "Teilgebiet": [
         {
           "Titel": "Nomen-Verb-Adjektiv Teil 1",
