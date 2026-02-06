@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import os
 import sys
-import Programmlogik.logic2
+from Programmlogik import logic2
 from GUI import BereichCheckbox
 
 
