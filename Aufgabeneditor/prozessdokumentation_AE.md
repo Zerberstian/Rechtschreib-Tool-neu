@@ -1,16 +1,37 @@
 
 # Aufgabeneditor
 
-## TO-DOs
+> Übergeordnete Sachen
 
-- **Ziel**: Anwendung soll auf GitHub JSON zugreifen können (statt nur lokal)
+- [x] Änderung To-Do's zu einer .md
+- [x] Ordnerstruktur anpassen
+- [x] Github Recherche ETag / Header
+- [x] Festhalten der nötigen Zwischenschritte
 
-- **Editierbare Felder**:
-  - Möglichkeiten
-  - Korrekte Antwort
-  - Infotext
-  - Übungsbeschreibung
-  - `[Übungs-ID automatisch generieren]`
+> Aktuelles Ziel: Globale Versionierung
+
+- [x] Anwendung soll auf GitHub JSON zugreifen können (statt nur lokal)
+- [x] Anwendung soll einen Update Check beim Start machen
+- [ ] Version soll auf GitHub ebenfalls automatisch inkrementiert werden
+
+  `Dafür notwendig ist der Editor, der zulässt das folgende Änderungen gemacht werden können:`
+  - [ ] Anzeigen der Aufgabe mit der eingebenen ID
+  - [ ] Anpassen der Antwortmöglichkeiten
+  - [ ] Anpassen der korrekten Antwort
+  - [ ] Bearbeiten des Infotextes
+  - [ ] Anpassen der Übungsbeschreibung
+  - [ ] Übungs-ID automatisch generieren
+  - [ ] Automatischer Github Commit
+    - [ ] Verschlüsselung der Accountcredentials
+
+---
+
+## Priorisierung
+
+| Status | Aufgaben |
+|--------|----------|
+| *Muss* | **1** Aufgabe vollständig bearbeiten <br> **2** Änderungen anzeigen <br> **3** Updates über Github möglich machen |
+| *Soll* | **4** Aufgaben hinzufügen <br> **5** Aufgaben entfernen |
 
 ---
 
@@ -36,16 +57,7 @@
 
 ---
 
-## Priorisierung
-
-| Status | Aufgaben |
-| --- | --- |
-| **Muss** | Aufgabe bearbeiten + Änderungen anzeigen, Updates über Github möglich machen |
-| **Soll** | Hinzufügen, Entfernen |
-
----
-
-### Unterschied zwischen lokaler und Remote Version
+## Unterschied zwischen lokaler und Remote Version
 
 ETag löst dein Problem nicht vollständig. Er ist nur ein Identifikator für **genaue Inhaltsgleichheit** der Datei, aber keine zentrale Versionsnummer – bei jedem Download wird einfach `local_version + 1` gesetzt, was pro Benutzer inkrementell läuft.
 
@@ -112,7 +124,7 @@ Aber das ist komplexer als JSON-Version.
 
 ---
 
-#### Entscheidung
+### Entscheidung
 
 JSON-Feld + auto increment ist einfach und verwirrungsfrei.
 
@@ -129,7 +141,3 @@ JSON-Feld + auto increment ist einfach und verwirrungsfrei.
 - Neue Aufgaben bekommen ID basierend auf Vorgängeraufgabe desselben Typs
 
 ---
-
-## DONE
-
-- Automatisches Laden aktueller Aufgabenversion von GitHub (via Terminal)
