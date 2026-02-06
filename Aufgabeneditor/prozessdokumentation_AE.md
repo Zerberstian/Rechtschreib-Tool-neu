@@ -28,10 +28,10 @@
 
 ## Priorisierung
 
-| Status | Aufgaben |
-|--------|----------|
-| *Muss* | **1** Aufgabe vollständig bearbeiten <br> **2** Änderungen anzeigen <br> **3** Updates über Github möglich machen |
-| *Soll* | **4** Aufgaben hinzufügen <br> **5** Aufgaben entfernen |
+| Status | Aufgaben                                                                                                          |
+|--------|-------------------------------------------------------------------------------------------------------------------|
+| *Muss* | **1** Aufgabe vollständig bearbeiten **2** Änderungen anzeigen **3** Updates über Github möglich machen           |
+| *Soll* | **4** Aufgaben hinzufügen **5** Aufgaben entfernen                                                                |
 
 ---
 
