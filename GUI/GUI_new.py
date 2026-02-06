@@ -2,8 +2,9 @@ from tkinter import *
 from tkinter import messagebox
 import os
 import sys
-import logic2
-import BereichCheckbox
+import Programmlogik.logic2
+from GUI import BereichCheckbox
+
 
 #logic2.jsonladen()  # json must be in directory
 

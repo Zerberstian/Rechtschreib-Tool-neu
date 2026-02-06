@@ -1,7 +1,7 @@
 #used to create the BereichCheckbox as packable Widget
 from functools import partial
 from tkinter import *
-import logic2
+from Programmlogik import logic2
 
 ober_dict = {}
 unter_dict = {}

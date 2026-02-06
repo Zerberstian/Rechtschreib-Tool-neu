@@ -1,5 +1,5 @@
 from logic2 import *
-from BereichCheckbox import *
+from GUI.BereichCheckbox import *
 import random
 
 aufgaben_dict_ausgewahlt = {} # Objekte der Klasse Aufgabe werden hier gemerkt und können mit der Uebung_id ist key
