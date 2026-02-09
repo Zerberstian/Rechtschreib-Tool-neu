@@ -79,13 +79,17 @@ def button_start():
 
 def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(8):
+    if aufgaben_picken(10):
         return
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
         aufgabe_loesen(index, aufgaben_dict[aufgabe])
     print(len(gute_liste), " Richtige Antworten")
+    for x in gute_liste:
+        print(x)
     print(len(boese_liste), " Falschen Antworten")
+    for x in boese_liste:
+        print(x)
     resetting()
 
 def resetting():
@@ -113,13 +117,13 @@ def richtige_merken(aufgabe):
     gute_liste.append(aufgabe.uebung_id)
 
 def falsche_merken(index, aufgabe):
-    boese_liste.append(aufgabe.uebung_id)
-    if aufgabe.uebung_id in boese_liste:
+    if aufgabe.uebung_id not in boese_liste:
+        boese_liste.append(aufgabe.uebung_id)
         falsche_antwort_rein_shuffeln(index, aufgabe.uebung_id)
 
 def falsche_antwort_rein_shuffeln(index, aufgabe):
     try:
-        random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list) - index)
+        random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list))
         zu_loesende_aufgaben_list.insert(random_index, aufgabe)
     except ValueError:
         print("Der Index ist nicht gefund!")
