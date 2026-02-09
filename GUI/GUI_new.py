@@ -60,11 +60,11 @@ def to_start():
     combined_command()
 
 # Main style constants
-BG_Farbe = "#E0470A"
-Btn_BG_Farbe = "#ffffff"
-BtnFontArt = "Arial"
-BtnFontGroesse = 30
-inside_Padding_Y = 20
+BG_Farbe = "#E0470A"        #Background Color Value (general)
+Btn_BG_Farbe = "#ffffff"    #Background Color (all Btn except Spinbox & Buttons)
+BtnFontArt = "Arial"        #Button Font Style (all Btn)
+BtnFontGroesse = 30         #Button Font size (all Btn)
+inside_Padding_Y = 0       #Button Inside pady Value (Main Menu)
 
 # Defining window
 window = Tk()
@@ -109,6 +109,7 @@ def back_to_main_frame():
     headline.grid(row=0,column=1, sticky=N)
     MenuText.grid(row=1,column=1, sticky=NW)
     logicFrame.grid_forget()
+    ColorPickerFrame.grid_forget()
 
 def open_instruction_pdf():
     project_root = os.path.dirname(os.path.dirname(__file__))
@@ -116,6 +117,15 @@ def open_instruction_pdf():
     if sys.platform.startswith("win"):
         os.startfile(pdf_path)
 
+def show_color_picker():
+    MenuFrame.grid_forget()
+    MenuText.grid_forget()
+    headline.grid_forget()
+    ColorPickerFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)
+
+def change_BG_Farbe(farbe):
+    window.config(bg=farbe)
+    SelectFrame.config(bg=farbe)
 
 # Frames
 ##############################################################################
@@ -141,6 +151,8 @@ SpinBoxFrame.grid(row=1, column=2, rowspan=1, sticky=NW)
 logicFrame  =   Frame(window, bg=BG_Farbe)
 
 AufgabenFrameSeite = Frame(window, bg=BG_Farbe)
+
+ColorPickerFrame = Frame(window, bg=BG_Farbe)
 ##############################################################################
 
 SelectFrame.grid_rowconfigure(0, weight=1)
@@ -190,14 +202,16 @@ Button(MenuFrame,
         command=show_select_frame,
         ).pack(anchor="w",fill="x", pady=5, ipady=inside_Padding_Y)
 
+# Button for going back to Main Menu
 Button(MenuFrame,
-        text="Rot-Grün\n Schwäche",
+        text="Farbwahl",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=open_instruction_pdf,
+        command=show_color_picker
+        #command=lambda: change_BG_Farbe("#ffffff"),
         ).pack(anchor="w",fill="x", pady=5)
 
-# Buttons for going back to Main Menu
+# Button for going back to Main Menu
 Button(ButtonFrameSB,
         text="zurück",
         font=(BtnFontArt, BtnFontGroesse),
@@ -205,12 +219,29 @@ Button(ButtonFrameSB,
         command=back_to_main_frame,
         ).pack(anchor="w" ,fill="x", pady=5, padx=5)
 
+# Button for going back to Main Menu
+Button(ColorPickerFrame,
+        text="zurück",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=back_to_main_frame,
+        ).pack(anchor="w", fill="x", pady=5, padx=5)
+
+# Button for going back to Main Menu
 Button(logicFrame,
         text="zurück",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=back_to_main_frame,
         ).grid(row=3, column=3, padx=5, pady=5)
+
+Button(ColorPickerFrame,
+        text="weißer\n Hintergrund",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=lambda: change_BG_Farbe("#ffffff")).pack(anchor="w", fill="x", pady=5, padx=5)
+
+Button(ColorPickerFrame,)
 
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
