@@ -2,8 +2,8 @@ from logic2 import *
 from GUI.BereichCheckbox import *
 import random
 
-aufgaben_dict_ausgewahlt = {} # Objekte der Klasse Aufgabe werden hier gemerkt und können mit der Uebung_id ist key
-zuloesende_aufgaben_dict = {} # ^ diese sind aber die, welche noch beantwortet werden müssen
+aufgaben_dict = {} # Objekte der Klasse Aufgabe werden hier gemerkt und können mit der Uebung_id ist key
+zu_loesende_aufgaben_list = []
 boese_liste = []
 gute_liste = []
 
@@ -18,12 +18,11 @@ class Aufgabe:
         self.moeglichkeiten = aufgabe["Moeglichkeiten"]
         self.korrekt = aufgabe["KorrekteAntwort"]
         self.infotext = aufgabe["Infotext"]
-        self.fremdwort = aufgabe["Fremdwort"]
         self.uebungs_beschreibung = aufgabe["UebungsBeschreibung"]
         self.spezial_type = self.spezial_check()
         self.aufgabenbeschreibung = self.aufgabenbeschreibung()
 
-        aufgaben_dict_ausgewahlt[self.uebung_id] = self
+        aufgaben_dict[self.uebung_id] = self
 
     def aufgabenbeschreibung(self):
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
@@ -39,7 +38,7 @@ class Aufgabe:
         else:
             return "Speziell Satz"
     def release_me(self):
-        aufgaben_dict_ausgewahlt.pop(self.uebung_id)
+        aufgaben_dict.pop(self.uebung_id)
 
 def aufgabe_loesen(aufgabe):
     print(aufgabe.aufgabenbeschreibung, '\n')
@@ -75,40 +74,35 @@ def akitve_aufgaben_objekte_erstellen():
     for eintrag in list_uebungen(aktiv):
         Aufgabe(eintrag)
 
+def button_start():
+    aufgaben_initialisieren()
 
-def do_stuff():
+def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
     aufgaben_picken(5)
-    for aufgabe in zuloesende_aufgaben_dict:
+    for aufgabe in zu_loesende_aufgaben_list:
         print(aufgabe)
-        aufgabe_loesen(zuloesende_aufgaben_dict[aufgabe])
+        aufgabe_loesen(aufgaben_dict[aufgabe])
     print(len(gute_liste), " Richtige Antworten")
     print(len(boese_liste), " Falschen Antworten")
 
-def temp_do_stuff():
-    for aufgabe in aufgaben_dict_ausgewahlt.copy():
-        print(aufgabe)
-        aufgaben_dict_ausgewahlt[aufgabe].release_me()
+def aktive_resetting():
+    pass
 
 def aufgaben_picken(limit):
-    if aufgaben_dict_ausgewahlt == {}:
+    if aufgaben_dict == {}:
         return print("Das Dict ist Leer. Haben Sie nichts ausgewählt?")
     x = 0
-    list_test = []
     while x < limit:
-        test = random.choice(list(aufgaben_dict_ausgewahlt.keys()))
-        if test not in list_test:
-            list_test.append(test)
-            zuloesende_aufgaben_dict[test] = aufgaben_dict_ausgewahlt[test]
-            print(zuloesende_aufgaben_dict[test].uebung_id)
-        elif len(list_test) == len(list(aufgaben_dict_ausgewahlt.keys())):
+        uebung_id = random.choice(list(aufgaben_dict.keys()))
+        if uebung_id not in zu_loesende_aufgaben_list:
+            zu_loesende_aufgaben_list.append(uebung_id)
+            print(zu_loesende_aufgaben_list[-1])
+        elif len(zu_loesende_aufgaben_list) == len(list(aufgaben_dict.keys())):
             print("Alle Verfügbaren Aufgaben geloaden")
             break
         x += 1
     return None
-
-def neu_aufgabe_random_wieder_ins_dictionary(neue_aufgabe):
-    pass
 
 def richtige_merken(aufgabe):
     gute_liste.append(aufgabe.uebung_id)
@@ -119,9 +113,9 @@ def falsche_merken(aufgabe):
 if __name__ == "__main__":
     root = Tk()
     BereichCheckbox(root).create("#ffffff")
-    start = Button(root, text="Start", command=do_stuff)
+    start = Button(root, text="Start", command=button_start)
     start.pack()
-    reset = Button(root, text="Reset", command=temp_do_stuff)
+    reset = Button(root, text="Reset" )
     reset.pack()
     root.mainloop()
 
