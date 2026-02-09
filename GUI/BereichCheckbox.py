@@ -62,7 +62,7 @@ class BereichCheckbox:
                         offvalue=0,
                         command=partial(BereichCheckbox.toggle_unter_dict, self, bereich),
                         ).grid(pady=5, padx=5,sticky=NSEW, column=0, row=0)
-            for titelindex, titel in enumerate(logic2.list_titels(bereich)):
+            for titelindex, titel in enumerate(logic_der_zweite.list_titels(bereich)):
                 var = IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
                 box = Checkbutton(self.frame_dict[f"{bereich}2"],
@@ -107,7 +107,7 @@ def get_active():
     return aktiv
 
 if __name__ == "__main__":
-    logic2.jsonladen()
+    logic_der_zweite.jsonladen()
     root = Tk()
     BereichCheckbox(root).create("#ffffff")
     root.mainloop()
