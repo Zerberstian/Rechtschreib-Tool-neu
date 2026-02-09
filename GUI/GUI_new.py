@@ -4,11 +4,9 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports eg.: "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
-from tkinter import *
-from Programmlogik import logic2
 from BereichCheckbox import BereichCheckbox
 
-# logic2.jsonladen()
+# logic_der_zweite.jsonladen()
 # Json must be in directory
 
 def on_value_change():
@@ -52,7 +50,7 @@ def combined_command():
         aktiv = BereichCheckbox.get_active()
         if not aktiv  == []:
             start_logic()
-            for a in logic2.list_uebungen(aktiv): print(a)
+            for a in logic_der_zweite.list_uebungen(aktiv): print(a)
         else:
             messagebox.showerror("Fehlende Auswahl",
                                  "Es wurde kein Aufgabenbereich ausgewählt.")
