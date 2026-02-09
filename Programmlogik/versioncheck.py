@@ -1,6 +1,6 @@
-# Aktuell müssen die Aufgaben [https://github.com/orphcvs/Aufgabenkatalog/tree/main]
-# Manuell noch geändert und gepushed werden, da der Editor noch nicht gecoded wurde
-# Der Versionscheck, und das Autoupdate beim Programmstart funktioniert jedoch, wenn Änderungen vorgenommen werden
+# Currently, tasks must be manually edited and pushed to [https://github.com/orphcvs/Aufgabenkatalog/tree/main]
+# as the editor is not yet implemented
+# However, version checking and auto-update on program startup work when changes are made
 
 import requests
 import json
@@ -22,17 +22,18 @@ def check_json_version():
     RAW_URL = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"
     CACHE_FILE = "json_cache.json"
     
-    print("🌐 Prüfe auf neue Aufgabenversion...")
+    print("🌐 Checking for new task version...")
     
     try:
         response = requests.head(RAW_URL)
         remote_etag = response.headers.get('ETag', '')
         print(f"🌐 Remote ETag: {remote_etag[:20]}...")
     except:
-        print("🔴 Netzwerkfehler")
+        print("🔴 Network error")
         return load_local_cache()
 
-# Lokaler Cache wird geladen, um mit einer neuen Version verglichen zu werden, oder aber als Fallback für einen Netzausfall zu funktionieren. Die "eigentliche" Aufgaben.json befindet sich nur auf GitHub.
+    # Local cache is loaded to compare with new version or as fallback for network failure.
+    # The "actual" tasks.json exists only on GitHub.
     local_etag = ""
     local_version = 0
     local_data = []
@@ -44,18 +45,18 @@ def check_json_version():
                 local_etag = cache.get('etag', '')
                 local_version = cache.get('version', 0)
                 local_data = cache.get('data', [])
-            print(f"⚪ Lokal vorhandene Aufgabenversion: v{local_version} ({count_aufgaben(local_data)} Aufgaben)")
+            print(f"⚪ Local task version available: v{local_version} ({count_aufgaben(local_data)} tasks)")
         except:
-            print("🟠 Cache kaputt, oder nicht gefunden")
+            print("🟠 Cache corrupted or not found")
     
-# Githubversion mit lokal vorhandener Version abgleichen
+    # Compare GitHub version with local version
     if remote_etag == local_etag and local_data:
         aufgaben_anzahl = count_aufgaben(local_data)
-        print(f"🟣 {aufgaben_anzahl} Aufgaben geladen")
+        print(f"🟣 {aufgaben_anzahl} tasks loaded")
         return local_data
     
-# Updaten der Version, und Überspeicherung der Cache, wenn neue Version vorhanden
-    print("🧭 Neue Aufgabenversion gefunden, Lade herunter...")
+    # Update version and overwrite cache if new version available
+    print("🧭 New task version found, downloading...")
     try:
         response = requests.get(RAW_URL, timeout=10)
         remote_data = response.json()
@@ -66,7 +67,7 @@ def check_json_version():
         
         cache = {
             'version': remote_version,
-            'lastUpdated': datetime.now().isoformat(), # Die Update Zeit ebenfalls in der GitHub json festhalten, damit es auch hier wieder keine Abweichungen von Benutzer zu Benutzer gibt
+            'lastUpdated': datetime.now().isoformat(),  # Also store update time in GitHub JSON to ensure consistency across users
             'etag': remote_etag,
             'totalAufgaben': aufgaben_anzahl,
             'size': file_size,
@@ -76,18 +77,18 @@ def check_json_version():
         with open(CACHE_FILE, 'w', encoding='utf-8') as f:
             json.dump(cache, f, indent=2, ensure_ascii=False)
         
-        print(f"🟢 Neue Aufgabenversion: v{remote_version}")
-        print(f"🟣 {aufgaben_anzahl} Aufgaben ({file_size} Bytes)")
+        print(f"🟢 New task version: v{remote_version}")
+        print(f"🟣 {aufgaben_anzahl} tasks ({file_size} bytes)")
         print(f"🕙 {cache['lastUpdated'][:19]}")
         
         return remote_data
         
     except Exception as e:
-        print(f"🔴 Download-Fehler: {e}")
+        print(f"🔴 Download error: {e}")
         return local_data
 
-# Mithilfe der Cache kann immer auch die Offlineversion geladen werden, welche anschließend geupdated wird, wenn das Programm mit Netzwerkzugriff gestartet wird
-# Initial ist dieser erforderlich um die json herunterzuladen
+# Using the cache, the offline version can always be loaded, which is then updated when the program starts with network access
+# Initially required to download the JSON
 def load_local_cache():
     cache_file = "json_cache.json"
     if os.path.exists(cache_file):
@@ -95,7 +96,7 @@ def load_local_cache():
             cache = json.load(f)
             data = cache.get('data', [])
             anzahl = count_aufgaben(data)
-            print(f"⚪ Vorhandene Offline-Aufgabenversion: v{cache.get('version', 0)} ({anzahl} Aufgaben)")
+            print(f"⚪ Available offline task version: v{cache.get('version', 0)} ({anzahl} tasks)")
             return data
     return []
 
@@ -105,12 +106,13 @@ if __name__ == "__main__":
     total_aufgaben = count_aufgaben(aufgaben_data)
     
     print("\n" + "=" * 60)
-    print(f"🟢 Verfügbare Aufgaben: {total_aufgaben} insgesamt")
+    print(f"🟢 Available tasks: {total_aufgaben} total")
     
-# Zugriff auf Daten:
-# aufgaben_data[0]['Teilgebiet'][0]['UebungenListe'][0]  -> Erste Aufgabe
-    print(f"🔵 {len(aufgaben_data)} Übungsbereiche"+"\n"+ "=" * 60 +"\n")
-    input("Drücke Enter zum Beenden...")
+    # Access data:
+    # aufgaben_data[0]['Teilgebiet'][0]['UebungenListe'][0]  -> First task
+    print(f"🔵 {len(aufgaben_data)} exercise areas\n" + "=" * 60 +"\n")
+    input("Press Enter to exit...")
 
-# WICHTIG: Die Versionierung ist aktuell lokal. Bedeutet die Erstellung der Cache bestimmt die Version, so kann es dazu kommmen, das zwei unterschiedliche Leute zwar die exakt selben Aufgaben haben, es aber als unterschiedliche Version angezeigt wird
-# ==> Das kann gefixed werden indem Die Version auch immer automatisch mit dazugeschrieben wird bei einem Commit über den Editor. So wird immer die tatsächliche Version auch angezeigt, und steht auch auf GitHub drinnen
+# IMPORTANT: Versioning is currently local. Cache creation determines the version, 
+# so different users might have identical tasks but different version numbers
+# ==> This can be fixed by automatically writing the version during commits via the editor,ensuring the actual version is always displayed and stored on GitHub
