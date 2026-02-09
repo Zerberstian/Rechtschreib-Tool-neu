@@ -7,7 +7,6 @@ ober_dict = {}
 unter_dict = {}
 
 
-
 class BereichCheckbox:
     def __init__(self, master):
         self.master = master
