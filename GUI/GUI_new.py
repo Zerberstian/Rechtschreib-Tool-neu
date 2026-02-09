@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter import messagebox
-import os
 import sys
-from Programmlogik import logic2
-from GUI import BereichCheckbox
+import os
+sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Project root
+from tkinter import *
+from Programmlogik import logic2  # ← JETZT funktioniert's!
+from BereichCheckbox import BereichCheckbox
 
 
 #logic2.jsonladen()  # json must be in directory
@@ -84,7 +86,7 @@ window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))      
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  # F12 = enter fullscreen
 window.title("Rechtschreibtool")                                                        # changing Title from tk to Rechtschreibtool
 window.configure(bg=BG_Farbe)                                                           # backround Color to SRH Color
-icon = PhotoImage(file="srhIcon.png")                                                   # changing the tk icon to srh icon
+icon = PhotoImage(file="Assets/srhIcon.png")                                                   # changing the tk icon to srh icon
 window.iconphoto(True, icon)
 
 # zwischen Frames wechseln
@@ -276,7 +278,7 @@ Button(SpinBoxFrame,
                               pady=5)
 
 # creates checkboxes
-BereichCheckbox.BereichCheckbox(CheckBoxFrameS).create("#ffffff")
+BereichCheckbox(CheckBoxFrameS).create("#ffffff")
 
 if __name__ == "__main__":
     window.mainloop()
