@@ -22,7 +22,7 @@ def on_value_change():
 
     except ValueError:
         messagebox.showerror("Ungültige Eingabe",
-                             "Start mit Standardwert für Aufgabenmenge (10).")
+                                "Start mit Standardwert für Aufgabenmenge (10).")
         spinbox.delete(0, END)
         spinbox.insert(0, 10)
         print(spinbox.get(), "bei ungültiger spinbox.get()")
@@ -53,7 +53,7 @@ def combined_command():
             for a in logic_der_zweite.list_uebungen(aktiv): print(a)
         else:
             messagebox.showerror("Fehlende Auswahl",
-                                 "Es wurde kein Aufgabenbereich ausgewählt.")
+                                    "Es wurde kein Aufgabenbereich ausgewählt.")
 '''
 
 def to_start():
@@ -169,10 +169,10 @@ headline = Label(window,
 headline.grid(row=0,column=1, sticky=N)
 
 MenuText = Label(window,
-                 text= f"Die offizielle und\n"         # Adding a Label with Text in the Center
-                       f"verbesserte Version\n"
-                       f"des Rechtschreibtools\n"
-                       f"der SRH Dresden",
+                    text= f"Die offizielle und\n"         # Adding a Label with Text in the Center
+                        f"verbesserte Version\n"
+                        f"des Rechtschreibtools\n"
+                        f"der SRH Dresden",
                 font=(BtnFontArt, 35),
                 bg=BG_Farbe,
                 fg="#ffffff")
@@ -187,6 +187,13 @@ Button(MenuFrame,
         command=show_select_frame,
         ).pack(anchor="w",fill="x", pady=5)
 
+Button(MenuFrame,
+        text="Farbenblind",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=open_instruction_pdf,
+        ).pack(anchor="w",fill="x", pady=5)
+
 # Buttons for going back to Main Menu
 Button(ButtonFrameSB,
         text="zurück",
@@ -196,89 +203,89 @@ Button(ButtonFrameSB,
         ).pack(anchor="w" ,fill="x", pady=5, padx=5)
 
 Button(logicFrame,
-       text="zurück",
-       font=(BtnFontArt, BtnFontGroesse),
-       bg=Btn_BG_Farbe,
-       command=back_to_main_frame,
-       ).grid(row=3, column=3, padx=5, pady=5)
+        text="zurück",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=back_to_main_frame,
+        ).grid(row=3, column=3, padx=5, pady=5)
 
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
-       text="10",
-       font=(BtnFontArt, BtnFontGroesse),
-       bg=Btn_BG_Farbe,
-       command=callback_value_10,
-       ).grid(row=3, column=0, padx=5, pady=5, ipadx=15)
+        text="10",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=callback_value_10,
+        ).grid(row=3, column=0, padx=5, pady=5, ipadx=15)
 
 # Max 100 questions -> quickselct (logic)
 Button(SpinBoxFrame,
-       text="100",
-       font=(BtnFontArt, BtnFontGroesse),
-       bg=Btn_BG_Farbe,
-       command=callback_value_100,
-       ).grid(row=3,
-              column=1,
-              padx=5,
-              pady=5)
+        text="100",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=callback_value_100,
+        ).grid(row=3,
+            column=1,
+            padx=5,
+            pady=5)
 
 # Button for explaination of the programm (it opens the PDF in same folder as the files)
 Button(MenuFrame,
-       text="Erklärung",
-       font=(BtnFontArt, BtnFontGroesse),
-       bg=Btn_BG_Farbe,
-       command=open_instruction_pdf,
-       ).pack(anchor="w",
-              fill="x",
-              pady=5)
+        text="Erklärung",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=open_instruction_pdf,
+        ).pack(anchor="w",
+            fill="x",
+            pady=5)
 
 # sys exit
 Button(MenuFrame,
-       text="Beenden",
-       font=(BtnFontArt, BtnFontGroesse),
-       bg=Btn_BG_Farbe,
-       command=sys.exit,).pack(anchor="w",
-                               fill="x",
-                               pady=5)
+        text="Beenden",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=sys.exit,).pack(anchor="w",
+                                fill="x",
+                                pady=5)
 Label(SpinBoxFrame,
-      bg="#ffffff",
-      text=f"Gib die Menge\n "
-           f"an Aufgaben an:\n "
-           f"(1-100)",
-      font=("Arial", 18)).grid(row=0,
-                               column=0,
-                               columnspan=2,
-                               pady=5,
-                               ipadx=13)
+        bg="#ffffff",
+        text=f"Gib die Menge\n "
+            f"an Aufgaben an:\n "
+            f"(1-100)",
+        font=("Arial", 18)).grid(row=0,
+                                column=0,
+                                columnspan=2,
+                                pady=5,
+                                ipadx=13)
 
 # Spinbox
 spinbox = Spinbox(SpinBoxFrame,
-                  from_=1,
-                  to=100,
-                  increment=1,
-                  width=10,
-                  font=("Arial", 20),
-                  command=on_value_change)
+                    from_=1,
+                    to=100,
+                    increment=1,
+                    width=10,
+                    font=("Arial", 20),
+                    command=on_value_change)
 
 spinbox.delete(0, END)
 spinbox.insert(0, 10)  # Setting default value to 10
 
 spinbox.grid(row=2,
-             column=0,
-             columnspan=2,
-             pady=5,
-             ipadx=23)
+                column=0,
+                columnspan=2,
+                pady=5,
+                ipadx=23)
 
 # Logic + extras
 Button(SpinBoxFrame,
-       bg=Btn_BG_Farbe,
-       text="Start",
-       font=(BtnFontArt, BtnFontGroesse),
-       command=to_start).grid(row=4,
-                              column=0,
-                              columnspan=2,
-                              ipadx=50,
-                              padx=5,
-                              pady=5)
+        bg=Btn_BG_Farbe,
+        text="Start",
+        font=(BtnFontArt, BtnFontGroesse),
+        command=to_start).grid(row=4,
+                                column=0,
+                                columnspan=2,
+                                ipadx=50,
+                                padx=5,
+                                pady=5)
 
 # Creating checkboxes
 BereichCheckbox(CheckBoxFrameS).create("#ffffff")
