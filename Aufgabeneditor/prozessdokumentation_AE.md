@@ -30,8 +30,8 @@
 
 | Status | Aufgaben                                                                                                          |
 |--------|-------------------------------------------------------------------------------------------------------------------|
-| *Muss* | **1** Aufgabe vollständig bearbeiten **2** Änderungen anzeigen **3** Updates über Github möglich machen           |
-| *Soll* | **4** Aufgaben hinzufügen **5** Aufgaben entfernen                                                                |
+| *Muss* | **1** Aufgabe vollständig bearbeiten <br> **2** Änderungen anzeigen <br> **3** Updates über Github möglich machen           |
+| *Soll* | **4** Aufgaben hinzufügen <br> **5** Aufgaben entfernen                                                                |
 
 ---
 
@@ -119,7 +119,7 @@ release_resp = requests.get("https://api.github.com/repos/orphcvs/Aufgabenkatalo
 remote_version = release_resp.json()['tag_name']  # z.B. "v1.2.3"
 ```
 
-Aber das ist komplexer als JSON-Version.
+Aber das ist komplexer als JSON-Version, und APIs funktionieren wahrscheinlich aufgrund Restriktionen nicht.
 [siehe Docs](https://docs.github.com/ja/rest/about-the-rest-api/api-versions)
 
 ---
