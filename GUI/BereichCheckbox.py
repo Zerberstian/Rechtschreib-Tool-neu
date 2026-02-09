@@ -1,7 +1,7 @@
 #used to create the BereichCheckbox as packable Widget
 from functools import partial
 from tkinter import *
-from Programmlogik import logic2
+from Programmlogik import logic_der_zweite
 
 ober_dict = {}
 unter_dict = {}
@@ -34,7 +34,7 @@ class BereichCheckbox:
         main_checkbox_frame.bind("<Configure>", on_configure)
 
         # Checkboxes for "Bereiche"
-        for index, bereich in enumerate(logic2.uebungsbereich_auflisten()):
+        for index, bereich in enumerate(logic_der_zweite.uebungsbereich_auflisten()):
             frame = Frame(main_checkbox_frame, bg=color)
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
