@@ -3,6 +3,7 @@ from tkinter import messagebox
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Project root
+project_root = os.path.dirname(os.path.dirname(__file__))  # GUI/ → Root/
 from tkinter import *
 from Programmlogik import logic2  # ← JETZT funktioniert's!
 from BereichCheckbox import BereichCheckbox
@@ -86,7 +87,9 @@ window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))      
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  # F12 = enter fullscreen
 window.title("Rechtschreibtool")                                                        # changing Title from tk to Rechtschreibtool
 window.configure(bg=BG_Farbe)                                                           # backround Color to SRH Color
-icon = PhotoImage(file="Assets/srhIcon.png")                                                   # changing the tk icon to srh icon
+icon_path = os.path.join(project_root, "Assets", "srhIcon.png")
+icon = PhotoImage(file=icon_path)
+window.iconphoto(True, icon)                                          # changing the tk icon to srh icon
 window.iconphoto(True, icon)
 
 # zwischen Frames wechseln
@@ -108,10 +111,11 @@ def back_to_main_frame():
     logicFrame.grid_forget()
 
 def open_instruction_pdf():
-    pdf_path = os.path.join(os.path.dirname(__file__), "A.pdf")
-
+    project_root = os.path.dirname(os.path.dirname(__file__))
+    pdf_path = os.path.join(project_root, "Assets", "A.pdf")
     if sys.platform.startswith("win"):
         os.startfile(pdf_path)
+
 
 # Frames
 ##############################################################################
