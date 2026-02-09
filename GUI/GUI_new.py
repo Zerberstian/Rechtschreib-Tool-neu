@@ -5,7 +5,7 @@ import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Project root
 project_root = os.path.dirname(os.path.dirname(__file__))  # GUI/ → Root/
 from tkinter import *
-from Programmlogik import logic2  # ← JETZT funktioniert's!
+from Programmlogik import logic_der_zweite  # ← JETZT funktioniert's!
 from BereichCheckbox import BereichCheckbox
 
 
