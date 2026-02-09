@@ -1,4 +1,4 @@
-from logic2 import *
+from logic_der_zweite import *
 from GUI.BereichCheckbox import *
 import random
 
@@ -79,7 +79,7 @@ def button_start():
 
 def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(5):
+    if aufgaben_picken(8):
         return
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
@@ -119,7 +119,7 @@ def falsche_merken(index, aufgabe):
 
 def falsche_antwort_rein_shuffeln(index, aufgabe):
     try:
-        random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list))
+        random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list) - index)
         zu_loesende_aufgaben_list.insert(random_index, aufgabe)
     except ValueError:
         print("Der Index ist nicht gefund!")
