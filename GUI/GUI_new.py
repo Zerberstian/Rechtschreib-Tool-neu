@@ -2,18 +2,18 @@ from tkinter import *
 from tkinter import messagebox
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Project root
-project_root = os.path.dirname(os.path.dirname(__file__))  # GUI/ → Root/
+sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports eg.: "from Programmlogik import logic2"
+project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
 from tkinter import *
-from Programmlogik import logic2  # ← JETZT funktioniert's!
+from Programmlogik import logic2
 from BereichCheckbox import BereichCheckbox
 
-
-#logic2.jsonladen()  # json must be in directory
+# logic2.jsonladen()
+# Json must be in directory
 
 def on_value_change():
     try:
-        print(f"{spinbox.get()} = Wert in Spinbox")  # Print zur Kontrolle beim Debugging
+        print(f"{spinbox.get()} = Wert in Spinbox")  # Print for debugging purposes
         if int(spinbox.get()) > 100:
             spinbox.delete(0, END)
             spinbox.insert(0, 100)
@@ -29,12 +29,12 @@ def on_value_change():
         spinbox.insert(0, 10)
         print(spinbox.get(), "bei ungültiger spinbox.get()")
 
-# max Aufgaben 10 als quickselct (Logic)
+# Max 10 questions -> quickselct (logic)
 def callback_value_10():
     spinbox.delete(0, END)
     spinbox.insert(0, 10)
 
-# max Aufgaben 100 als quickselct (Logic)
+# Max 100 questions -> quickselect (logic)
 def callback_value_100():
     spinbox.delete(0, END)
     spinbox.insert(0, 100)
@@ -60,28 +60,28 @@ def combined_command():
 def to_start():
     combined_command()
 
-# Konstanten für Größen und Farben
+# Main style constants
 BG_Farbe = "#E0470A"
 Btn_BG_Farbe = "#ffffff"
 BtnFontArt = "Arial"
 BtnFontGroesse = 30
 
-# Fenster wird definiert
+# Defining window
 window = Tk()
 window.update_idletasks()
 
-# Ausrichtung im Fenster
+# Spacing within the Window
 window.grid_rowconfigure(0, weight=2)
 window.grid_columnconfigure(0, weight=2)
 window.grid_rowconfigure(1, weight=3)
 window.grid_columnconfigure(1, weight=3)
 
-# generiere Fenster über ganzen Bildschirm
+# Generating fullscreen with a little offset to avoid taskbar issues
 x_pos = -9
 y_pos = 0
 window.geometry(f"{window.winfo_screenwidth()}x{window.winfo_screenheight()}+{x_pos}+{y_pos}")
 
-# Eigenschaften für Fenster
+# Window-settings
 window.minsize(1100, 650)
 window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))              # Escape = exit fullscreen
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  # F12 = enter fullscreen
@@ -89,10 +89,10 @@ window.title("Rechtschreibtool")                                                
 window.configure(bg=BG_Farbe)                                                           # backround Color to SRH Color
 icon_path = os.path.join(project_root, "Assets", "srhIcon.png")
 icon = PhotoImage(file=icon_path)
-window.iconphoto(True, icon)                                          # changing the tk icon to srh icon
+window.iconphoto(True, icon)                                          # Changing the tk icon to srh icon
 window.iconphoto(True, icon)
 
-# zwischen Frames wechseln
+# Changing between frames
 def show_start_frame():
     logicFrame.grid(row=0, column=0, sticky=NW)
     SelectFrame.place_forget()
@@ -119,11 +119,11 @@ def open_instruction_pdf():
 
 # Frames
 ##############################################################################
-# Frame für das Mainmenu
+# Main window frame
 MenuFrame = Frame(window, bg=BG_Farbe)
 MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)
 
-# Frame für die Aufgabenauswahl
+# Window for taskselection
 SelectFrame = Frame(window, bg=BG_Farbe)
 
 # Frame for managing grid
@@ -134,7 +134,7 @@ CheckBoxFrameS.grid(row=1, column=1, sticky=N)
 ButtonFrameSB = Frame(SelectFrame, bg=BG_Farbe)
 ButtonFrameSB.grid(row=0, column=0, sticky=NW)
 
-# Frame für Spinbox und Buttons
+# Frame for spinbox and buttons
 SpinBoxFrame = Frame(SelectFrame, bg=BG_Farbe)
 SpinBoxFrame.grid(row=1, column=2, rowspan=1, sticky=NW)
 
@@ -152,15 +152,15 @@ SelectFrame.grid_columnconfigure(1, weight=4)
 SelectFrame.grid_rowconfigure(2, weight=1)
 SelectFrame.grid_columnconfigure(2, weight=0)
 
-# Label für Ausrichtungszwecke
+# Label for spacing
 voidLabel = Label(SelectFrame, bg=BG_Farbe)
 voidLabel.grid(row=0, column=1, sticky=NW)
 
-# Label für das Icon
+# Iconlabel
 iconLabel = Label(MenuFrame, image=icon)
 iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
-# adding a big Title
+# Adding a big title
 headline = Label(window,
                 text="Hallo",
                 font=(BtnFontArt, BtnFontGroesse),
@@ -170,7 +170,7 @@ headline = Label(window,
 headline.grid(row=0,column=1, sticky=N)
 
 MenuText = Label(window,
-                 text= f"Die offizielle und\n"         # adding a Label with Text in the Center
+                 text= f"Die offizielle und\n"         # Adding a Label with Text in the Center
                        f"verbesserte Version\n"
                        f"des Rechtschreibtools\n"
                        f"der SRH Dresden",
@@ -203,7 +203,7 @@ Button(logicFrame,
        command=back_to_main_frame,
        ).grid(row=3, column=3, padx=5, pady=5)
 
-# max Aufgaben 10 als quickselct (Button)
+# Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
        text="10",
        font=(BtnFontArt, BtnFontGroesse),
@@ -211,7 +211,7 @@ Button(SpinBoxFrame,
        command=callback_value_10,
        ).grid(row=3, column=0, padx=5, pady=5, ipadx=15)
 
-# max Aufgaben 100 als quickselct (Button)
+# Max 100 questions -> quickselct (logic)
 Button(SpinBoxFrame,
        text="100",
        font=(BtnFontArt, BtnFontGroesse),
@@ -222,7 +222,7 @@ Button(SpinBoxFrame,
               padx=5,
               pady=5)
 
-# Button for Explaination of the Programm (it opens the PDF in same Folder as the Files)
+# Button for explaination of the programm (it opens the PDF in same folder as the files)
 Button(MenuFrame,
        text="Erklärung",
        font=(BtnFontArt, BtnFontGroesse),
@@ -232,7 +232,7 @@ Button(MenuFrame,
               fill="x",
               pady=5)
 
-# sys Exit
+# sys exit
 Button(MenuFrame,
        text="Beenden",
        font=(BtnFontArt, BtnFontGroesse),
@@ -261,7 +261,7 @@ spinbox = Spinbox(SpinBoxFrame,
                   command=on_value_change)
 
 spinbox.delete(0, END)
-spinbox.insert(0, 10)  # bei Inizialisierung wird der Standardwert 10 festgelegt
+spinbox.insert(0, 10)  # Setting default value to 10
 
 spinbox.grid(row=2,
              column=0,
@@ -269,7 +269,7 @@ spinbox.grid(row=2,
              pady=5,
              ipadx=23)
 
-# start der logik + extras
+# Logic + extras
 Button(SpinBoxFrame,
        bg=Btn_BG_Farbe,
        text="Start",
@@ -281,7 +281,7 @@ Button(SpinBoxFrame,
                               padx=5,
                               pady=5)
 
-# creates checkboxes
+# Creating checkboxes
 BereichCheckbox(CheckBoxFrameS).create("#ffffff")
 
 if __name__ == "__main__":
