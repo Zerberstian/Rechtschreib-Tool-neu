@@ -40,7 +40,7 @@ class Aufgabe:
     def release_me(self):
         aufgaben_dict.pop(self.uebung_id)
 
-def aufgabe_loesen(aufgabe):
+def aufgabe_loesen(index, aufgabe):
     print(aufgabe.aufgabenbeschreibung, '\n')
     print(aufgabe.uebungs_beschreibung, "\n")
     aufgabe_stellen(aufgabe)
@@ -49,7 +49,7 @@ def aufgabe_loesen(aufgabe):
         richtige_merken(aufgabe)
     else:
         print("Die Antwort ist Falsch")
-        falsche_merken(aufgabe)
+        falsche_merken(index, aufgabe)
 
 def aufgabe_stellen(aufgabe):
     for index, entry in enumerate(aufgabe.moeglichkeiten):
@@ -79,19 +79,24 @@ def button_start():
 
 def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
-    aufgaben_picken(5)
-    for aufgabe in zu_loesende_aufgaben_list:
+    if aufgaben_picken(5):
+        return
+    for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
-        aufgabe_loesen(aufgaben_dict[aufgabe])
+        aufgabe_loesen(index, aufgaben_dict[aufgabe])
     print(len(gute_liste), " Richtige Antworten")
     print(len(boese_liste), " Falschen Antworten")
+    resetting()
 
-def aktive_resetting():
-    pass
+def resetting():
+    aufgaben_dict.clear()
+    zu_loesende_aufgaben_list.clear()
+    boese_liste.clear()
+    gute_liste.clear()
 
 def aufgaben_picken(limit):
     if aufgaben_dict == {}:
-        return print("Das Dict ist Leer. Haben Sie nichts ausgewählt?")
+        return False, print("Das Dict ist Leer. Haben Sie nichts ausgewählt?")
     x = 0
     while x < limit:
         uebung_id = random.choice(list(aufgaben_dict.keys()))
@@ -107,16 +112,25 @@ def aufgaben_picken(limit):
 def richtige_merken(aufgabe):
     gute_liste.append(aufgabe.uebung_id)
 
-def falsche_merken(aufgabe):
+def falsche_merken(index, aufgabe):
     boese_liste.append(aufgabe.uebung_id)
+    if aufgabe.uebung_id in boese_liste:
+        falsche_antwort_rein_shuffeln(index, aufgabe.uebung_id)
+
+def falsche_antwort_rein_shuffeln(index, aufgabe):
+    try:
+        random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list))
+        zu_loesende_aufgaben_list.insert(random_index, aufgabe)
+    except ValueError:
+        print("Der Index ist nicht gefund!")
 
 if __name__ == "__main__":
     root = Tk()
     BereichCheckbox(root).create("#ffffff")
     start = Button(root, text="Start", command=button_start)
     start.pack()
-    reset = Button(root, text="Reset" )
-    reset.pack()
+    #reset = Button(root, text="Reset", command=resetting )
+    #reset.pack()
     root.mainloop()
 
 '''
