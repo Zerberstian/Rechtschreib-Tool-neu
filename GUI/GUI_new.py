@@ -64,6 +64,7 @@ BG_Farbe = "#E0470A"
 Btn_BG_Farbe = "#ffffff"
 BtnFontArt = "Arial"
 BtnFontGroesse = 30
+inside_Padding_Y = 20
 
 # Defining window
 window = Tk()
@@ -179,16 +180,18 @@ MenuText = Label(window,
 
 MenuText.grid(row=1,column=1, sticky=NW)
 
+
+
 # Button for starting the select options
 Button(MenuFrame,
         text="Start",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=show_select_frame,
-        ).pack(anchor="w",fill="x", pady=5)
+        ).pack(anchor="w",fill="x", pady=5, ipady=inside_Padding_Y)
 
 Button(MenuFrame,
-        text="Farbenblind",
+        text="Rot-Grün\n Schwäche",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=open_instruction_pdf,
@@ -236,7 +239,8 @@ Button(MenuFrame,
         command=open_instruction_pdf,
         ).pack(anchor="w",
             fill="x",
-            pady=5)
+            pady=5,
+            ipady=inside_Padding_Y)
 
 # sys exit
 Button(MenuFrame,
@@ -245,7 +249,8 @@ Button(MenuFrame,
         bg=Btn_BG_Farbe,
         command=sys.exit,).pack(anchor="w",
                                 fill="x",
-                                pady=5)
+                                pady=5,
+                                ipady=inside_Padding_Y)
 Label(SpinBoxFrame,
         bg="#ffffff",
         text=f"Gib die Menge\n "
