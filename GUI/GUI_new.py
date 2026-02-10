@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import colorchooser
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports eg.: "from Programmlogik import logic2"
@@ -62,6 +63,7 @@ def to_start():
 # Main style constants
 BG_Farbe = "#E0470A"        #Background Color Value (general)
 Btn_BG_Farbe = "#ffffff"    #Background Color (all Btn except Spinbox & Buttons)
+Btn_FG_Farbe = "#000000"    #BUtton fg Color
 BtnFontArt = "Arial"        #Button Font Style (all Btn)
 BtnFontGroesse = 30         #Button Font size (all Btn)
 inside_Padding_Y = 0       #Button Inside pady Value (Main Menu)
@@ -124,9 +126,61 @@ def show_color_picker():
     ColorPickerFrame.grid(row=0, column=0, sticky=NW, ipadx=5)
     ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5)
 
+def pick_color_bg():            # Background Color (pick from Tkinter Colorpicker)
+    color = colorchooser.askcolor(title="Farbe auswählen")
+    if color[1]:  # Hex-Wert, z.B. "#ff0000"
+        window.config(bg=color[1])
+        MenuFrame.config(bg=color[1])
+        SelectFrame.config(bg=color[1])
+        ButtonFrameSB.config(bg=color[1])
+        logicFrame.config(bg=color[1])
+        AufgabenFrameSeite.config(bg=color[1])
+        ColorPickerFrame.config(bg=color[1])
+        ColorPickerButtonFrame.config(bg=color[1])
+        SpinBoxFrame.config(bg=color[1])
+        MenuText.config(bg=color[1], fg=color[1])
+        headline.config(bg=color[1], fg=color[1])
+        voidLabel.config(bg=color[1], fg=color[1])
+
+def pick_color_fg():
+    color = colorchooser.askcolor(title="Farbe auswählen")
+    if color[1]:
+        MenuText.config(fg=color[1])
+        for widget in MenuFrame.winfo_children():
+            if isinstance(widget, Button):
+                widget.config(fg=color[1])
+        for widget in CheckBoxFrameS.winfo_children():
+            if isinstance(widget, Button):
+                widget.config(fg=color[1])
+        for widget in ButtonFrameSB.winfo_children():
+            if isinstance(widget, Button):
+                widget.config(fg=color[1])
+        for widget in SpinBoxFrame.winfo_children():
+            if isinstance(widget, (Button, Label)):
+                widget.config(fg=color[1])
+            if isinstance(widget, Spinbox):
+                widget.config(fg=color[1])
+        for widget in ColorPickerFrame.winfo_children():
+            if isinstance(widget, Button):
+                widget.config(fg=color[1])
+        for widget in ColorPickerButtonFrame.winfo_children():
+            if isinstance(widget, Button):
+                widget.config(fg=color[1])
+'''
 def change_BG_Farbe(farbe):
     window.config(bg=farbe)
+    MenuFrame.config(bg=farbe)
     SelectFrame.config(bg=farbe)
+    ButtonFrameSB.config(bg=farbe)
+    logicFrame.config(bg=farbe)
+    AufgabenFrameSeite.config(bg=farbe)
+    ColorPickerFrame.config(bg=farbe)
+    ColorPickerButtonFrame.config(bg=farbe)
+    SpinBoxFrame.config(bg=farbe)
+    MenuText.config(bg=farbe, fg=farbe)
+    headline.config(bg=farbe, fg=farbe)
+    voidLabel.config(bg=farbe, fg=farbe)
+'''
 
 # Frames
 ##############################################################################
@@ -200,6 +254,7 @@ Button(MenuFrame,
         text="Start",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
+        fg=Btn_FG_Farbe,
         command=show_select_frame,
         ).pack(anchor="w",fill="x", pady=5, ipady=inside_Padding_Y)
 
@@ -237,34 +292,22 @@ Button(logicFrame,
         ).grid(row=3, column=3, padx=5, pady=5)
 
 Button(ColorPickerButtonFrame,
-        text="weißer\n Hintergrund",
+        text="Hintergrund",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: change_BG_Farbe("#ffffff")).grid(row=0, column=0, pady=2, padx=2)
+        command=lambda: pick_color_bg()).grid(row=0, column=0, pady=2, padx=2)
 
 Button(ColorPickerButtonFrame,
-        text="schwarzer\n Hintergrund",
+        text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: change_BG_Farbe("#000000")).grid(row=1, column=0,pady=2, padx=2)
+        command=lambda: pick_color_fg()).grid(row=0, column=1,pady=2, padx=2, ipadx=15)
 
 Button(ColorPickerButtonFrame,
-        text="blauer\n Hintergrund",
+        text="Buttonfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: change_BG_Farbe("#2596be")).grid(row=2, column=0,pady=2, padx=2)
-
-Button(ColorPickerButtonFrame,
-        text="gelber\n Hintergrund",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=lambda: change_BG_Farbe("#ffe900")).grid(row=3, column=0,pady=2, padx=2)
-
-Button(ColorPickerButtonFrame,
-        text="roter\n Hintergrund",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=lambda : change_BG_Farbe("#ff0000")).grid(row=4, column=0,pady=2, padx=2)
+        command=lambda: pick_color_bg()).grid(row=0, column=2,pady=2, padx=2)
 
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
