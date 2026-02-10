@@ -2,14 +2,19 @@ from logic_der_zweite import *
 from GUI.BereichCheckbox import *
 import random
 
-aufgaben_dict = {} # Objekte der Klasse Aufgabe werden hier gemerkt und können mit der Uebung_id ist key
+aufgaben_dict = {} # Objekte der Klasse Aufgabe werden hier gemerkt und die Uebung_id ist key
 zu_loesende_aufgaben_list = []
+falsche_antwort_dict = {}
 boese_liste = []
 gute_liste = []
 
-'''
-Hier sind eine paar Funktionen, welche ihren Sinn im laufe der Programmierung wieder verlieren.
-'''
+class FalscheAntwort:
+    def __init__(self, uebung_id, antwort, korrekte_antwort):
+        self.uebung_id = uebung_id
+        self.antwort = antwort
+        self.korrekte_antwort = korrekte_antwort
+
+        falsche_antwort_dict[self.uebung_id] = self
 
 class Aufgabe:
     def __init__(self, uebung_id):
@@ -44,22 +49,20 @@ def aufgabe_loesen(index, aufgabe):
     print(aufgabe.aufgabenbeschreibung, '\n')
     print(aufgabe.uebungs_beschreibung, "\n")
     aufgabe_stellen(aufgabe)
-    if aufgabe_beantworten(int_input(), aufgabe):
-        print("Die Antwort ist Richtig")
-        richtige_merken(aufgabe)
-    else:
-        print("Die Antwort ist Falsch")
-        falsche_merken(index, aufgabe)
+    antwort = int_input()
+    aufgabe_beantworten(antwort, aufgabe, index)
 
 def aufgabe_stellen(aufgabe):
     for index, entry in enumerate(aufgabe.moeglichkeiten):
         print(entry)
 
-def aufgabe_beantworten(antwort, aufgabe):
+def aufgabe_beantworten(antwort, aufgabe, index):
     if antwort == aufgabe.korrekt:
-        return True
+        print("Die Antwort ist Richtig")
+        richtige_merken(aufgabe)
     else:
-        return False
+        print("Die Antwort ist Falsch")
+        falsche_merken(index, aufgabe, antwort)
 
 def int_input():
     while True:
@@ -88,8 +91,9 @@ def aufgaben_initialisieren():
     for x in gute_liste:
         print(x)
     print(len(boese_liste), " Falschen Antworten")
-    for x in boese_liste:
-        print(x)
+    for antwort in falsche_antwort_dict:
+        print("\nDie richtige Antwort ist: ", falsche_antwort_dict[antwort].korrekte_antwort)
+        print("Du hast: ", falsche_antwort_dict[antwort].antwort , " ausgewählt")
     resetting()
 
 def resetting():
@@ -116,7 +120,16 @@ def aufgaben_picken(limit):
 def richtige_merken(aufgabe):
     gute_liste.append(aufgabe.uebung_id)
 
-def falsche_merken(index, aufgabe):
+def do_something_function_that_needs_a_better_name(aufgabe, antwort):
+    try:
+        return aufgabe.moeglichkeiten[antwort-1]
+    except IndexError:
+        return "Antwort außerhalb des gültigen Mengenbereiches"
+
+def falsche_merken(index, aufgabe, antwort):
+    FalscheAntwort(aufgabe.uebung_id,
+                   do_something_function_that_needs_a_better_name(aufgabe,antwort),
+                   aufgabe.moeglichkeiten[aufgabe.korrekt-1])
     if aufgabe.uebung_id not in boese_liste:
         boese_liste.append(aufgabe.uebung_id)
         falsche_antwort_rein_shuffeln(index, aufgabe.uebung_id)
@@ -133,12 +146,4 @@ if __name__ == "__main__":
     BereichCheckbox(root).create("#ffffff")
     start = Button(root, text="Start", command=button_start)
     start.pack()
-    #reset = Button(root, text="Reset", command=resetting )
-    #reset.pack()
     root.mainloop()
-
-'''
-Es fehlt noch das die "Auswahl" entfernt wird falls man noch mal Übungen machen will.
-Zur Zeit muss man neustarten um eine neue Auswahl in der Checkbox zu machen.
-eg wenn man zurück geht sollen alle Aufgaben Objekte vergessen werden. 
-'''
