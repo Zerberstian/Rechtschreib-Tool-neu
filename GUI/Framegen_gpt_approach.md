@@ -74,8 +74,88 @@ root.mainloop()
 ### Event function: 
 - button_click() displays the selected answer or can be used, for example, for navigation.
 ---
+### 4. Frame by Frame 
+Problem: 
+- All Frames get packed to the Window at the same time
 
-### 4. Extensions/Ideas
-- You could have frames change, so only one frame is displayed and the next one is shown via a button.<br/>
-- Nested structures like sub-questions or selection trees can also be represented using JSON.<br/>
-- Instead of buttons, radio buttons or checkboxes could also be used.
+Solution:
+1. Store all frames in a list
+2. Keep an index of the currently visible frame
+3. Hide the current frame and show the next one when a button is clicked
+
+### Key idea (simple mental model)
+- frames = [] → holds all generated frames
+- current_index = 0 → which frame is visible
+- pack_forget() → hide current frame
+- pack() → show next frame
+- 
+````python
+import tkinter as tk
+import json
+
+# JSON-Daten laden
+with open("fg_json.json", "r", encoding="utf-8") as f:
+    daten = json.load(f)
+
+root = tk.Tk()                              # <- Root aka Window
+root.title("Dynamische Frames")
+
+main_frame = tk.Frame(root)
+main_frame.pack(padx=10, pady=10)
+
+frames = []
+current_index = 0
+
+def show_frame(index):
+    for frame in frames:
+        frame.pack_forget()
+    frames[index].pack(fill="x", pady=5)
+
+def button_click(frage, antwort):
+    global current_index
+    print(f"Frage: {frage} | Gewählte Antwort: {antwort}")
+
+    if current_index < len(frames) - 1:
+        current_index += 1
+        show_frame(current_index)
+    else:
+        print("Ende erreicht")
+
+# Frames generieren
+for eintrag in daten:
+    frame = tk.Frame(main_frame, bd=2, relief="groove", padx=10, pady=10)
+
+    frage_label = tk.Label(frame, text=eintrag["frage"], font=("Arial", 12, "bold"))
+    frage_label.pack(anchor="w")
+
+    for antwort in eintrag["antworten"]:
+        btn = tk.Button(
+            frame,
+            text=antwort,
+            command=lambda f=eintrag["frage"], a=antwort: button_click(f, a)
+        )
+        btn.pack(side="left", padx=5, pady=5)
+
+    frames.append(frame)
+
+# Show only the first frame
+show_frame(0)
+
+root.mainloop()
+````
+
+### Important notes
+- frame always refers to the last frame created
+  - so you can't just use:
+
+````python
+def next_frame():
+    frame.pack_forget()
+    frame.pack()
+````
+- it hides and immediately shows **the same** frame 
+    - That's why we use list to go through it step by step (index by index)
+---
+### 5. Ideas
+- add a delay and color the Buttons with the right answer
+- Disable buttons after one click
