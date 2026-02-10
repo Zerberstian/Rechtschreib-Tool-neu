@@ -3,7 +3,7 @@ from tkinter import messagebox
 from tkinter import colorchooser
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports eg.: "from Programmlogik import logic2"
+sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
 from BereichCheckbox import BereichCheckbox
 
@@ -258,13 +258,12 @@ Button(MenuFrame,
         command=show_select_frame,
         ).pack(anchor="w",fill="x", pady=5, ipady=inside_Padding_Y)
 
-# Button for going back to Main Menu
+# Button to open the color picker
 Button(MenuFrame,
         text="Farbwahl",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=show_color_picker
-        #command=lambda: change_BG_Farbe("#ffffff"),
         ).pack(anchor="w",fill="x", pady=5)
 
 # Button for going back to Main Menu

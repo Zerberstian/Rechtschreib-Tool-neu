@@ -32,6 +32,85 @@ def check_json_version():
         print("🔴 Network error")
         return load_local_cache()
 
+    # Local cache check
+    local_etag = ""
+    local_version = 0
+    local_data = []
+    
+    if os.path.exists(CACHE_FILE):
+        try:
+            with open(CACHE_FILE, 'r', encoding='utf-8') as f:
+                cache = json.load(f)
+                local_etag = cache.get('etag', '')
+                local_version = cache.get('version', 0)
+                # FIX: Extracting only the actual task-data
+                data = cache.get('data', {})
+                while isinstance(data, dict) and 'data' in data:
+                    data = data['data']
+                local_data = data if isinstance(data, list) else []
+            print(f"⚪ Local task version available: v{local_version} ({count_aufgaben(local_data)} tasks)")
+        except:
+            print("🟠 Cache corrupted or not found")
+    
+    # Comparing ETags for version check
+    if remote_etag == local_etag and local_data:
+        aufgaben_anzahl = count_aufgaben(local_data)
+        print(f"🟣 {aufgaben_anzahl} tasks loaded from cache")
+        return local_data
+
+    # The Download does now overwrite the old Cache, instead of appending the version-tag
+    print("🧭 New task version found, downloading...")
+    try:
+        response = requests.get(RAW_URL, timeout=10)
+        remote_data_full = response.json()
+        
+        # Extracting the full set of tasks from GitHub
+        remote_data = remote_data_full
+        while isinstance(remote_data, dict) and 'data' in remote_data:
+            remote_data = remote_data['data']
+        
+        # Now using the version stated in the Github-File - no longer incrementing locally
+        remote_version = remote_data_full.get('version', local_version + 1)
+        aufgaben_anzahl = count_aufgaben(remote_data)
+        file_size = len(response.content)
+        
+        # Clean and structured cache format also containing metadata
+        cache = {
+            'version': remote_version,
+            'lastUpdated': datetime.now().isoformat(),
+            'etag': remote_etag,
+            'totalAufgaben': aufgaben_anzahl,
+            'size': file_size,
+            'data': remote_data  # this is the actual task data to be modified by the editor
+        }
+        
+        # Overwriting old cache
+        with open(CACHE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+        
+        print(f"🟢 Updated to version: v{remote_version}")
+        print(f"🟣 {aufgaben_anzahl} tasks ({file_size} bytes)")
+        print(f"🕙 {cache['lastUpdated'][:19]}")
+        
+        return remote_data
+        
+    except Exception as e:
+        print(f"🔴 Download error: {e}")
+        return local_data
+
+    RAW_URL = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"
+    CACHE_FILE = "json_cache.json"
+    
+    print("🌐 Checking for new task version...")
+    
+    try:
+        response = requests.head(RAW_URL)
+        remote_etag = response.headers.get('ETag', '')
+        print(f"🌐 Remote ETag: {remote_etag[:20]}...")
+    except:
+        print("🔴 Network error")
+        return load_local_cache()
+
     # Local cache is loaded to compare with new version or as fallback for network failure.
     # The "actual" tasks.json exists only on GitHub.
     local_etag = ""
@@ -92,13 +171,21 @@ def check_json_version():
 def load_local_cache():
     cache_file = "json_cache.json"
     if os.path.exists(cache_file):
-        with open(cache_file, 'r', encoding='utf-8') as f:
-            cache = json.load(f)
-            data = cache.get('data', [])
-            anzahl = count_aufgaben(data)
-            print(f"⚪ Available offline task version: v{cache.get('version', 0)} ({anzahl} tasks)")
-            return data
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cache = json.load(f)
+                data = cache.get('data', {})
+                # now ignoring older structure, or even a more obsfucated json file by just picking the data (tasks) alone
+                while isinstance(data, dict) and 'data' in data:
+                    data = data['data']
+                data = data if isinstance(data, list) else []
+                anzahl = count_aufgaben(data)
+                print(f"⚪ Available Offline version: v{cache.get('version', 0)} ({anzahl} tasks)")
+                return data
+        except Exception as e:
+            print(f"🔴 Cache load failed: {e}")
     return []
+
 
 if __name__ == "__main__":
     print("═" * 60); print("Aufgabeneditor".center(60)); print("═" * 60+"\n")
