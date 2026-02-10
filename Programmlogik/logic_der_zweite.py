@@ -14,7 +14,7 @@ def jsonladen():
 #Function to list all "uebungsbereich"
 def uebungsbereich_auflisten():
     uebungsbereich_liste = []
-    for uebungsbereich in geladeneAufgaben:
+    for uebungsbereich in geladeneAufgaben['data']:
         if uebungsbereich['Uebungsbereich'] not in uebungsbereich_liste:
             uebungsbereich_liste.append(uebungsbereich['Uebungsbereich'])
     return uebungsbereich_liste
@@ -23,13 +23,13 @@ def uebungsbereich_auflisten():
 def list_titels(bereiche):
     titels = []
     if not type(bereiche) == list:
-        for bereich in geladeneAufgaben:
+        for bereich in geladeneAufgaben['data']:
             if bereiche == bereich['Uebungsbereich']:
                 for titel in bereich['Teilgebiet']:
                     titels.append(titel['Titel'])
     else:
         for bereich in bereiche:
-            for uebungsbereiche in geladeneAufgaben:
+            for uebungsbereiche in geladeneAufgaben['data']:
                 if bereich == uebungsbereiche['Uebungsbereich']:
                     for titel in uebungsbereiche['Teilgebiet']:
                         titels.append(titel['Titel'])
@@ -39,14 +39,14 @@ def list_titels(bereiche):
 def list_uebungen(titels):
     aufgaben_liste = []
     if not type(titels) == list:
-        for aufgabe in geladeneAufgaben:
+        for aufgabe in geladeneAufgaben['data']:
             for objekt in aufgabe['Teilgebiet']:
                 if titels == objekt['Titel']:
                     for uebung in objekt['UebungenListe']:
                         aufgaben_liste.append(uebung["Uebung_id"])
     else:
         for titel in titels:
-            for aufgabe in geladeneAufgaben:
+            for aufgabe in geladeneAufgaben['data']:
                 for objekt in aufgabe['Teilgebiet']:
                     if titel == objekt['Titel']:
                         for uebung in objekt['UebungenListe']:
@@ -55,20 +55,20 @@ def list_uebungen(titels):
     return aufgaben_liste
 
 def aufgabe_lesen(aufgaben_id):
-    for bereich in geladeneAufgaben:
+    for bereich in geladeneAufgaben['data']:
         for teilgebiet in bereich['Teilgebiet']:
             for aufgabe in teilgebiet['UebungenListe']:
                 if aufgaben_id == aufgabe["Uebung_id"]:
                     return aufgabe
 
 def get_spezial_status(teilgebiet_id):
-    for bereich in geladeneAufgaben:
+    for bereich in geladeneAufgaben['data']:
         for teilgebiet in bereich['Teilgebiet']:
             if teilgebiet_id == teilgebiet['Teilgebiet_id']:
                 return teilgebiet['IstSpeziell']
 
 def get_aufgaben_beschreibung(teilgebiet_id):
-    for bereich in geladeneAufgaben:
+    for bereich in geladeneAufgaben['data']:
         for teilgebiet in bereich['Teilgebiet']:
             if teilgebiet_id == teilgebiet['Teilgebiet_id']:
                 return teilgebiet['Aufgabenbeschreibung']
