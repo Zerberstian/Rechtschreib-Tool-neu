@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "lastUpdated": "2026-02-06T10:00:54.307211",
+  "etag": "W/\"9153c7a541e4e3d702495a91ec3fdc2ed03836b2a986bc0295a063164c6c7512\"",
+  "totalAufgaben": 7385,
+  "size": 2558025,
+  "data": 
+  [
+    {
+    "Uebungsbereich": "Groß- und Kleinschreibung",
+    "Teilgebiet": [
+      {
+        "Titel": "Nomen-Verb-Adjektiv Teil 1",
+        "Aufgabenbeschreibung": "Bitte die drei folgenden Wortarten unterscheiden:\nNomen = geben den Begriffen einen Namen: Ewigkeit, Geist, Mathematik\nVerben = alles was man tun kann: essen, läuft, malt, denkst\nAdjektive = beschreiben wie etwas ist: rot, warm, lang, schwer, eklig",
+        "UebungenListe": [
+          {
+            "Moeglichkeiten": [
+              "Nomen",
+              "Verb",
+              "Adjektiv"
+            ],
+            "KorrekteAntwort": 3,
+            "Infotext": null,
+            "UebungsBeschreibung": "IDIOTISCH",
+            "Uebung_id": "1.1.1"
+          }
+            
+        ]
+      }
+    ],
+    "Uebungsbereich_id": 1
+    }
+  ]
+}
