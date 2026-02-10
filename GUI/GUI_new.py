@@ -121,7 +121,8 @@ def show_color_picker():
     MenuFrame.grid_forget()
     MenuText.grid_forget()
     headline.grid_forget()
-    ColorPickerFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)
+    ColorPickerFrame.grid(row=0, column=0, sticky=NW, ipadx=5)
+    ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5)
 
 def change_BG_Farbe(farbe):
     window.config(bg=farbe)
@@ -153,6 +154,8 @@ logicFrame  =   Frame(window, bg=BG_Farbe)
 AufgabenFrameSeite = Frame(window, bg=BG_Farbe)
 
 ColorPickerFrame = Frame(window, bg=BG_Farbe)
+
+ColorPickerButtonFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
 ##############################################################################
 
 SelectFrame.grid_rowconfigure(0, weight=1)
@@ -192,8 +195,6 @@ MenuText = Label(window,
 
 MenuText.grid(row=1,column=1, sticky=NW)
 
-
-
 # Button for starting the select options
 Button(MenuFrame,
         text="Start",
@@ -225,7 +226,7 @@ Button(ColorPickerFrame,
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=back_to_main_frame,
-        ).pack(anchor="w", fill="x", pady=5, padx=5)
+        ).grid(row=0, column=0, pady=5, padx=5)
 
 # Button for going back to Main Menu
 Button(logicFrame,
@@ -235,13 +236,35 @@ Button(logicFrame,
         command=back_to_main_frame,
         ).grid(row=3, column=3, padx=5, pady=5)
 
-Button(ColorPickerFrame,
+Button(ColorPickerButtonFrame,
         text="weißer\n Hintergrund",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: change_BG_Farbe("#ffffff")).pack(anchor="w", fill="x", pady=5, padx=5)
+        command=lambda: change_BG_Farbe("#ffffff")).grid(row=0, column=0, pady=2, padx=2)
 
-Button(ColorPickerFrame,)
+Button(ColorPickerButtonFrame,
+        text="schwarzer\n Hintergrund",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=lambda: change_BG_Farbe("#000000")).grid(row=1, column=0,pady=2, padx=2)
+
+Button(ColorPickerButtonFrame,
+        text="blauer\n Hintergrund",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=lambda: change_BG_Farbe("#2596be")).grid(row=2, column=0,pady=2, padx=2)
+
+Button(ColorPickerButtonFrame,
+        text="gelber\n Hintergrund",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=lambda: change_BG_Farbe("#ffe900")).grid(row=3, column=0,pady=2, padx=2)
+
+Button(ColorPickerButtonFrame,
+        text="roter\n Hintergrund",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=lambda : change_BG_Farbe("#ff0000")).grid(row=4, column=0,pady=2, padx=2)
 
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
