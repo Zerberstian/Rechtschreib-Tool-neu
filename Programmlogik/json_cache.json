@@ -1,9 +1,9 @@
 {
-  "version": 2,
-  "lastUpdated": "2026-02-10T12:08:49.890701",
-  "etag": "W/\"886fff2ff8ccc2586db39250ff33282047be1a41dd83ff0d8fee189a2373a806\"",
-  "totalAufgaben": 7385,
-  "size": 2319469,
+  "version": 9,
+  "lastUpdated": "2026-02-11T11:52:15.306691",
+  "etag": "W/\"09bf7b6821f22a2bade56e4e54a86475ecc0483f97eecd91b17ed87a59fa5c43\"",
+  "totalAufgaben": 7387,
+  "size": 2471241,
   "data": [
     {
       "Uebungsbereich": "Groß- und Kleinschreibung",
@@ -36799,6 +36799,17 @@
               "Infotext": "Getreide mit -ei-",
               "UebungsBeschreibung": "Getraide/Getreide",
               "Uebung_id": "4.1.100"
+            },
+            {
+              "Uebung_id": "5.1.101",
+              "UebungsBeschreibung": "Testfrage",
+              "Moeglichkeiten": [
+                "A",
+                "B",
+                "C"
+              ],
+              "KorrekteAntwort": 3,
+              "Infotext": "testinfo"
             }
           ],
           "IstSpeziell": false,
@@ -74671,7 +74682,7 @@
                 "Quantität",
                 "Quarantäne"
               ],
-              "KorrekteAntwort": 2,
+              "KorrekteAntwort": 1,
               "Infotext": null,
               "UebungsBeschreibung": "Menge",
               "Uebung_id": "6.4.17"
@@ -75588,6 +75599,17 @@
               "Infotext": null,
               "UebungsBeschreibung": "ägyptischer Herrscher",
               "Uebung_id": "6.4.100"
+            },
+            {
+              "Uebung_id": "6.4.101",
+              "UebungsBeschreibung": "Badenwürttemberg",
+              "Moeglichkeiten": [
+                "Ja",
+                "Nein",
+                "Vielleicht?"
+              ],
+              "KorrekteAntwort": 2,
+              "Infotext": "infotest"
             }
           ],
           "IstSpeziell": false,
