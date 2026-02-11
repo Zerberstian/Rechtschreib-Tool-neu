@@ -1,2 +1,4 @@
 credentials.json
 temp_repo/
+temp_repo/**/*.json
+aufgabeneditor.py # just for now, to avoid accidentally committing it. Should be removed later on.
