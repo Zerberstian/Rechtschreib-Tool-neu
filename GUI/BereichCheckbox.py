@@ -1,11 +1,13 @@
 #used to create the BereichCheckbox as packable Widget
 from functools import partial
 from tkinter import *
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import logic_der_zweite
+
 
 ober_dict = {}
 unter_dict = {}
-
 
 class BereichCheckbox:
     def __init__(self, master):
