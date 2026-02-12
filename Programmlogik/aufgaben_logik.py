@@ -31,7 +31,7 @@ class Aufgabe:
 
     def aufgabenbeschreibung(self):
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
-        return get_aufgaben_beschreibung(gekuerzte_uebung_id)
+        return get_aufgabenbeschreibung(gekuerzte_uebung_id)
 
     def spezial_check(self):
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]

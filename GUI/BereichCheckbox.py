@@ -1,4 +1,3 @@
-#used to create the BereichCheckbox as packable Widget
 from functools import partial
 from tkinter import *
 import sys, os
@@ -16,27 +15,26 @@ class BereichCheckbox:
         self.ausgeklappt_dict = {}
         self.checkbox_list = []
 
+    # Creates canvas with checkboxes
     def create(self,color):
         canvas_for_checkbox = Canvas(self.master, height=432)
-        vertikale_scrollbar = Scrollbar(self.master, command=canvas_for_checkbox.yview)
+        vertical_scrollbar = Scrollbar(self.master, command=canvas_for_checkbox.yview)
         main_checkbox_frame = Frame(canvas_for_checkbox, bg=color)
         canvas_for_checkbox.create_window((0,0),anchor="nw" ,  window=main_checkbox_frame)
-        canvas_for_checkbox.configure(yscrollcommand=vertikale_scrollbar.set)
-        vertikale_scrollbar.pack(side="right", fill="y")
+        canvas_for_checkbox.configure(yscrollcommand=vertical_scrollbar.set)
+        vertical_scrollbar.pack(side="right", fill="y")
         canvas_for_checkbox.pack(expand=True, fill="both")
 
         def on_configure(event):
             canvas_for_checkbox.configure(scrollregion=canvas_for_checkbox.bbox("all"))
-
             canvas_for_checkbox.update_idletasks()
             canvas_for_checkbox.config(
                 width=main_checkbox_frame.winfo_reqwidth()
             )
-
         main_checkbox_frame.bind("<Configure>", on_configure)
 
-        # Checkboxes for "Bereiche"
-        for index, bereich in enumerate(logic_der_zweite.uebungsbereich_auflisten()):
+        # Fills checkboxes with "Uebungsbereich"
+        for index, bereich in enumerate(logic_der_zweite.list_uebungsbereiche()):
             frame = Frame(main_checkbox_frame, bg=color)
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
@@ -79,7 +77,6 @@ class BereichCheckbox:
                 self.checkbox_list.append(box)
                 box.pack(anchor="w")
 
-
     def ausklappen(self,bereich):
         if self.ausgeklappt_dict[f"{bereich}"].get() == 1:
             self.frame_dict[f"{bereich}2"].grid(sticky="W",column=1, row=1)
@@ -96,7 +93,6 @@ class BereichCheckbox:
             ober_dict[haupt].set(1)
         else:
             ober_dict[haupt].set(0)
-
 
 def get_active():
     aktiv = []
