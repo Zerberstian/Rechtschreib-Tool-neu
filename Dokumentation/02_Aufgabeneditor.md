@@ -1,31 +1,6 @@
 
 # Aufgabeneditor
 
-> Übergeordnete Sachen
-
-- [x] Änderung To-Do's zu einer .md
-- [x] Ordnerstruktur anpassen
-- [x] Github Recherche ETag / Header
-- [x] Festhalten der nötigen Zwischenschritte
-
-> Aktuelles Ziel: Globale Versionierung
-
-- [x] Anwendung soll auf GitHub JSON zugreifen können (statt nur lokal)
-- [x] Anwendung soll einen Update Check beim Start machen
-- [ ] Version soll auf GitHub ebenfalls automatisch inkrementiert werden
-
-  `Dafür notwendig ist der Editor, der zulässt das folgende Änderungen gemacht werden können:`
-  - [ ] Anzeigen der Aufgabe mit der eingebenen ID
-  - [ ] Anpassen der Antwortmöglichkeiten
-  - [ ] Anpassen der korrekten Antwort
-  - [ ] Bearbeiten des Infotextes
-  - [ ] Anpassen der Übungsbeschreibung
-  - [ ] Übungs-ID automatisch generieren
-  - [ ] Automatischer Github Commit
-    - [ ] Verschlüsselung der Accountcredentials
-
----
-
 ## Priorisierung
 
 | Status | Aufgaben                                                                                                          |
