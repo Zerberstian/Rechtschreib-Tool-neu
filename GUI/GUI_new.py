@@ -226,7 +226,7 @@ voidLabel = Label(SelectFrame, bg=BG_Farbe)
 voidLabel.grid(row=0, column=1, sticky=NW)
 
 # Iconlabel
-iconLabel = Label(MenuFrame, image=icon)
+iconLabel = Label(MenuFrame, image=icon, bg=Btn_BG_Farbe)
 iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
 # Adding a big title
