@@ -1,7 +1,7 @@
-# <span style="color:#00ff00">Learnings during our Project:</span>
+# <span style="color:#f2d3a0"><u>Learnings during our Project:</u></span>
 
 ---
-## <span style="color:#00fff0">1. Using VS Code or Pycharm "Run" was sometimes unreliable.</span>
+## <span style="color:#cae494"><u>1. Using VS Code or Pycharm "Run" was sometimes unreliable.</u></span>
 - We started using cmd/PowerShell to run the file in the directory.<br>
 ``
 *your directory* python.\GUI_new.py
@@ -25,8 +25,8 @@ D:.
 ````
 
 ---
-## <span style="color:#00fff0">2. In general using the Terminal and useful commands.</span>
-### <span style="color:#ff4b4b">tree:</span>
+## <span style="color:#cae494"><u>2. In general using the Terminal and useful commands.</u></span>
+### <span style="color:#f2d3a0">tree:</span>
 Show directory structure<br>
 *commands*:
   - ``tree`` <br>
@@ -40,7 +40,7 @@ Show directory structure<br>
   - ``tree /a`` <br>
   Uses ASCII characters instead of extended characters (useful for logs or text files).<br><br>
   
-### <span style="color:#ff4b4b">cd:</span>
+### <span style="color:#f2d3a0">cd:</span>
 Change directory<br>
 *commands*:
 - ``cd foldername``<br>
@@ -50,7 +50,11 @@ will move you up one level, changing the current directory<br><br>
 - ``cd D:\Projects``<br>
 specifies the target path where you want to move
 
-###  <span style="color:#ff4b4b">mkdir and rmdir</span>
+#### <span style="color:#aaffaa">*Note*:</span> for cmd the command to change to a directory on a different Drive is
+- ``cd /d D:directory\`` <br>
+the targeted drive is D:\
+
+###  <span style="color:#f2d3a0">mkdir and rmdir:</span>
 an quick way to create and remove Folders<br>
 *commands*:
 - ``mkdir *folder name*``
@@ -60,5 +64,28 @@ an quick way to create and remove Folders<br>
 - ``rmdir /s *folder name*``
   - will remove Folder with content
 
-###  <span style="color:#ff4b4b">del</sman>
+###  <span style="color:#f2d3a0">del:</span>
+Delete a file
+*command*:
+- ``del *file name*``
+
+### <span style="color:#f2d3a0">clear and cls:</span>
+clear the Terminal Window
+*commands*:<br>
+- Powershell
+  - ``clear``<br><br>
+- cmd
+  - ``cls``<br>
+### <span style="color:#f2d3a0">python *run file*</span>
+- ``python .\*your file*``<br>
+
+for example:<br>
+- ``python .\GUI_new.py``
+#### <span style="color:#aaffaa">*Note*:</span> You need to be in the same directory as the File.
+
+### <span style="color:#f2d3a0">python version</span>
+Check your Python Version installed <br>
+- ``python --version``
+---
+## <span style="color:#cae494"><u>3. Version control: </u></span>
 
