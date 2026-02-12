@@ -301,13 +301,13 @@ Button(ColorPickerButtonFrame,
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=lambda: pick_color_fg()).grid(row=0, column=1,pady=2, padx=2, ipadx=15)
-
+"""
 Button(ColorPickerButtonFrame,
         text="Buttonfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=lambda: pick_color_bg()).grid(row=0, column=2,pady=2, padx=2)
-
+"""
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
         text="10",
@@ -390,6 +390,12 @@ Button(SpinBoxFrame,
 
 # Creating checkboxes
 BereichCheckbox(CheckBoxFrameS).create("#ffffff")
+
+'''
+Franzosen Grrr
+щ(゜ロ゜щ)
+jk
+'''
 
 if __name__ == "__main__":
     window.mainloop()
