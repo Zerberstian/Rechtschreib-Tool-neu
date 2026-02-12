@@ -46,3 +46,6 @@ ausstehend:
 - kleines GUI für den Aufgabeneditor
 
 - gitignore umfassend in der Parent-folder machen, sodass keine unnötigen Caches initial runtergeladen werden, und auch nicht das repo vollmüllen
+
+- requirements.txt
+(pip install requirements.txt)
