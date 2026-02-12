@@ -1,65 +1,67 @@
-from tkinter import *
+import tkinter as tk
 import json
 
-from Programmlogik.logic_der_zweite import geladeneAufgaben
+# JSON-Daten laden
+with open("fg_json.json", "r", encoding="utf-8") as f:
+    daten = json.load(f)
 
-def jsonladen():
-    with open( "json.json", "r", encoding="utf-8") as f:
-        global geladeneAufgaben
-        geladeneAufgaben = json.load(f)
-#os.path.join(os.path.dirname(__file__),)
-window = Tk()
+root = tk.Tk()
+root.title("Dynamische Frames")
 
-MotherFrame = Frame(window)
-MotherFrame.pack()
+main_frame = tk.Frame(root)
+main_frame.pack(padx=10, pady=10)
 
 frames = []
 current_index = 0
+
 def show_frame(index):
     for frame in frames:
         frame.pack_forget()
     frames[index].pack(fill="x", pady=5)
 
-def button_click(frage, antwort):
+def next_frame():
     global current_index
-    print(f"Frage: {frage} | Gewählte Antwort: {antwort}")
-
-    if current_index < len(frames) - 1:
-        current_index += 1
+    current_index += 1
+    if current_index < len(frames):
         show_frame(current_index)
     else:
         print("Ende erreicht")
 
-for bereich in geladeneAufgaben["data"]:
-    for teil in bereich["Teilgebiet"]:
+def button_click(frame, richtige_antwort, gewaehlte_antwort):
+    print(f"Gewählte Antwort: {gewaehlte_antwort}")
 
-        frame = Frame(MotherFrame, bd=2, relief="groove", padx=10, pady=10)
-        frame.pack(fill="x", pady=5)
+    # Buttons einfärben
+    for widget in frame.winfo_children():
+        if isinstance(widget, tk.Button):
+            if widget["text"] == richtige_antwort:
+                widget.config(bg="#12a505", fg="#ffffff")  # richtige Antwort grün
+            elif widget["text"] == gewaehlte_antwort:
+                widget.config(bg="#ff0000", fg="#ffffff")  # falsche Antwort rot
 
-        frage_label = Label(
+    # Nach 1 Sekunde nächste Frage
+    root.after(1000, next_frame)
+
+# Frames generieren
+for eintrag in daten:
+    frame = tk.Frame(main_frame, bd=2, relief="groove", padx=10, pady=10)
+
+    frage_label = tk.Label(frame, text=eintrag["frage"], font=("Arial", 25, "bold"))
+    frage_label.pack(anchor="w")
+
+    for antwort in eintrag["antworten"]:
+        btn = tk.Button(
             frame,
-            text=teil["Titel"],
-            font=("Arial", 12, "bold")
+            text=antwort,
+            font=("Arial", 20, "bold"),
+            command=lambda f=frame,
+                           r=eintrag["richtig"],
+                           a=antwort: button_click(f, r, a)
         )
-        frage_label.pack(anchor="w")
-
-        for uebung in teil["UebungenListe"]:
-
-            uebung = teil["UebungenListe"][0]
-
-            for antwort in uebung["Moeglichkeiten"]:
-                btn = Button(
-                    frame,
-                    text=antwort,
-                    command=lambda f=teil["Titel"], a=antwort: button_click(f, a)
-                )
-                btn.pack(side="left", padx=5, pady=5)
+        btn.pack(side="left", padx=5, pady=5)
 
     frames.append(frame)
 
-# Show only the first frame
+# Erste Frage anzeigen
 show_frame(0)
 
-if __name__ == "__main__":
-    window.mainloop()
-    print("b")
+root.mainloop()
