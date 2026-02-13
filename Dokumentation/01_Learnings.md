@@ -88,4 +88,24 @@ Check your Python Version installed <br>
 - ``python --version``
 ---
 ## <span style="color:#cae494"><u>3. Version control: </u></span>
+### <span style="color:#94e3c9">We encountered a few problems while working on our Project:</span>
+Working exclusively with local versions of the program can quickly become problematic. <br>
+As more people work on the project, the risk of breaking something increases, and communication overhead grows significantly.
+
+Team members must constantly check whether someone else is working on the same file, which can slow 
+progress and create confusion. In some cases, developers may even avoid working on certain parts of the code altogether 
+to prevent conflicts, reducing overall efficiency and collaboration.
+
+### <span style="color:#f2d3a0">GitHub</span>
+GitHub has a relatively low learning curve while offering a wide range of powerful features for collaboration and 
+version control. You can continue working in your preferred editor, such as PyCharm or VS Code, while using Git in the 
+background to track every change you make.
+
+One of GitHub’s biggest advantages is its ability to manage versions efficiently. It allows you to create branches to 
+develop new features independently, review changes through pull requests, and merge updates safely into the main project. 
+This reduces the risk of conflicts and makes teamwork more structured and transparent.
+
+Additionally, GitHub provides a centralized platform where all project files, history, and discussions are stored in 
+one place. This improves collaboration, ensures everyone works with the latest version, and makes it easy to roll back 
+to previous versions if something goes wrong.
 
