@@ -2,19 +2,11 @@ from logic_der_zweite import *
 from GUI.BereichCheckbox import *
 import random
 
-aufgaben_dict = {} # Objekte der Klasse Aufgabe werden hier gemerkt und die Uebung_id ist key
+aufgaben_dict = {} # Contains "Uebung_id"s to load exercises
 zu_loesende_aufgaben_list = []
 falsche_antwort_dict = {}
-boese_liste = []
-gute_liste = []
-
-class FalscheAntwort:
-    def __init__(self, uebung_id, antwort, korrekte_antwort):
-        self.uebung_id = uebung_id
-        self.antwort = antwort
-        self.korrekte_antwort = korrekte_antwort
-
-        falsche_antwort_dict[self.uebung_id] = self
+falsch_beantwortet = []
+richtig_beantwortet = []
 
 class Aufgabe:
     def __init__(self, uebung_id):
@@ -24,7 +16,7 @@ class Aufgabe:
         self.korrekt = aufgabe["KorrekteAntwort"]
         self.infotext = aufgabe["Infotext"]
         self.uebungs_beschreibung = aufgabe["UebungsBeschreibung"]
-        self.spezial_type = self.spezial_check()
+        self.speziell = self.speziell_check()
         self.aufgabenbeschreibung = self.aufgabenbeschreibung()
 
         aufgaben_dict[self.uebung_id] = self
@@ -33,75 +25,25 @@ class Aufgabe:
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
         return get_aufgabenbeschreibung(gekuerzte_uebung_id)
 
-    def spezial_check(self):
+    def speziell_check(self):
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
-        x = get_spezial_status(gekuerzte_uebung_id)
-        if not x:
+        speziell = get_spezial_status(gekuerzte_uebung_id)
+        if not speziell:
             return "Nicht Speziell"
         if len(self.moeglichkeiten[0].split()) == 1:
             return "Speziell Wort"
         else:
             return "Speziell Satz"
-    def release_me(self):
-        aufgaben_dict.pop(self.uebung_id)
 
-def aufgabe_loesen(index, aufgabe):
-    print(aufgabe.aufgabenbeschreibung, '\n')
-    print(aufgabe.uebungs_beschreibung, "\n")
-    aufgabe_stellen(aufgabe)
-    antwort = int_input()
-    aufgabe_beantworten(antwort, aufgabe, index)
+class FalscheAntwort:
+    def __init__(self, uebung_id, antwort, korrekte_antwort):
+        self.uebung_id = uebung_id
+        self.antwort = antwort
+        self.korrekte_antwort = korrekte_antwort
 
-def aufgabe_stellen(aufgabe):
-    for index, entry in enumerate(aufgabe.moeglichkeiten):
-        print(entry)
+        falsche_antwort_dict[self.uebung_id] = self
 
-def aufgabe_beantworten(antwort, aufgabe, index):
-    if antwort == aufgabe.korrekt:
-        print("Die Antwort ist Richtig")
-        richtige_merken(aufgabe)
-    else:
-        print("Die Antwort ist Falsch")
-        falsche_merken(index, aufgabe, antwort)
-
-def int_input():
-    while True:
-        try :
-            ant = input("Schreiben Sie die Zahl der richtigen Antwort")
-            return int(ant)
-        except ValueError:
-            print("Der Antwort ist nicht gefund!")
-
-def akitve_aufgaben_objekte_erstellen():
-    aktiv = get_active()
-    for eintrag in list_uebungen(aktiv):
-        Aufgabe(eintrag)
-
-def button_start():
-    aufgaben_initialisieren()
-
-def aufgaben_initialisieren():
-    akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(10):
-        return
-    for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
-        print(aufgabe)
-        aufgabe_loesen(index, aufgaben_dict[aufgabe])
-    print(len(gute_liste), " Richtige Antworten")
-    for x in gute_liste:
-        print(x)
-    print(len(boese_liste), " Falschen Antworten")
-    for antwort in falsche_antwort_dict:
-        print("\nDie richtige Antwort ist: ", falsche_antwort_dict[antwort].korrekte_antwort)
-        print("Du hast: ", falsche_antwort_dict[antwort].antwort , " ausgewählt")
-    resetting()
-
-def resetting():
-    aufgaben_dict.clear()
-    zu_loesende_aufgaben_list.clear()
-    boese_liste.clear()
-    gute_liste.clear()
-
+# Randomly picks exercises from chosen "Teilgebiet" until limit is reached
 def aufgaben_picken(limit):
     if aufgaben_dict == {}:
         return False, print("Das Dict ist Leer. Haben Sie nichts ausgewählt?")
@@ -111,14 +53,34 @@ def aufgaben_picken(limit):
         if uebung_id not in zu_loesende_aufgaben_list:
             zu_loesende_aufgaben_list.append(uebung_id)
             print(zu_loesende_aufgaben_list[-1])
+            x += 1
         elif len(zu_loesende_aufgaben_list) == len(list(aufgaben_dict.keys())):
-            print("Alle Verfügbaren Aufgaben geloaden")
+            print("Alle Verfügbaren Aufgaben geladen")
             break
-        x += 1
     return None
 
-def richtige_merken(aufgabe):
-    gute_liste.append(aufgabe.uebung_id)
+def moeglichkeiten_listen(aufgabe):
+    for index, entry in enumerate(aufgabe.moeglichkeiten):
+        print(entry)
+
+def int_input():
+    while True:
+        try :
+            antwort = input("Schreiben Sie die Zahl der richtigen Antwort")
+            return int(antwort)
+        except ValueError:
+            print("Die Antwort ist nicht gültig!")
+
+def antwort_check(antwort, aufgabe, index):
+    if antwort == aufgabe.korrekt:
+        print("\nDie Antwort ist richtig.")
+        richtig_merken(aufgabe)
+    else:
+        print("\nDie Antwort ist falsch.")
+        falsch_merken(index, aufgabe, antwort)
+
+def richtig_merken(aufgabe):
+    richtig_beantwortet.append(aufgabe.uebung_id)
 
 def do_something_function_that_needs_a_better_name(aufgabe, antwort):
     try:
@@ -126,20 +88,59 @@ def do_something_function_that_needs_a_better_name(aufgabe, antwort):
     except IndexError:
         return "Antwort außerhalb des gültigen Mengenbereiches"
 
-def falsche_merken(index, aufgabe, antwort):
+def falsch_merken(index, aufgabe, antwort):
     FalscheAntwort(aufgabe.uebung_id,
                    do_something_function_that_needs_a_better_name(aufgabe,antwort),
                    aufgabe.moeglichkeiten[aufgabe.korrekt-1])
-    if aufgabe.uebung_id not in boese_liste:
-        boese_liste.append(aufgabe.uebung_id)
-        falsche_antwort_rein_shuffeln(index, aufgabe.uebung_id)
+    if aufgabe.uebung_id not in falsch_beantwortet:
+        falsch_beantwortet.append(aufgabe.uebung_id)
+        falsch_beantwortet_einfuegen(index, aufgabe.uebung_id)
 
-def falsche_antwort_rein_shuffeln(index, aufgabe):
+# Inserts exercises that were  answered wrong at a random spot in "aufgaben_liste"
+def falsch_beantwortet_einfuegen(index, aufgabe):
     try:
         random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list))
         zu_loesende_aufgaben_list.insert(random_index, aufgabe)
     except ValueError:
         print("Der Index ist nicht gefund!")
+
+def aufgabe_bearbeiten(index, aufgabe):
+    print(aufgabe.aufgabenbeschreibung, '\n')
+    print(aufgabe.uebungs_beschreibung, "\n")
+    moeglichkeiten_listen(aufgabe)
+    antwort = int_input()
+    antwort_check(antwort, aufgabe, index)
+
+def akitve_aufgaben_objekte_erstellen():
+    aktiv = get_active()
+    for eintrag in list_uebungen(aktiv):
+        Aufgabe(eintrag)
+
+def aufgaben_initialisieren():
+    akitve_aufgaben_objekte_erstellen()
+    if aufgaben_picken(10):
+        return
+    for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
+        print(aufgabe)
+        aufgabe_bearbeiten(index, aufgaben_dict[aufgabe])
+    print(len(richtig_beantwortet), " Richtige Antworten")
+    for x in richtig_beantwortet:
+        print(x)
+    print(len(falsch_beantwortet), " Falschen Antworten")
+    for antwort in falsche_antwort_dict:
+        print("\nDie richtige Antwort ist: ", falsche_antwort_dict[antwort].korrekte_antwort)
+        print("Du hast: ", falsche_antwort_dict[antwort].antwort , " ausgewählt")
+    resetting()
+
+def button_start():
+    aufgaben_initialisieren()
+
+# Clears all dictionaries
+def resetting():
+    aufgaben_dict.clear()
+    zu_loesende_aufgaben_list.clear()
+    falsch_beantwortet.clear()
+    richtig_beantwortet.clear()
 
 if __name__ == "__main__":
     root = Tk()
