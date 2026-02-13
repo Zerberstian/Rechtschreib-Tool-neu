@@ -111,5 +111,16 @@ one place. This improves collaboration, ensures everyone works with the latest v
 to previous versions if something goes wrong.
 
 ### <span style="color:#f2d3a0">GitHub, Git clone and ssl</span>
+Git Clone Without SSL (Due to Company Restrictions)
 
+In our company network environment, standard SSL-based Git access (HTTPS over port 443) may not function correctly due
+to firewall restrictions, SSL inspection, or internal proxy policies. As a result, cloning repositories via HTTPS 
+(e.g., https://...) may fail with SSL certificate or connection errors.
+
+To work around this limitation, repositories must be cloned using an alternative protocol that is permitted within the 
+company network.<br><br>
+instead of: <br>
+``git clone *your repository URL*`` <br><br>
+use: <br>
+``git -c http.sslVerify=false *your repository URL*``
 
