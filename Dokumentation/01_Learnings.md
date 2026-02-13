@@ -23,7 +23,8 @@ D:.
         │   GUI_new.py
         └───__pycache__
 ````
-
+or you do this in your VS-Code settings if you are cringe 
+![img.png](img.png)
 ---
 ## <span style="color:#cae494"><u>2. In general using the Terminal and useful commands.</u></span>
 ### <span style="color:#f2d3a0">tree:</span>
@@ -108,4 +109,7 @@ This reduces the risk of conflicts and makes teamwork more structured and transp
 Additionally, GitHub provides a centralized platform where all project files, history, and discussions are stored in 
 one place. This improves collaboration, ensures everyone works with the latest version, and makes it easy to roll back 
 to previous versions if something goes wrong.
+
+### <span style="color:#f2d3a0">GitHub, Git clone and ssl</span>
+
 
