@@ -49,3 +49,10 @@ ausstehend:
 
 - requirements.txt
 (pip install requirements.txt)
+
+Aktuell, Versuch Zusammenführung GUI und Backend:
+
+- random cycle aufgaben
+- buttons deaktivieren wenn geklickt
+- pick aufgaben mit Bereichcheckbox.py
+- imports überall auf die gleiche weise und verständlich mit comments
