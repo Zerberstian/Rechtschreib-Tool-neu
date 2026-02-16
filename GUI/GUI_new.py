@@ -93,6 +93,8 @@ icon_path = os.path.join(project_root, "Assets", "srhIcon.png")
 icon = PhotoImage(file=icon_path)
 window.iconphoto(True, icon)                                          # Changing the tk icon to srh icon
 window.iconphoto(True, icon)
+window.bind("<#>", lambda event: show_color_picker())
+# ^ Hotkey for swaping Menu bc im genuinely about to crash out if i have to press Farbenwahl one more Time
 
 # Changing between frames
 def show_start_frame():
@@ -124,7 +126,9 @@ def show_color_picker():
     MenuText.grid_forget()
     headline.grid_forget()
     ColorPickerFrame.grid(row=0, column=0, sticky=NW, ipadx=5)
-    ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5)
+    ColorPickerBackFrame.grid(row=0, column=1, sticky=NW, ipadx=5)
+    ColorExampleFrame.grid(row=2, column=3, sticky=NW, ipadx=5)
+    ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
 
 def pick_color_bg():            # Background Color (pick from Tkinter Colorpicker)
     color = colorchooser.askcolor(title="Farbe auswählen")
@@ -210,6 +214,10 @@ AufgabenFrameSeite = Frame(window, bg=BG_Farbe)
 ColorPickerFrame = Frame(window, bg=BG_Farbe)
 
 ColorPickerButtonFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
+
+ColorPickerBackFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
+
+ColorExampleFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
 ##############################################################################
 
 SelectFrame.grid_rowconfigure(0, weight=1)
@@ -275,7 +283,7 @@ Button(ButtonFrameSB,
         ).pack(anchor="w" ,fill="x", pady=5, padx=5)
 
 # Button for going back to Main Menu
-Button(ColorPickerFrame,
+Button(ColorPickerBackFrame,
         text="zurück",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
@@ -294,13 +302,34 @@ Button(ColorPickerButtonFrame,
         text="Hintergrund",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_bg()).grid(row=0, column=0, pady=2, padx=2)
+        command=lambda: pick_color_bg()).grid(row=0, column=0, pady=2, padx=2, sticky=NW)
 
 Button(ColorPickerButtonFrame,
         text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_fg()).grid(row=0, column=1,pady=2, padx=2, ipadx=15)
+        command=lambda: pick_color_fg()).grid(row=1, column=0,pady=2, padx=2, sticky=NW)
+
+Button(ColorPickerButtonFrame,
+        text="Textfarbe",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe
+        ).grid(row=2, column=0, pady=2, padx=2, sticky=NW)
+
+Button(ColorPickerButtonFrame,
+        text="Textfarbe",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe
+        ).grid(row=3, column=0, pady=2, padx=2, sticky=NW)
+
+Label(ColorExampleFrame,
+        text=f"Bla bla Bla bla Bla bla\n"
+            f"Bla blaBla blaBla bla\n"
+            f"Bla blaBla blaBla bla",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=BG_Farbe,
+        fg="#ffffff").grid(row=0, column=0, pady=2, padx=2, sticky=NW)
+
 """
 Button(ColorPickerButtonFrame,
         text="Buttonfarbe",
@@ -308,6 +337,7 @@ Button(ColorPickerButtonFrame,
         bg=Btn_BG_Farbe,
         command=lambda: pick_color_bg()).grid(row=0, column=2,pady=2, padx=2)
 """
+
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
         text="10",
