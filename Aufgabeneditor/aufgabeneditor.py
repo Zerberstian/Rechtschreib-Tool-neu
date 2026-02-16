@@ -11,7 +11,7 @@ import time
 current_context = []
 
 def print_context():
-    """Showing Task as following: Bereich > Teilgebiet > Aufgabe"""
+    # Showing Task as following: Bereich > Teilgebiet > Aufgabe
     print("\n" + "─"*70)
     if not current_context:
         print("📍 HAUPTMENÜ".center(70))
@@ -32,7 +32,6 @@ def count_aufgaben(data):
     return total
 
 def print_numbered_list(items, prefix="", max_items=100):
-    """Zeigt nummerierte Liste mit echten Namen an"""
     if not items:
         print("❌ Keine Einträge gefunden")
         return None
@@ -104,7 +103,7 @@ def load_local_data():
 def save_and_commit(data, repo_path_base='temp_repo'):
     username, token = load_credentials()
     
-    # fallback - but in this case the automatic distrubution of the updated version does not work, as the catalogue is only stored locally
+    # fallback - but in this case the automatic distrubution of the updated version does not work, as the catalog is only stored locally
     if not username or not token:
         print("⚠️  Keine GitHub-Credentials → Nur lokal speichern")
         local_path = os.path.join(os.path.dirname(__file__), '..', 'Programmlogik', 'Aufgabenkatalog.json')
