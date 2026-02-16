@@ -1,9 +1,9 @@
 {
-  "version": 10,
-  "lastUpdated": "2026-02-12T14:35:37.675726",
-  "etag": "W/\"6a5c8120a39bd6a28c0019c7b1d878475b970fe9261e5e2a4465f1e82c5e5dd4\"",
+  "version": 11,
+  "lastUpdated": "2026-02-16T11:53:50.767902",
+  "etag": "W/\"b0a0a67d3d9a6c4778a75951e69b83bf7de34139c8aae6e9bca6fcc0a3177a1c\"",
   "totalAufgaben": 7387,
-  "size": 2471241,
+  "size": 2471242,
   "data": [
     {
       "Uebungsbereich": "Groß- und Kleinschreibung",
@@ -74682,7 +74682,7 @@
                 "Quantität",
                 "Quarantäne"
               ],
-              "KorrekteAntwort": 3,
+              "KorrekteAntwort": 2,
               "Infotext": null,
               "UebungsBeschreibung": "Menge",
               "Uebung_id": "6.4.17"
