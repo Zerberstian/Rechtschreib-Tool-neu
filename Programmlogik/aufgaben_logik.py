@@ -7,6 +7,7 @@ zu_loesende_aufgaben_list = []
 falsche_antwort_dict = {}
 falsch_beantwortet = []
 richtig_beantwortet = []
+korrigiert_beantwortet = []
 
 class Aufgabe:
     def __init__(self, uebung_id):
@@ -83,12 +84,20 @@ def int_input():
             print("Die Antwort ist nicht gültig!")
 
 def antwort_check(antwort, aufgabe, index):
-    if antwort == aufgabe.korrekt:
-        print("\nDie Antwort ist richtig.")
-        richtig_merken(aufgabe)
+    if aufgabe.get_wiederholt():
+        if antwort == aufgabe.korrekt:
+            print("\nDie Antwort wurde korrigiert")
+            korrigierte_merken(aufgabe)
     else:
-        print("\nDie Antwort ist falsch.")
-        falsch_merken(index, aufgabe, antwort)
+        if antwort == aufgabe.korrekt:
+            print("\nDie Antwort ist richtig.")
+            richtig_merken(aufgabe)
+        else:
+            print("\nDie Antwort ist falsch.")
+            falsch_merken(index, aufgabe, antwort)
+
+def korrigierte_merken(aufgabe):
+    korrigiert_beantwortet.append(aufgabe.uebung_id)
 
 def richtig_merken(aufgabe):
     richtig_beantwortet.append(aufgabe.uebung_id)
@@ -104,6 +113,7 @@ def falsch_merken(index, aufgabe, antwort):
                    antwort_finden(aufgabe,antwort),
                    aufgabe.moeglichkeiten[(aufgabe.korrekt-1)])
     if aufgabe.uebung_id not in falsch_beantwortet:
+        aufgabe.set_wiederholt()
         falsch_beantwortet.append(aufgabe.uebung_id)
         falsch_beantwortet_einfuegen(index, aufgabe.uebung_id)
 
@@ -131,7 +141,7 @@ def akitve_aufgaben_objekte_erstellen():
 
 def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(10):
+    if aufgaben_picken(5):
         return
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
@@ -139,10 +149,17 @@ def aufgaben_initialisieren():
     print(len(richtig_beantwortet), " Richtige Antworten")
     for x in richtig_beantwortet:
         print(x)
-    print(len(falsch_beantwortet), " Falschen Antworten")
+    print(len(falsch_beantwortet), " Falsche Antworten")
     for antwort in falsche_antwort_dict:
-        print("\nDie richtige Antwort ist: ", falsche_antwort_dict[antwort].korrekte_antwort)
+        print(antwort, '\n')
+        print(aufgaben_dict[antwort].aufgabenbeschreibung, '\n')
+        print(aufgaben_dict[antwort].uebungs_beschreibung, "\n")
+        print("Die richtige Antwort ist: ", falsche_antwort_dict[antwort].korrekte_antwort)
         print("Du hast: ", falsche_antwort_dict[antwort].antwort , " ausgewählt")
+    print(len(korrigiert_beantwortet), "Korrigiert")
+    for x in korrigiert_beantwortet:
+        print(x)
+    print(f"Aus {len(zu_loesende_aufgaben_list)} Aufgaben hast du {len(richtig_beantwortet)} Richtig, {len(falsch_beantwortet)} Falsch und {len(korrigiert_beantwortet)} Korrigiert")
     resetting()
 
 def button_start():
