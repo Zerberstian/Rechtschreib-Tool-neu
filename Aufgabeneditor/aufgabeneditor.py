@@ -2,16 +2,45 @@ import json
 import os
 import requests
 from datetime import datetime
-import git  # pip install GitPython (requirements.txt)
+# pip install GitPython (requirements.txt)
 import subprocess
 import shutil
 import stat
 import time
+import re
 
-current_context = []
+current_context = []  # globally used for displaying the current state in the menu 
+
+def generate_auto_id(bereich_idx, teilgebiet_idx, uebungen_liste):
+    # generating new ids based on the predecessor id
+    bereich_num = bereich_idx + 1
+    teil_num = teilgebiet_idx + 1
+    
+    # getting the highest id (predecessor) from the selection
+    max_num = 0
+    for aufgabe in uebungen_liste:
+        if aufgabe.get('Uebung_id'):
+            match = re.match(rf'^{bereich_num}\.{teil_num}\.(\d+)$', aufgabe['Uebung_id'])
+            if match:
+                max_num = max(max_num, int(match.group(1)))
+    
+    return f"{bereich_num}.{teil_num}.{max_num + 1}"
+
+def find_task_by_id(data, task_id):
+    # searching for the task with the given id and returning its indices and reference for editing
+    if isinstance(data, list):
+        for bereich_idx, bereich in enumerate(data):
+            teilgebiete = bereich.get('Teilgebiet', [])
+            if isinstance(teilgebiete, list):
+                for teil_idx, teil in enumerate(teilgebiete):
+                    uebungen = teil.get('UebungenListe', [])
+                    for task_idx, aufgabe in enumerate(uebungen):
+                        if aufgabe.get('Uebung_id') == task_id:
+                            return bereich_idx, teil_idx, task_idx, aufgabe
+    return None
 
 def print_context():
-    # Showing Task as following: Bereich > Teilgebiet > Aufgabe
+    # showing task as following: Bereich > Teilgebiet > Aufgabe
     print("\n" + "─"*70)
     if not current_context:
         print("📍 HAUPTMENÜ".center(70))
@@ -31,7 +60,23 @@ def count_aufgaben(data):
                     total += len(uebungen)
     return total
 
+def print_id_list(items, prefix="", max_items=100): # max needs to be overwritten if there are picked more than 100 tasks
+    if not items:
+        print("❌ Keine Einträge gefunden")
+        return None
+    
+    print(f"\n📋 {prefix}Verfügbar:")
+    for item in items[:max_items]:
+        task_id = item.get('Uebung_id', 'ID?')
+        name = f"{task_id}: {item.get('UebungsBeschreibung', '')[:150]}"
+        print(f"  {name}")
+    
+    if len(items) > max_items:
+        print(f" ... und {len(items)-max_items} weitere")
+    return items
+
 def print_numbered_list(items, prefix="", max_items=100):
+    # only showing the section via numbers, but not the ids, for better overview when picking a section to edit
     if not items:
         print("❌ Keine Einträge gefunden")
         return None
@@ -45,10 +90,6 @@ def print_numbered_list(items, prefix="", max_items=100):
                 name = item['Uebungsbereich']
             elif 'Titel' in item:
                 name = item['Titel']
-            elif 'UebungsBeschreibung' in item:
-                name = f"{item.get('Uebung_id', 'ID?')}: {item['UebungsBeschreibung'][:200]}"
-            elif 'id' in item:
-                name = f"{item['id']}: {item.get('frage', 'keine Frage')[:50]}"
             else:
                 name = f"Eintrag {i+1}"
         else:
@@ -57,7 +98,7 @@ def print_numbered_list(items, prefix="", max_items=100):
         print(f"  {i+1:3d}. {name}")
     
     if len(items) > max_items:
-        print(f"{len(items)-max_items}")
+        print(f" ... und {len(items)-max_items} weitere")
     
     return items
 
@@ -240,20 +281,21 @@ def edit_task_menu(data):
         print_context()
         print("📋 HAUPTMENÜ")
         print("1. Alle Bereiche anzeigen")
-        print("2. Bereich bearbeiten")
+        print("2. Bereich bearbeiten") 
         print("3. Neuen Bereich hinzufügen")
-        print("4. Speichern & GitHub Commit")
-        print("5. Statistik")
+        print("4. Aufgabe per ID suchen & bearbeiten")
+        print("5. Speichern & GitHub Commit")
+        print("6. Statistik")
         print("0. Beenden")
         
-        choice = input("\nWähle (0-5): ").strip()
+        choice = input("\nWähle (0-6): ").strip()
         
         if choice == '1' or choice == '2':
             print_numbered_list(data, "Bereiche - ")
             if choice == '1': continue
-                
+            
             try:
-                bereich_idx = int(input("\n📍 Bereich-Nummer eingeben (1-6): ")) - 1
+                bereich_idx = int(input(f"\n📍 Bereich-Nummer eingeben (1-{len(data)}): ")) - 1
                 if 0 <= bereich_idx < len(data):
                     current_context = [data[bereich_idx].get('Uebungsbereich', f'Bereich {bereich_idx+1}')]
                     edit_bereich_menu(data, bereich_idx)
@@ -272,11 +314,27 @@ def edit_task_menu(data):
             print("✅ Neuer Bereich hinzugefügt!")
         
         elif choice == '4':
+            task_id = input("\n🔍 Aufgabe-ID eingeben (z.B. 1.2.45): ").strip()
+            result = find_task_by_id(data, task_id)
+            if result:
+                bereich_idx, teil_idx, task_idx, aufgabe = result
+                bereich_name = data[bereich_idx].get('Uebungsbereich', f'Bereich {bereich_idx+1}')
+                teil_name = data[bereich_idx]['Teilgebiet'][teil_idx].get('Titel', f'Teilgebiet {teil_idx+1}')
+                
+                current_context.extend([bereich_name, teil_name, f"Aufgabe {task_id}"])
+                print(f"\n✅ Aufgabe {task_id} gefunden!")
+                print(f"   📂 {bereich_name} > {teil_name}")
+                edit_single_task(data[bereich_idx]['Teilgebiet'][teil_idx]['UebungenListe'], task_idx)
+                current_context.pop()
+            else:
+                print(f"❌ Aufgabe mit ID '{task_id}' nicht gefunden!")
+        
+        elif choice == '5':
             if save_and_commit(data): 
                 print("✨ Update erfolgreich!")
             input("Enter zum Beenden...")
-
-        elif choice == '5':
+        
+        elif choice == '6':
             total_tasks = count_aufgaben(data)
             print(f"📈 {total_tasks} Aufgaben in {len(data)} Bereichen")
         
@@ -308,12 +366,13 @@ def edit_bereich_menu(data, bereich_idx):
                 teil_idx = int(input(f"\n📍 Teilgebiet-Nummer eingeben (1-{len(teilgebiete)}): ")) - 1
                 if 0 <= teil_idx < len(teilgebiete):
                     current_context.append(teilgebiete[teil_idx].get('Titel', f'Teilgebiet {teil_idx+1}'))
-                    edit_teilgebiet_menu(teilgebiete, teil_idx)
+                    edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx)
                     current_context.pop()
                 else:
                     print("❌ Ungültige Nummer!")
             except ValueError:
                 print("❌ Bitte Nummer eingeben!")
+
         
         elif choice == '3':
             new_teil = {
@@ -327,12 +386,13 @@ def edit_bereich_menu(data, bereich_idx):
             new_name = input("✏️ Neuer Bereichsname: ")
             if new_name.strip():
                 bereich['Uebungsbereich'] = new_name
-                current_context[0] = new_name
+                if current_context:  # checking context length for safety
+                    current_context[0] = new_name
         
         elif choice == '0':
             break
 
-def edit_teilgebiet_menu(teilgebiete, teil_idx):
+def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx):
     global current_context
     teil = teilgebiete[teil_idx]
     
@@ -342,45 +402,62 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx):
         print("1. Aufgaben auflisten")
         print("2. Aufgabe bearbeiten")
         print("3. Neue Aufgabe hinzufügen")
-        print("4. Titel/Beschreibung ändern")
+        print("4. Aufgabe per ID in diesem Teilgebiet")
+        print("5. Titel/Beschreibung ändern")
         print("0. Zurück")
         
         choice = input("Wähle: ").strip()
         
-        if choice == '1' or choice == '2':
+        if choice == '1':
             aufgaben = teil.get('UebungenListe', [])
-            print_numbered_list(aufgaben, "Aufgaben - ", max_items=100)  # settomg base value, might be overwritten by the actual number of tasks, if there are more than 100 
-            if choice == '1': continue
-            
-            try:
-                task_idx = int(input(f"\n📍 Aufgaben-Nummer eingeben (1-{len(aufgaben)}): ")) - 1
-                if 0 <= task_idx < len(aufgaben):
+            print_id_list(aufgaben, "Aufgaben - ")  # now only showing ids
+            continue
+        
+        elif choice == '2':
+            aufgaben = teil.get('UebungenListe', [])
+            print_id_list(aufgaben, "Aufgaben - ")
+            task_id = input("\n🔍 Aufgabe-ID eingeben (z.B. 3.1.5): ").strip()
+            result = find_task_by_id([{'Teilgebiet': [teil]}], task_id)
+            if result:
+                _, _, task_idx, _ = result
+                aufgabe = aufgaben[task_idx]
+                current_context.append(f"Aufgabe {task_id}")
+                edit_single_task(aufgaben, task_idx)
+                current_context.pop()
+            else:
+                print(f"❌ Aufgabe '{task_id}' nicht gefunden!")
+        
+        elif choice == '4':
+                task_id = input("\n🔍 Aufgabe-ID eingeben (z.B. 1.2.45): ").strip()
+                result = find_task_by_id([{'Teilgebiet': [teil]}], task_id)
+                if result:
+                    _, _, task_idx, _ = result
                     aufgabe = aufgaben[task_idx]
-                    current_context.append(f"Aufgabe {task_idx+1}: {aufgabe.get('Uebung_id', 'no-id')} - {aufgabe.get('UebungsBeschreibung', '')[:30]}")
+                    current_context.append(f"Aufgabe {task_id}")
                     edit_single_task(aufgaben, task_idx)
                     current_context.pop()
                 else:
-                    print("❌ Ungültige Nummer!")
-            except ValueError:
-                print("❌ Bitte Nummer eingeben!")
+                    print(f"❌ Aufgabe '{task_id}' nicht in diesem Teilgebiet gefunden!")
         
         elif choice == '3':
-            # displaying all the inputs so the user provides the right data, and format
+            auto_id = generate_auto_id(bereich_idx, teil_idx, teil.get('UebungenListe', []))
+            print(f"🆕 Automatische ID: {auto_id}")
             new_task = {
-                'Uebung_id': input("🆕 Uebung_id (z.B. 1.1.1): ") or f"{len(teil.get('UebungenListe', []))+1}",
+                'Uebung_id': auto_id,
                 'UebungsBeschreibung': input("❓ UebungsBeschreibung (Frage): "),
-                'Moeglichkeiten': json.loads(input("📋 Moeglichkeiten als JSON-Liste [ [\"A\",\"B\",\"C\"] ]: ")) or ["Option 1", "Option 2", "Option 3"],
+                'Moeglichkeiten': json.loads(input("📋 Moeglichkeiten als JSON-Liste [[\"A\",\"B\",\"C\"]]: ") or '[["Option 1"], ["Option 2"], ["Option 3"]]'),
                 'KorrekteAntwort': int(input("✅ KorrekteAntwort (Index 1-3): ") or 1),
                 'Infotext': input("ℹ️ Infotext (optional): ")
             }
             teil.setdefault('UebungenListe', []).append(new_task)
             print("✅ Neue Aufgabe hinzugefügt!")
         
-        elif choice == '4':
+        elif choice == '5':
             new_titel = input("✏️ Neuer Titel (Enter=behalten): ") or teil.get('Titel', '')
             if new_titel.strip():
                 teil['Titel'] = new_titel
-                current_context[-1] = new_titel
+                if len(current_context) > 1:
+                    current_context[-1] = new_titel
             teil['Aufgabenbeschreibung'] = input("📝 Neue Beschreibung: ") or teil.get('Aufgabenbeschreibung', '')
         
         elif choice == '0':
@@ -390,7 +467,7 @@ def edit_single_task(uebungen_liste, task_idx):
     task = uebungen_liste[task_idx]
     
     print(f"\n{'─'*70}")
-    print(f"✏️ Aufgabe {task_idx+1} - ID: {task.get('Uebung_id', 'no-id')}")
+    print(f"✏️ Aufgabe {task_idx+1} - ID: {task.get('Uebung_id', 'no-id')} (🔒 AUTO-GENERATED)")
     print(f"{'─'*70}")
     
     beschreibung = task.get('UebungsBeschreibung', '')
@@ -416,9 +493,9 @@ def edit_single_task(uebungen_liste, task_idx):
         print("\nWelches Feld bearbeiten?")
         print("1. UebungsBeschreibung")
         print("2. KorrekteAntwort (+Option)")
-        print("3. Moeglichkeiten")
+        print("3. Moeglichkeiten") 
         print("4. Infotext")
-        print("5. Uebung_id")
+        print("5. Aufgabe LÖSCHEN")
         print("0. Fertig ✓")
         
         choice = input("Wähle (0-5): ").strip()
@@ -463,10 +540,13 @@ def edit_single_task(uebungen_liste, task_idx):
             print("✅ Aktualisiert!")
         
         elif choice == '5':
-            new_id = input(f"🆕 Uebung_id (aktuell: '{task.get('Uebung_id', 'no-id')}'): ").strip()
-            if new_id:
-                task['Uebung_id'] = new_id
-                print("✅ ID aktualisiert!")
+            confirm = input(f"\n⚠️ Aufgabe '{task.get('Uebung_id')}' LÖSCHEN? (JA/NEIN): ").strip().upper()
+            if confirm == 'JA':
+                uebungen_liste.pop(task_idx)
+                print("🗑️  Aufgabe gelöscht!")
+                return
+            else:
+                print("❌ Abgebrochen.")
         
         elif choice == '0':
             print("\n🎉 Aufgabe komplett gespeichert!")
@@ -482,7 +562,7 @@ if __name__ == "__main__":
     
     cleanup_old_temps(os.path.dirname(__file__), 'temp_repo')
     print("═" * 70)
-    print("📝 AUFGABENEDITOR V3 - MIT NUMMERANZEIGE".center(70))
+    print("📝 AUFGABENEDITOR V5 - ID-SUCHE & AUTO-ID FIXED".center(70))
     print("═" * 70)
     
     aufgaben_data = load_local_data()
@@ -495,4 +575,4 @@ if __name__ == "__main__":
     try:
         edit_task_menu(aufgaben_data)
     except KeyboardInterrupt:
-        print("\n👋 Abgebrochen, wir sehen uns nie wieder!")
+        print("\n👋 wir sehen uns nie wieder!!!")
