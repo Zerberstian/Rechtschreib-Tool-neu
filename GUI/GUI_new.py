@@ -93,8 +93,11 @@ icon_path = os.path.join(project_root, "Assets", "srhIcon.png")
 icon = PhotoImage(file=icon_path)
 window.iconphoto(True, icon)                                          # Changing the tk icon to srh icon
 window.iconphoto(True, icon)
-window.bind("<#>", lambda event: show_color_picker())
+
+window.bind("<F4>", lambda event: show_color_picker())
 # ^ Hotkey for swaping Menu bc im genuinely about to crash out if i have to press Farbenwahl one more Time
+window.bind("<F3>", lambda event: back_to_main_frame())
+# ^ back to main Menu Hotkey
 
 # Changing between frames
 def show_start_frame():
@@ -127,7 +130,7 @@ def show_color_picker():
     headline.grid_forget()
     ColorPickerFrame.grid(row=0, column=0, sticky=NW, ipadx=5)
     ColorPickerBackFrame.grid(row=0, column=1, sticky=NW, ipadx=5)
-    ColorExampleFrame.grid(row=2, column=3, sticky=NW, ipadx=5)
+    ColorExampleFrame.grid(row=1, column=3, sticky=NW, ipadx=5)
     ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
 
 def pick_color_bg():            # Background Color (pick from Tkinter Colorpicker)
@@ -217,7 +220,9 @@ ColorPickerButtonFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
 
 ColorPickerBackFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
 
-ColorExampleFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
+ColorExampleFrame = Frame(ColorPickerFrame, bg="#ffffff")
+
+
 ##############################################################################
 
 SelectFrame.grid_rowconfigure(0, weight=1)
@@ -302,33 +307,53 @@ Button(ColorPickerButtonFrame,
         text="Hintergrund",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_bg()).grid(row=0, column=0, pady=2, padx=2, sticky=NW)
+        command=lambda: pick_color_bg()).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_fg()).grid(row=1, column=0,pady=2, padx=2, sticky=NW)
+        command=lambda: pick_color_fg()).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe
-        ).grid(row=2, column=0, pady=2, padx=2, sticky=NW)
+        ).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe
-        ).grid(row=3, column=0, pady=2, padx=2, sticky=NW)
+        ).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Label(ColorExampleFrame,
-        text=f"Bla bla Bla bla Bla bla\n"
-            f"Bla blaBla blaBla bla\n"
-            f"Bla blaBla blaBla bla",
+        text=f"Nomen-Verb-Adjektiv Teil 1\n",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=BG_Farbe,
-        fg="#ffffff").grid(row=0, column=0, pady=2, padx=2, sticky=NW)
+        bg="#ffffff",
+        fg="#000000").pack(anchor="n", pady=5, padx=5)
+
+Label(ColorExampleFrame,
+        text=f"Bitte die drei folgenden Wortarten unterscheiden:\nNomen = geben den Begriffen einen Namen: Ewigkeit, Geist, Mathematik\nVerben = alles was man tun kann: essen, läuft, malt, denkst\nAdjektive = beschreiben wie etwas ist: rot, warm, lang, schwer, eklig\n",
+        font=(BtnFontArt, 20),
+        bg="#ffffff",
+        fg="#000000").pack(anchor="n", pady=5, padx=5)
+
+ColorExampleButtonFrame = Frame(ColorExampleFrame, bg="#ffffff")
+ColorExampleButtonFrame.pack(anchor="n", pady=5, padx=5)
+
+Button(ColorExampleButtonFrame,
+        text="Nomen",
+        font=(BtnFontArt, BtnFontGroesse),
+        ).pack(side="left", pady=5, padx=5)
+Button(ColorExampleButtonFrame,
+        text="Verb",
+        font=(BtnFontArt, BtnFontGroesse),
+        ).pack(side="left", pady=5, padx=5)
+Button(ColorExampleButtonFrame,
+        text="Adjektiv",
+        font=(BtnFontArt, BtnFontGroesse),
+        ).pack(side="left", pady=5, padx=5)
 
 """
 Button(ColorPickerButtonFrame,
