@@ -133,6 +133,7 @@ def show_color_picker():
     ColorExampleFrame.grid(row=1, column=3, sticky=NW, ipadx=5)
     ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
 
+
 def pick_color_bg():            # Background Color (pick from Tkinter Colorpicker)
     color = colorchooser.askcolor(title="Farbe auswählen")
     if color[1]:  # Hex-Wert, z.B. "#ff0000"
@@ -173,6 +174,18 @@ def pick_color_fg():
         for widget in ColorPickerButtonFrame.winfo_children():
             if isinstance(widget, Button):
                 widget.config(fg=color[1])
+
+def pick_color_all():
+    pick_color_bg()
+    pick_color_fg()
+
+def pick_color_test_bg():
+    color = colorchooser.askcolor(title="Farbe auswählen")
+    if color[1]:  # Hex-Wert, z.B. "#ff0000"
+        for widget in ColorExampleFrame.winfo_children():
+            widget.config(bg=color[1])
+            ColorExampleFrame.config(bg=color[1])
+
 '''
 def change_BG_Farbe(farbe):
     window.config(bg=farbe)
@@ -307,7 +320,7 @@ Button(ColorPickerButtonFrame,
         text="Hintergrund",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_bg()).pack(anchor="w",fill="x", pady=5, padx=5)
+        command=lambda: pick_color_test_bg()).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="Textfarbe",
@@ -316,13 +329,13 @@ Button(ColorPickerButtonFrame,
         command=lambda: pick_color_fg()).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
-        text="Textfarbe",
+        text="reset color",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe
         ).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
-        text="Textfarbe",
+        text="anwenden",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe
         ).pack(anchor="w",fill="x", pady=5, padx=5)
