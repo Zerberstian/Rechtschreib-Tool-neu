@@ -1,6 +1,6 @@
 credentials.json
 # verschlüsselung?
-temp_repo/
+temp_repo_*
 temp_repo/**/*.json
 aufgabeneditor.py
 # just for now, to avoid accidentally committing it. Should be removed later on.
