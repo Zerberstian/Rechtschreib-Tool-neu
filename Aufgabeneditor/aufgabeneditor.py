@@ -1,6 +1,3 @@
-# E:\07_Rechtschreibtool\Rechtschreib-Tool-neu\Aufgabeneditor\aufgabeneditor.py
-# MIT NUMMERN-ANZEIGE BEI JEDER EINGABE
-
 import json
 import os
 import requests
@@ -11,11 +8,10 @@ import shutil
 import stat
 import time
 
-# GLOBALER KONTEXT
 current_context = []
 
 def print_context():
-    """Zeigt immer an: Bereich > Teilgebiet > Aufgabe"""
+    """Showing Task as following: Bereich > Teilgebiet > Aufgabe"""
     print("\n" + "─"*70)
     if not current_context:
         print("📍 HAUPTMENÜ".center(70))
@@ -46,12 +42,11 @@ def print_numbered_list(items, prefix="", max_items=100):
     
     for i, item in enumerate(items[:display_count]):
         if isinstance(item, dict):
-            # ✨ ECHTE JSON-Felder priorisieren
-            if 'Uebungsbereich' in item:  # Bereich
+            if 'Uebungsbereich' in item:
                 name = item['Uebungsbereich']
-            elif 'Titel' in item:         # Teilgebiet
+            elif 'Titel' in item:
                 name = item['Titel']
-            elif 'UebungsBeschreibung' in item:  # AUFGABE - wichtigster Fix!
+            elif 'UebungsBeschreibung' in item:
                 name = f"{item.get('Uebung_id', 'ID?')}: {item['UebungsBeschreibung'][:200]}"
             elif 'id' in item:
                 name = f"{item['id']}: {item.get('frage', 'keine Frage')[:50]}"
@@ -68,14 +63,12 @@ def print_numbered_list(items, prefix="", max_items=100):
     return items
 
 def load_credentials():
-    # ✅ FIX: Suche credentials.json IM SELBEN ORDNER wie das Script
     credentials_path = os.path.join(os.path.dirname(__file__), 'credentials.json')
     
     if not os.path.exists(credentials_path):
         print(f"🔴 credentials.json nicht gefunden in: {credentials_path}")
         print("📝 Erstelle Beispiel-Datei...")
         
-        # Erstelle Beispiel-credentials.json
         example_creds = {
             "username": "dein_github_username",
             "token": "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -89,7 +82,7 @@ def load_credentials():
         print("   1. GitHub Token: https://github.com/settings/tokens")
         print("   2. 'repo' Permission aktivieren")
         print("   3. Token in credentials.json einfügen")
-        return None, None  # Kein Commit möglich ohne echte Credentials
+        return None, None  # no commit possible if no credentials provided
     
     try:
         with open(credentials_path, 'r', encoding='utf-8') as f:
@@ -111,7 +104,7 @@ def load_local_data():
 def save_and_commit(data, repo_path_base='temp_repo'):
     username, token = load_credentials()
     
-    # ✅ FALLBACK: Ohne Credentials nur lokal speichern
+    # fallback - but in this case the automatic distrubution of the updated version does not work, as the catalogue is only stored locally
     if not username or not token:
         print("⚠️  Keine GitHub-Credentials → Nur lokal speichern")
         local_path = os.path.join(os.path.dirname(__file__), '..', 'Programmlogik', 'Aufgabenkatalog.json')
@@ -131,10 +124,9 @@ def save_and_commit(data, repo_path_base='temp_repo'):
         print(f"📊 {count_aufgaben(data)} Aufgaben")
         return True
     
-    import time
     timestamp = int(time.time())
     repo_path = os.path.join(os.path.dirname(__file__), f'{repo_path_base}_{timestamp}')
-    print(f"📁 Fresh temp: {repo_path}")
+    print(f"📁 temp-repo: {repo_path}")
     
     remote_url = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"
     try:
@@ -151,7 +143,7 @@ def save_and_commit(data, repo_path_base='temp_repo'):
             'data': data
         }
         
-        # ✅ FRESH CLONE - KEIN CLEANUP PROBLEM!
+        # no cleanup problems, as the programm is always cloned freshly
         print("🔄 Cloning fresh repo...")
         clone_cmd = [
             'git', '-c', 'http.sslVerify=false', 'clone',
@@ -163,12 +155,12 @@ def save_and_commit(data, repo_path_base='temp_repo'):
         subprocess.run(clone_cmd, capture_output=True, text=True, check=True, timeout=30)
         print("✅ Repo cloned!")
         
-        # JSON schreiben
+        # writing the json file
         json_path = os.path.join(repo_path, 'Aufgabenkatalog.json')
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(full_json, f, indent=2, ensure_ascii=False)
         
-        # Git via subprocess (sauber & stabil)
+        # updating the repo via git and subprocess with credentials
         subprocess.run(['git', '-C', repo_path, 'config', 'http.sslVerify', 'false'], check=True)
         subprocess.run(['git', '-C', repo_path, 'config', 'user.name', username], check=True)
         subprocess.run(['git', '-C', repo_path, 'config', 'user.email', f'{username}@users.noreply.github.com'], check=True)
@@ -177,7 +169,7 @@ def save_and_commit(data, repo_path_base='temp_repo'):
         subprocess.run(['git', '-C', repo_path, 'commit', '-m', 
                        f'Auto-update v{new_version} - {count_aufgaben(data)} tasks'], check=True)
         
-        # Push mit Credentials
+        # now the commit is automatically pushed with the given credentials
         push_env = os.environ.copy()
         push_env['GIT_USERNAME'] = username
         push_env['GIT_PASSWORD'] = token
@@ -186,7 +178,7 @@ def save_and_commit(data, repo_path_base='temp_repo'):
         
         print(f"🟢 SUCCESS v{new_version}! ({count_aufgaben(data)} tasks)")
         
-        # 🧹 Optional: Alte temp_repos löschen (nur wenn leer/frei)
+        # now cleaning up old temp_rempos, but keeping the latest 2 locally for safety
         cleanup_old_temps(os.path.dirname(repo_path), repo_path_base)
         
         return True
@@ -199,15 +191,14 @@ def save_and_commit(data, repo_path_base='temp_repo'):
         return False
 
 def on_rm_error(func, path, exc_info):
-    # Schreibschutz entfernen und nochmal versuchen
+    # removing writing protection, and retrying if the file should be locked
     try:
         os.chmod(path, stat.S_IWRITE)
         func(path)
     except Exception as e:
-        print(f"⚠️ Konnte {path} trotz chmod nicht löschen: {e}")
+        print(f"⚠️ Konnte {path} trotz chmod-Approach nicht löschen: {e}")
 
 def cleanup_old_temps(base_dir, prefix):
-    """Löscht alle temp_repo_* außer den neuesten 2, mit WinError‑Workaround."""
     try:
         temps = [d for d in os.listdir(base_dir) if d.startswith(prefix + '_')]
 
@@ -221,7 +212,7 @@ def cleanup_old_temps(base_dir, prefix):
         for old_dir in to_delete:
             old_path = os.path.join(base_dir, old_dir)
 
-            # 1. Rechte rekursiv setzen
+            # 1. setting write permissions recursively for all files and folders inside the old temp repo
             for root, dirs, files in os.walk(old_path):
                 for name in dirs + files:
                     p = os.path.join(root, name)
@@ -230,10 +221,10 @@ def cleanup_old_temps(base_dir, prefix):
                     except Exception as e:
                         print(f"⚠️ Schreibschutz konnte nicht entfernt werden {p}: {e}")
 
-            # 2. Kurze Pause, falls noch ein Prozess drauf zugreift
+            # 2. waiting if the file is still locked by another process (e.g. git) 
             time.sleep(0.2)
 
-            # 3. rmtree mit Fehler-Callback
+            # 3. rmtree with debugging if it fails
             try:
                 shutil.rmtree(old_path, onerror=on_rm_error)
                 print(f"✅ Gelöscht: {old_dir}")
@@ -282,7 +273,7 @@ def edit_task_menu(data):
             print("✅ Neuer Bereich hinzugefügt!")
         
         elif choice == '4':
-            if save_and_commit(data):  # repo_path_base entfällt
+            if save_and_commit(data): 
                 print("✨ Update erfolgreich!")
             input("Enter zum Beenden...")
 
@@ -359,7 +350,7 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx):
         
         if choice == '1' or choice == '2':
             aufgaben = teil.get('UebungenListe', [])
-            print_numbered_list(aufgaben, "Aufgaben - ", max_items=100)  # Weniger anzeigen
+            print_numbered_list(aufgaben, "Aufgaben - ", max_items=100)  # settomg base value, might be overwritten by the actual number of tasks, if there are more than 100 
             if choice == '1': continue
             
             try:
@@ -375,7 +366,7 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx):
                 print("❌ Bitte Nummer eingeben!")
         
         elif choice == '3':
-            # ✨ NEUE AUFGABE im echten JSON-Format
+            # displaying all the inputs so the user provides the right data, and format
             new_task = {
                 'Uebung_id': input("🆕 Uebung_id (z.B. 1.1.1): ") or f"{len(teil.get('UebungenListe', []))+1}",
                 'UebungsBeschreibung': input("❓ UebungsBeschreibung (Frage): "),
@@ -399,36 +390,29 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx):
 def edit_single_task(uebungen_liste, task_idx):
     task = uebungen_liste[task_idx]
     
-    # 🎨 VOLLSTÄNDIGE AUFGABE ANZEIGEN
     print(f"\n{'─'*70}")
     print(f"✏️ Aufgabe {task_idx+1} - ID: {task.get('Uebung_id', 'no-id')}")
     print(f"{'─'*70}")
     
-    # UebungsBeschreibung
     beschreibung = task.get('UebungsBeschreibung', '')
     print(f"📝 UebungsBeschreibung: {beschreibung}")
     
-    # KorrekteAntwort MIT zugehöriger Option
     korrekt_idx = task.get('KorrekteAntwort', 0)
     moeglichkeiten = task.get('Moeglichkeiten', [])
     korrekte_option = moeglichkeiten[korrekt_idx-1] if moeglichkeiten and 0 < korrekt_idx <= len(moeglichkeiten) else "❌ Ungültig"
     print(f"✅ KorrekteAntwort: {korrekt_idx} → '{korrekte_option}'")
     
-    # Moeglichkeiten kompakt
     if moeglichkeiten:
-        # ✅ FIX: Backslash außerhalb der f-string Expression
         moeg_items = [f"({i+1})'{opt}'" for i, opt in enumerate(moeglichkeiten)]
         moeg_str = ", ".join(moeg_items)
         print(f"📋 Moeglichkeiten: {moeg_str}")
     
-    # Infotext
     infotext = task.get('Infotext', '')
     if infotext:
         print(f"ℹ️  Infotext: {infotext}")
     
     print(f"{'─'*70}")
     
-    # 🎯 GEZIELTE BEARBEITUNG - Benutzer wählt Feld
     while True:
         print("\nWelches Feld bearbeiten?")
         print("1. UebungsBeschreibung")
@@ -471,7 +455,6 @@ def edit_single_task(uebungen_liste, task_idx):
                 task['Moeglichkeiten'] = [opt.strip() for opt in new_moeg if opt.strip()]
                 moeglichkeiten = task['Moeglichkeiten']
                 
-                # ✅ FIX: Backslash-Problem gelöst durch Zwischenschritt
                 moeg_items = [f"({i+1})'{opt}'" for i, opt in enumerate(moeglichkeiten)]
                 print(f"✅ Neue Optionen: {', '.join(moeg_items)}")
         
@@ -493,7 +476,7 @@ def edit_single_task(uebungen_liste, task_idx):
         else:
             print("❌ Ungültige Auswahl!")
         
-        # 🔄 Aufgaben-Zusammenfassung nach Änderung
+        # showing the updated task after each edit for better clarity
         print(f"\n📊 Status: {task.get('Uebung_id')} | {task.get('UebungsBeschreibung', '')[:30]}... | Korrekt: '{korrekte_option}'")
 
 if __name__ == "__main__":
