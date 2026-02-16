@@ -1,4 +1,4 @@
-json_cache.json
+# add json_cache.json back later; as this file is meant to be only local, downloaded when initializing the program , and not on the repository
 __pycache__/ 
 *.pyc   
 *.pyo 
