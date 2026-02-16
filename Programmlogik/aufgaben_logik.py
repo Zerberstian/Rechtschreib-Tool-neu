@@ -21,7 +21,7 @@ class Aufgabe:
         self.speziell = self.speziell_check()
         self.aufgabenbeschreibung = self.aufgabenbeschreibung()
         if self.speziell == "Speziell Satz":
-            self.moeglichkeiten = self.moeglichkeiten.copy()[0].split(" ")
+            self.moeglichkeiten = self.moeglichkeiten.copy()[0].split()
         elif self.speziell == "Speziell Wort":
             self.moeglichkeiten = list(self.moeglichkeiten.copy()[0])
         aufgaben_dict[self.uebung_id] = self
