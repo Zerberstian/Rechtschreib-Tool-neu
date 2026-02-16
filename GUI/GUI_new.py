@@ -355,18 +355,28 @@ Label(ColorExampleFrame,
 ColorExampleButtonFrame = Frame(ColorExampleFrame, bg="#ffffff")
 ColorExampleButtonFrame.pack(anchor="n", pady=5, padx=5)
 
-Button(ColorExampleButtonFrame,
-        text="Nomen",
-        font=(BtnFontArt, BtnFontGroesse),
-        ).pack(side="left", pady=5, padx=5)
-Button(ColorExampleButtonFrame,
+button1 = Button(
+    ColorExampleButtonFrame,
+    text="Nomen",
+    font=(BtnFontArt, BtnFontGroesse),
+)
+button1.pack(side="left", pady=5, padx=5)
+
+button1.config(state=DISABLED)
+
+button2 = Button(ColorExampleButtonFrame,
         text="Verb",
         font=(BtnFontArt, BtnFontGroesse),
-        ).pack(side="left", pady=5, padx=5)
-Button(ColorExampleButtonFrame,
+        )
+button2.pack(side="left", pady=5, padx=5)
+button2.config(state=DISABLED)
+
+button3 = Button(ColorExampleButtonFrame,
         text="Adjektiv",
         font=(BtnFontArt, BtnFontGroesse),
-        ).pack(side="left", pady=5, padx=5)
+        )
+button3.pack(side="left", pady=5, padx=5)
+button3.config(state=DISABLED)
 
 """
 Button(ColorPickerButtonFrame,
