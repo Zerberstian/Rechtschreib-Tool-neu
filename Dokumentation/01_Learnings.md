@@ -124,3 +124,15 @@ instead of: <br>
 use: <br>
 ``git -c http.sslVerify=false *your repository URL*``
 
+## <span style="color:#cae494"><u>4. Clean Code:</u></span>
+Surely i dont have to explain Clean Code in great detail:
+
+Clean code refers to writing software that is easy to read, understand, and maintain. A foundational resource on this topic is Clean Code by Robert C. Martin, which emphasizes meaningful variable and function names, small and focused functions, clear structure, and avoiding unnecessary complexity. In Python development, the PEP 8 style guide plays a central role in maintaining clean code by defining consistent rules for formatting, naming conventions, indentation, and code layout.
+
+Consistency in code is essential for readability and collaboration. Following established standards like PEP 8 ensures that all developers write code in a uniform way, making it easier to understand and maintain. Clear and purposeful comments are also important—they should explain *why* something is done, not just *what* the code does. Additionally, writing meaningful and descriptive commit messages helps track changes, understand the history of a project, and support teamwork. Maintaining consistent language across code, comments, documentation, and user-facing text further improves professionalism, clarity, and long-term maintainability of the software.
+
+well about that...<br>
+we fucked up on that part. <br>
+
+sorry
+
