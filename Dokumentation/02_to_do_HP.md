@@ -9,6 +9,8 @@
 - [ ] requirements.txt
 - [ ] Executable erstellen
 - [ ] Ordner aufräumen und files richtig benennen
+- [ ] imports überall auf die gleiche weise und verständlich mit comments
+- [ ] Clean Code - Complete Overhaul
 
 ---
 
@@ -30,13 +32,12 @@
 - [x] Bearbeiten des Infotextes
 - [x] Anpassen der Übungsbeschreibung
 - [ ] Übungs-ID automatisch generieren beim Hinzufügen
-- [ ] Aufgaben löschen
-- [ ] Die Reihenfolge beim Hinzufügen anpassen, sodass sie wie überall auch in der JSON ist
+- [ ] Komplett falsche oder veraltete Aufgaben löschen
+- [ ] Die Reihenfolge beim Hinzufügen anpassen, sodass sie wie überall auch in der JSON ist (rein optisch, funktioniert trotzdem)
 
 > Technisches
 
 - [ ] Verschlüsselung der Accountcredentials
-- [ ] imports überall auf die gleiche weise und verständlich mit comments
 
 ---
 
@@ -44,10 +45,27 @@
 
 > Programmlogik
 
-- [ ] Random Cycle Aufgaben richtig implementieren (siehe aufgabenlogik.py)
+- [x] Random Cycle Aufgaben richtig implementieren (siehe aufgabenlogik.py)
+- [ ] Anzeige wiederholter und falsch beantworteter Aufgaben
+- [ ] Komplette Statistik - Anzeigen bzw. abspeichern falsch beantworteter Fragen
 
 > GUI
 
 - [ ] Buttons deaktivieren wenn geklickt (Frame_Generation_Class.py)
-- [ ] Aufgabenbereich-Pick mit Bereichcheckbox.py (siehe ebenfalls GUI_New.py beereits implementiert
-- [ ] Switch zu Frame_Generation_Class.py muss gemacht werden)
+- [ ] Immernoch funktionierende Button Highlights für falsch und richtig, auch mit dynamischer Frame Gen
+- [ ] Aufgabenbereich-Pick mit Bereichcheckbox.py (siehe ebenfalls GUI_New.py bereits implementiert)
+- [ ] Switch zu Frame_Generation_Class.py muss gemacht werden
+
+---
+
+###### Dokumentation
+
+> Readme
+
+- [ ] Readme mit Instruktionen
+- [ ] Readme - Teil für Developer
+- [ ] Readme - Teil für Benutzer
+
+> Learnings
+
+- [ ] Kurze Anpassungen
