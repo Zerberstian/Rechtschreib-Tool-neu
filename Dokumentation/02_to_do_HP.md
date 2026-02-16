@@ -55,6 +55,7 @@
 - [ ] Immernoch funktionierende Button Highlights für falsch und richtig, auch mit dynamischer Frame Gen
 - [ ] Aufgabenbereich-Pick mit Bereichcheckbox.py (siehe ebenfalls GUI_New.py bereits implementiert)
 - [ ] Switch zu Frame_Generation_Class.py muss gemacht werden
+- [ ] Vorschau-Fenster für Farbwahl
 
 ---
 

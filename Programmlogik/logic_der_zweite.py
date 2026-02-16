@@ -5,7 +5,7 @@ geladeneAufgaben = [] #Create an empty list for questions
 
 # Function to load aufgaben.json
 def jsonladen():
-    with open(os.path.join(os.path.dirname(__file__), "aufgaben_mit_ids.json"), "r", encoding="utf-8") as f:
+    with open(os.path.join(os.path.dirname(__file__), "json_cache.json"), "r", encoding="utf-8") as f:
         global geladeneAufgaben
         geladeneAufgaben = json.load(f)
 
