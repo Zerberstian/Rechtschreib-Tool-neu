@@ -10,6 +10,7 @@ richtig_beantwortet = []
 
 class Aufgabe:
     def __init__(self, uebung_id):
+        self.__wiederholt = False
         self.uebung_id = uebung_id
         aufgabe = aufgabe_lesen(uebung_id)
         self.moeglichkeiten = aufgabe["Moeglichkeiten"]
@@ -18,7 +19,10 @@ class Aufgabe:
         self.uebungs_beschreibung = aufgabe["UebungsBeschreibung"]
         self.speziell = self.speziell_check()
         self.aufgabenbeschreibung = self.aufgabenbeschreibung()
-
+        if self.speziell == "Speziell Satz":
+            self.moeglichkeiten = self.moeglichkeiten.copy()[0].split(" ")
+        elif self.speziell == "Speziell Wort":
+            self.moeglichkeiten = list(self.moeglichkeiten.copy()[0])
         aufgaben_dict[self.uebung_id] = self
 
     def aufgabenbeschreibung(self):
@@ -34,6 +38,13 @@ class Aufgabe:
             return "Speziell Wort"
         else:
             return "Speziell Satz"
+
+# Skulldunno warum ich das Privat gemacht habe
+    def set_wiederholt(self):
+        self.__wiederholt = True
+
+    def get_wiederholt(self):
+        return self.__wiederholt
 
 class FalscheAntwort:
     def __init__(self, uebung_id, antwort, korrekte_antwort):
@@ -82,7 +93,7 @@ def antwort_check(antwort, aufgabe, index):
 def richtig_merken(aufgabe):
     richtig_beantwortet.append(aufgabe.uebung_id)
 
-def do_something_function_that_needs_a_better_name(aufgabe, antwort):
+def antwort_finden(aufgabe, antwort):
     try:
         return aufgabe.moeglichkeiten[antwort-1]
     except IndexError:
@@ -90,8 +101,8 @@ def do_something_function_that_needs_a_better_name(aufgabe, antwort):
 
 def falsch_merken(index, aufgabe, antwort):
     FalscheAntwort(aufgabe.uebung_id,
-                   do_something_function_that_needs_a_better_name(aufgabe,antwort),
-                   aufgabe.moeglichkeiten[aufgabe.korrekt-1])
+                   antwort_finden(aufgabe,antwort),
+                   aufgabe.moeglichkeiten[(aufgabe.korrekt-1)])
     if aufgabe.uebung_id not in falsch_beantwortet:
         falsch_beantwortet.append(aufgabe.uebung_id)
         falsch_beantwortet_einfuegen(index, aufgabe.uebung_id)
@@ -105,6 +116,8 @@ def falsch_beantwortet_einfuegen(index, aufgabe):
         print("Der Index ist nicht gefund!")
 
 def aufgabe_bearbeiten(index, aufgabe):
+    if aufgabe.get_wiederholt():
+        print("WIEDERHOLUNG_________!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! deutlich genug?")
     print(aufgabe.aufgabenbeschreibung, '\n')
     print(aufgabe.uebungs_beschreibung, "\n")
     moeglichkeiten_listen(aufgabe)
