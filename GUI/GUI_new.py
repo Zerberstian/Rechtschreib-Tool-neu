@@ -307,7 +307,7 @@ iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
 # Adding a big title
 headline = Label(window,
-                text="Hallo",
+                text="",
                 font=(BtnFontArt, BtnFontGroesse),
                 bg=BG_Farbe,
                 fg=BG_Farbe)
