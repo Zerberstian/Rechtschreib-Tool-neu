@@ -66,7 +66,7 @@ def count_aufgaben(data):
                     total += len(uebungen)
     return total
 
-def print_id_list(items, prefix="", max_items=100): # max needs to be overwritten if there are picked more than 100 tasks
+def print_id_list(items, prefix="", max_items=1000): # max needs to be overwritten if there are picked more than those tasks (performance reasons)
     if not items:
         print("❌ Keine Einträge gefunden")
         return None
@@ -128,7 +128,7 @@ def load_credentials():
         print("   1. GitHub Token: https://github.com/settings/tokens")
         print("   2. 'repo' Permission aktivieren")
         print("   3. Token in credentials.json einfügen")
-        return None, None  # no commit possible if no credentials provided
+        return None, None # no commit possible if no credentials provided
     
     try:
         with open(credentials_path, 'r', encoding='utf-8') as f:
@@ -226,7 +226,6 @@ def save_and_commit(data, repo_path_base='temp_repo'):
         
         # now cleaning up old temp_rempos, but keeping the latest 2 locally for safety
         cleanup_old_temps(os.path.dirname(repo_path), repo_path_base)
-        
         return True
         
     except subprocess.CalledProcessError as e:
@@ -257,7 +256,7 @@ def cleanup_old_temps(base_dir, prefix):
 
         for old_dir in to_delete:
             old_path = os.path.join(base_dir, old_dir)
-
+            
             # 1. setting write permissions recursively for all files and folders inside the old temp repo
             for root, dirs, files in os.walk(old_path):
                 for name in dirs + files:
@@ -266,10 +265,9 @@ def cleanup_old_temps(base_dir, prefix):
                         os.chmod(p, stat.S_IWRITE)
                     except Exception as e:
                         print(f"⚠️ Schreibschutz konnte nicht entfernt werden {p}: {e}")
-
-            # 2. waiting if the file is still locked by another process (e.g. git) 
+                        
+            # 2. waiting if the file is still locked by another process (e.g. git)
             time.sleep(0.2)
-
             # 3. rmtree with debugging if it fails
             try:
                 shutil.rmtree(old_path, onerror=on_rm_error)
@@ -304,7 +302,7 @@ def edit_task_menu(data):
                 bereich_idx = int(input(f"\n📍 Bereich-Nummer eingeben (1-{len(data)}): ")) - 1
                 if 0 <= bereich_idx < len(data):
                     current_context = [data[bereich_idx].get('Uebungsbereich', f'Bereich {bereich_idx+1}')]
-                    edit_bereich_menu(data, bereich_idx)
+                    edit_bereich_menu(data, bereich_idx, data)
                     current_context.pop()
                 else:
                     print("❌ Ungültige Nummer!")
@@ -348,7 +346,7 @@ def edit_task_menu(data):
             print("👋 Auf Wiedersehen!")
             break
 
-def edit_bereich_menu(data, bereich_idx):
+def edit_bereich_menu(data, bereich_idx, data_param): # now also passing data, as it is needed for the quick preview of the newly created task
     global current_context
     bereich = data[bereich_idx]
     
@@ -372,14 +370,13 @@ def edit_bereich_menu(data, bereich_idx):
                 teil_idx = int(input(f"\n📍 Teilgebiet-Nummer eingeben (1-{len(teilgebiete)}): ")) - 1
                 if 0 <= teil_idx < len(teilgebiete):
                     current_context.append(teilgebiete[teil_idx].get('Titel', f'Teilgebiet {teil_idx+1}'))
-                    edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx)
+                    edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx, data_param)
                     current_context.pop()
                 else:
                     print("❌ Ungültige Nummer!")
             except ValueError:
                 print("❌ Bitte Nummer eingeben!")
 
-        
         elif choice == '3':
             new_teil = {
                 'Titel': input("🆕 Teilgebiet-Titel: "),
@@ -392,13 +389,13 @@ def edit_bereich_menu(data, bereich_idx):
             new_name = input("✏️ Neuer Bereichsname: ")
             if new_name.strip():
                 bereich['Uebungsbereich'] = new_name
-                if current_context:  # checking context length for safety
+                if current_context: # checking context length for safety
                     current_context[0] = new_name
         
         elif choice == '0':
             break
 
-def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx):
+def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx, data):
     global current_context
     teil = teilgebiete[teil_idx]
     
@@ -416,7 +413,7 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx):
         
         if choice == '1':
             aufgaben = teil.get('UebungenListe', [])
-            print_id_list(aufgaben, "Aufgaben - ")  # now only showing ids
+            print_id_list(aufgaben, "Aufgaben - ") # now only showing ids
             continue
         
         elif choice == '2':
@@ -434,20 +431,20 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx):
                 print(f"❌ Aufgabe '{task_id}' nicht gefunden!")
         
         elif choice == '4':
-                task_id = input("\n🔍 Aufgabe-ID eingeben (z.B. 1.2.45): ").strip()
-                result = find_task_by_id([{'Teilgebiet': [teil]}], task_id)
-                if result:
-                    _, _, task_idx, _ = result
-                    aufgabe = aufgaben[task_idx]
-                    current_context.append(f"Aufgabe {task_id}")
-                    edit_single_task(aufgaben, task_idx)
-                    current_context.pop()
-                else:
-                    print(f"❌ Aufgabe '{task_id}' nicht in diesem Teilgebiet gefunden!")
+            task_id = input("\n🔍 Aufgabe-ID eingeben (z.B. 1.2.45): ").strip()
+            result = find_task_by_id([{'Teilgebiet': [teil]}], task_id)
+            if result:
+                _, _, task_idx, _ = result
+                aufgabe = aufgaben[task_idx]
+                current_context.append(f"Aufgabe {task_id}")
+                edit_single_task(aufgaben, task_idx)
+                current_context.pop()
+            else:
+                print(f"❌ Aufgabe '{task_id}' nicht in diesem Teilgebiet gefunden!")
         
         elif choice == '3':
             auto_id = generate_auto_id(bereich_idx, teil_idx, teil.get('UebungenListe', []))
-            print(f"🆕 Automatische ID: {auto_id}")
+            
             new_task = {
                 'Uebung_id': auto_id,
                 'UebungsBeschreibung': input("❓ UebungsBeschreibung (Frage): "),
@@ -455,8 +452,29 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx):
                 'KorrekteAntwort': int(input("✅ KorrekteAntwort (Index 1-3): ") or 1),
                 'Infotext': input("ℹ️ Infotext (optional): ")
             }
-            teil.setdefault('UebungenListe', []).append(new_task)
-            print("✅ Neue Aufgabe hinzugefügt!")
+            # added new preview of created task, and auto-push if really created, so it does not need to be done manually via the menu
+            print("\n" + "─"*70)
+            print(" 👀 VORSCHAU - Neue Aufgabe:")
+            print(f"   ID: {new_task['Uebung_id']}")
+            print(f"   Frage: {new_task['UebungsBeschreibung']}")
+            print(f"   Optionen: {new_task['Moeglichkeiten']}")
+            korrekte_option = new_task['Moeglichkeiten'][new_task['KorrekteAntwort']-1][0] if new_task['Moeglichkeiten'] else '❌'
+            print(f"   Korrekt: {new_task['KorrekteAntwort']} → {korrekte_option}")
+            if new_task['Infotext']:
+                print(f"   Info: {new_task['Infotext']}")
+            print("─"*70)
+            
+            confirm = input("✅ Aufgabe erstellen und direkt pushen? (JA/NEIN): ").strip().upper()
+            if confirm == 'JA':
+                teil.setdefault('UebungenListe', []).append(new_task)
+                print("✅ Neue Aufgabe hinzugefügt!")
+                
+                if save_and_commit(data):
+                    print("🎉 Automatischer GitHub-Commit erfolgreich!")
+                else:
+                    print("⚠️ Commit fehlgeschlagen - Aufgabe aber lokal gespeichert, versuche den Push manuell über das Hauptmenü!")
+            else:
+                print("❌ Erstellung abgebrochen.")
         
         elif choice == '5':
             new_titel = input("✏️ Neuer Titel (Enter=behalten): ") or teil.get('Titel', '')
@@ -568,7 +586,7 @@ if __name__ == "__main__":
     
     cleanup_old_temps(os.path.dirname(__file__), 'temp_repo')
     print("═" * 70)
-    print("📝 AUFGABENEDITOR V5 - ID-SUCHE & AUTO-ID FIXED".center(70))
+    print("📝 AUFGABENEDITOR V6 - AUTO-COMMIT NACH NEUER AUFGABE".center(70))
     print("═" * 70)
     
     aufgaben_data = load_local_data()
