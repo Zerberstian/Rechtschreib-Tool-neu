@@ -132,23 +132,7 @@ def show_color_picker():
     ColorPickerBackFrame.grid(row=0, column=1, sticky=NW, ipadx=5)
     ColorExampleFrame.grid(row=1, column=3, sticky=NW, ipadx=5)
     ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
-'''
-def pick_color_bg():            # Background Color (pick from Tkinter Colorpicker)
-    color = colorchooser.askcolor(title="Farbe auswählen")
-    if color[1]:  # Hex-Wert, z.B. "#ff0000"
-        window.config(bg=color[1])
-        MenuFrame.config(bg=color[1])
-        SelectFrame.config(bg=color[1])
-        ButtonFrameSB.config(bg=color[1])
-        logicFrame.config(bg=color[1])
-        AufgabenFrameSeite.config(bg=color[1])
-        ColorPickerFrame.config(bg=color[1])
-        ColorPickerButtonFrame.config(bg=color[1])
-        SpinBoxFrame.config(bg=color[1])
-        MenuText.config(bg=color[1], fg=color[1])
-        headline.config(bg=color[1], fg=color[1])
-        voidLabel.config(bg=color[1], fg=color[1])
-'''
+
 def pick_color_fg():
     color = colorchooser.askcolor(title="Farbe auswählen")
     if color[1]:
@@ -189,7 +173,7 @@ def pick_color_test_bg():
         ColorExampleFrame.config(bg=selected_bg_color)
         for widget in ColorExampleFrame.winfo_children():
             widget.config(bg=selected_bg_color)
-
+        headline.config(bg=selected_bg_color, fg=selected_bg_color)
 
 def apply_bg_color(color):
 
@@ -206,30 +190,38 @@ def apply_bg_color(color):
         # Still recurse through children
         for child in widget.winfo_children():
             update_widgets(child)
-    voidLabel.config(fg=color)
     update_widgets(window)
 
 def pick_color_all():
     global selected_bg_color
     print(f"{selected_bg_color} pick_color_all")
-    if selected_bg_color: # Only if a color was chosen
+    if selected_bg_color is not None: # Only if a color was chosen
+        print("oi oi")
         apply_bg_color(selected_bg_color)
+        print(BG_Farbe, "bg in all")
 
-'''
-def change_BG_Farbe(farbe):
-    window.config(bg=farbe)
-    MenuFrame.config(bg=farbe)
-    SelectFrame.config(bg=farbe)
-    ButtonFrameSB.config(bg=farbe)
-    logicFrame.config(bg=farbe)
-    AufgabenFrameSeite.config(bg=farbe)
-    ColorPickerFrame.config(bg=farbe)
-    ColorPickerButtonFrame.config(bg=farbe)
-    SpinBoxFrame.config(bg=farbe)
-    MenuText.config(bg=farbe, fg=farbe)
-    headline.config(bg=farbe, fg=farbe)
-    voidLabel.config(bg=farbe, fg=farbe)
-'''
+    else:
+        print("omegalul")
+
+def reset_all_color():
+    global BG_Farbe
+    default_bg = BG_Farbe
+    print(default_bg, "default")
+    headline.config(bg=default_bg, fg=default_bg)
+    def update_widgets_in_reset(widget):
+        if isinstance(widget, (Label, Frame)) or widget == window:
+            try:
+                widget.config(bg=default_bg)
+
+            except Exception:
+                print("Error xD")
+                pass
+
+        for child in widget.winfo_children():
+
+            update_widgets_in_reset(child)
+
+    update_widgets_in_reset(window)  # Start recursion here
 
 # Frames
 ##############################################################################
@@ -360,7 +352,8 @@ Button(ColorPickerButtonFrame,
 Button(ColorPickerButtonFrame,
         text="reset color",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe
+        bg=Btn_BG_Farbe,
+        command=lambda: reset_all_color()
         ).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
@@ -407,14 +400,6 @@ button3 = Button(ColorExampleButtonFrame,
         )
 button3.pack(side="left", pady=5, padx=5)
 button3.config(state=DISABLED)
-
-"""
-Button(ColorPickerButtonFrame,
-        text="Buttonfarbe",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=lambda: pick_color_bg()).grid(row=0, column=2,pady=2, padx=2)
-"""
 
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
