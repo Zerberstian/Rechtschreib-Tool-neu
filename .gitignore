@@ -1,20 +1,24 @@
-# Allgemeine Python-Regeln
+# Ignoring Python cache files
 # --------------------
 __pycache__/
 *.pyc
 *.pyo
 **/__pycache__/
 
+# PyInstaller Build-Directories (dist/ contains the executable)
+build/
+dist/
+
 # Aufgabeneditor
 # --------------------
 Aufgabeneditor/credentials.json
-Aufgabeneditor/temp_repo_*
+Aufgabeneditor/temp_repo_*/
 
 # Programmlogik
 # --------------------
-
 Programmlogik/json_cache.json
 # local cache, not intented to be shared, as it is generated when initializing the program and can be easily recreated
 
 # Other files
 # --------------------
+RechtschreibTool.spec
