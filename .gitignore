@@ -1,4 +1,20 @@
-__pycache__/ 
-*.pyc   
-*.pyo 
-**/__pycache__/ 
+# Allgemeine Python-Regeln
+# --------------------
+__pycache__/
+*.pyc
+*.pyo
+**/__pycache__/
+
+# Aufgabeneditor
+# --------------------
+Aufgabeneditor/credentials.json
+Aufgabeneditor/temp_repo_*
+
+# Programmlogik
+# --------------------
+
+Programmlogik/json_cache.json
+# local cache, not intented to be shared, as it is generated when initializing the program and can be easily recreated
+
+# Other files
+# --------------------
