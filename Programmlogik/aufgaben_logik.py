@@ -1,6 +1,11 @@
+import sys
+import os
 from logic_der_zweite import *
-from GUI.BereichCheckbox import *
 import random
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from GUI.BereichCheckbox import *
+import tkinter as Tk
+
 
 aufgaben_dict = {} # Contains "Uebung_id"s to load exercises
 zu_loesende_aufgaben_list = []
@@ -123,7 +128,7 @@ def falsch_beantwortet_einfuegen(index, aufgabe):
         random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list))
         zu_loesende_aufgaben_list.insert(random_index, aufgabe)
     except ValueError:
-        print("Der Index ist nicht gefund!")
+        print("Der Index ist nicht gefunden!")
 
 def aufgabe_bearbeiten(index, aufgabe):
     if aufgabe.get_wiederholt():
@@ -173,8 +178,8 @@ def resetting():
     richtig_beantwortet.clear()
 
 if __name__ == "__main__":
-    root = Tk()
+    root = Tk.Tk()
     BereichCheckbox(root).create("#ffffff")
-    start = Button(root, text="Start", command=button_start)
+    start = Tk.Button(root, text="Start", command=button_start)
     start.pack()
     root.mainloop()
