@@ -202,6 +202,8 @@ def resetting():
     zu_loesende_aufgaben_list.clear()
     falsch_beantwortet.clear()
     richtig_beantwortet.clear()
+    korrigiert_beantwortet.clear()
+    falsche_antwort_dict.clear()
 
 if __name__ == "__main__":
     root = Tk()
