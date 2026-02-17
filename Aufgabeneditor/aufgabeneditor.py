@@ -1,13 +1,19 @@
 import json
 import os
+# is used to define the directories
 import requests
+# used for downloading the raw json file
 from datetime import datetime
-# pip install GitPython (requirements.txt)
 import subprocess
+# used for pushing repo via subprocess
 import shutil
 import stat
+# both used for handling file permissions during cleanup of temp repos
 import time
 import re
+# regex pattern used for finding the predecessor id for auto-id generation
+
+# pip install GitPython (requirements.txt) - as Git is essential for automatically pushing the new version to GitHub
 
 current_context = []  # globally used for displaying the current state in the menu 
 
