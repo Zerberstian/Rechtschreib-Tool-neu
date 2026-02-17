@@ -132,8 +132,7 @@ def show_color_picker():
     ColorPickerBackFrame.grid(row=0, column=1, sticky=NW, ipadx=5)
     ColorExampleFrame.grid(row=1, column=3, sticky=NW, ipadx=5)
     ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
-
-
+'''
 def pick_color_bg():            # Background Color (pick from Tkinter Colorpicker)
     color = colorchooser.askcolor(title="Farbe auswählen")
     if color[1]:  # Hex-Wert, z.B. "#ff0000"
@@ -149,7 +148,7 @@ def pick_color_bg():            # Background Color (pick from Tkinter Colorpicke
         MenuText.config(bg=color[1], fg=color[1])
         headline.config(bg=color[1], fg=color[1])
         voidLabel.config(bg=color[1], fg=color[1])
-
+'''
 def pick_color_fg():
     color = colorchooser.askcolor(title="Farbe auswählen")
     if color[1]:
@@ -175,16 +174,46 @@ def pick_color_fg():
             if isinstance(widget, Button):
                 widget.config(fg=color[1])
 
-def pick_color_all():
-    pick_color_bg()
-    pick_color_fg()
+
+selected_bg_color = None
+print(f"{selected_bg_color} (def None)")
 
 def pick_color_test_bg():
+    global selected_bg_color
+
     color = colorchooser.askcolor(title="Farbe auswählen")
-    if color[1]:  # Hex-Wert, z.B. "#ff0000"
+    if color[1]:  # Hex value
+        selected_bg_color = color[1]  # Save it
+        print(f"{selected_bg_color} pick_color_test_bg")
+        # Preview only
+        ColorExampleFrame.config(bg=selected_bg_color)
         for widget in ColorExampleFrame.winfo_children():
-            widget.config(bg=color[1])
-            ColorExampleFrame.config(bg=color[1])
+            widget.config(bg=selected_bg_color)
+
+
+def apply_bg_color(color):
+
+    def update_widgets(widget):
+
+        # Only change bg for specific widget types
+        if isinstance(widget, (Label, Frame)) or widget == window:
+            try:
+                widget.config(bg=color)
+
+            except Exception:
+                pass
+
+        # Still recurse through children
+        for child in widget.winfo_children():
+            update_widgets(child)
+    voidLabel.config(fg=color)
+    update_widgets(window)
+
+def pick_color_all():
+    global selected_bg_color
+    print(f"{selected_bg_color} pick_color_all")
+    if selected_bg_color: # Only if a color was chosen
+        apply_bg_color(selected_bg_color)
 
 '''
 def change_BG_Farbe(farbe):
@@ -337,7 +366,8 @@ Button(ColorPickerButtonFrame,
 Button(ColorPickerButtonFrame,
         text="anwenden",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe
+        bg=Btn_BG_Farbe,
+        command=lambda: pick_color_all()
         ).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Label(ColorExampleFrame,
