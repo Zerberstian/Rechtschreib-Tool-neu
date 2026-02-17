@@ -132,7 +132,7 @@ def show_color_picker():
     ColorPickerBackFrame.grid(row=0, column=1, sticky=NW, ipadx=5)
     ColorExampleFrame.grid(row=1, column=3, sticky=NW, ipadx=5)
     ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
-
+'''
 def pick_color_fg():
     color = colorchooser.askcolor(title="Farbe auswählen")
     if color[1]:
@@ -157,10 +157,26 @@ def pick_color_fg():
         for widget in ColorPickerButtonFrame.winfo_children():
             if isinstance(widget, Button):
                 widget.config(fg=color[1])
-
+'''
 
 selected_bg_color = None
-print(f"{selected_bg_color} (def None)")
+selected_fg_color = None
+print(f"{selected_bg_color} (def None bg)")
+print(f"{selected_fg_color} (def None fg)")
+
+def pick_color_test_fg():
+    global selected_fg_color
+
+    color = colorchooser.askcolor()
+    if color[1]:
+        selected_fg_color = color[1]
+        print(f"{selected_fg_color} pick_color_test_fg")
+
+        for widget in ColorExampleFrame.winfo_children():
+            try:
+                widget.config(fg=selected_fg_color)
+            except TclError:
+                pass
 
 def pick_color_test_bg():
     global selected_bg_color
@@ -176,9 +192,7 @@ def pick_color_test_bg():
         headline.config(bg=selected_bg_color, fg=selected_bg_color)
 
 def apply_bg_color(color):
-
     def update_widgets(widget):
-
         # Only change bg for specific widget types
         if isinstance(widget, (Label, Frame)) or widget == window:
             try:
@@ -186,7 +200,20 @@ def apply_bg_color(color):
 
             except Exception:
                 pass
+        # Still recurse through children
+        for child in widget.winfo_children():
+            update_widgets(child)
+    update_widgets(window)
 
+def apply_fg_color(color):
+    def update_widgets(widget):
+        # Only change bg for specific widget types
+        if isinstance(widget, Label):
+            try:
+                widget.config(fg=color)
+
+            except Exception:
+                pass
         # Still recurse through children
         for child in widget.winfo_children():
             update_widgets(child)
@@ -199,7 +226,9 @@ def pick_color_all():
         print("oi oi")
         apply_bg_color(selected_bg_color)
         print(BG_Farbe, "bg in all")
-
+    elif selected_fg_color is not None:
+        apply_fg_color(selected_fg_color)
+        headline.config(fg=BG_Farbe)
     else:
         print("omegalul")
 
@@ -347,7 +376,7 @@ Button(ColorPickerButtonFrame,
         text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_fg()).pack(anchor="w",fill="x", pady=5, padx=5)
+        command=lambda: pick_color_test_fg()).pack(anchor="w",fill="x", pady=5, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="reset color",
