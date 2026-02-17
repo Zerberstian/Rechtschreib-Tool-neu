@@ -328,7 +328,7 @@ def edit_task_menu(data):
                 current_context.extend([bereich_name, teil_name, f"Aufgabe {task_id}"])
                 print(f"\n✅ Aufgabe {task_id} gefunden!")
                 print(f"   📂 {bereich_name} > {teil_name}")
-                edit_single_task(data[bereich_idx]['Teilgebiet'][teil_idx]['UebungenListe'], task_idx)
+                edit_single_task(data[bereich_idx]['Teilgebiet'][teil_idx]['UebungenListe'], task_idx, data)
                 current_context.pop()
             else:
                 print(f"❌ Aufgabe mit ID '{task_id}' nicht gefunden!")
@@ -425,22 +425,24 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx, data):
                 _, _, task_idx, _ = result
                 aufgabe = aufgaben[task_idx]
                 current_context.append(f"Aufgabe {task_id}")
-                edit_single_task(aufgaben, task_idx)
+                edit_single_task(aufgaben, task_idx, data)
                 current_context.pop()
             else:
                 print(f"❌ Aufgabe '{task_id}' nicht gefunden!")
         
         elif choice == '4':
+            aufgaben = teil.get('UebungenListe', [])
             task_id = input("\n🔍 Aufgabe-ID eingeben (z.B. 1.2.45): ").strip()
             result = find_task_by_id([{'Teilgebiet': [teil]}], task_id)
             if result:
                 _, _, task_idx, _ = result
                 aufgabe = aufgaben[task_idx]
                 current_context.append(f"Aufgabe {task_id}")
-                edit_single_task(aufgaben, task_idx)
+                edit_single_task(aufgaben, task_idx, data)
                 current_context.pop()
             else:
                 print(f"❌ Aufgabe '{task_id}' nicht in diesem Teilgebiet gefunden!")
+
         
         elif choice == '3':
             auto_id = generate_auto_id(bereich_idx, teil_idx, teil.get('UebungenListe', []))
@@ -487,7 +489,7 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx, data):
         elif choice == '0':
             break
 
-def edit_single_task(uebungen_liste, task_idx):
+def edit_single_task(uebungen_liste, task_idx, data):
     task = uebungen_liste[task_idx]
     
     print(f"\n{'─'*70}")
@@ -568,10 +570,13 @@ def edit_single_task(uebungen_liste, task_idx):
             if confirm == 'JA':
                 uebungen_liste.pop(task_idx)
                 print("🗑️  Aufgabe gelöscht!")
-                return
+                if save_and_commit(data):
+                    print("🎉 Automatischer GitHub-Commit erfolgreich!")
+                else:
+                    print("⚠️ Commit fehlgeschlagen - Aufgabenänderung aber lokal gespeichert, versuche den Push manuell über das Hauptmenü!")
             else:
-                print("❌ Abgebrochen.")
-        
+                print("❌ Löschung abgebrochen.")
+            
         elif choice == '0':
             print("\n🎉 Aufgabe komplett gespeichert!")
             break
@@ -600,3 +605,9 @@ if __name__ == "__main__":
         edit_task_menu(aufgaben_data)
     except KeyboardInterrupt:
         print("\n👋 wir sehen uns nie wieder!!!")
+
+
+
+# edit_task_menu: edit_single_task(..., data)
+
+# edit_teilgebiet_menu: edit_single_task(aufgaben, task_idx, data)
