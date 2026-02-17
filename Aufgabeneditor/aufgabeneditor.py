@@ -605,9 +605,3 @@ if __name__ == "__main__":
         edit_task_menu(aufgaben_data)
     except KeyboardInterrupt:
         print("\n👋 wir sehen uns nie wieder!!!")
-
-
-
-# edit_task_menu: edit_single_task(..., data)
-
-# edit_teilgebiet_menu: edit_single_task(aufgaben, task_idx, data)
