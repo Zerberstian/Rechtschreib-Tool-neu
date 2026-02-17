@@ -4,7 +4,7 @@ from logic_der_zweite import *
 import random
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from GUI.BereichCheckbox import *
-import tkinter as Tk
+from GUI.GUI_new import spinbox
 
 
 aufgaben_dict = {} # Contains "Uebung_id"s to load exercises
@@ -53,13 +53,19 @@ class Aufgabe:
         return self.__wiederholt
 
 class FalscheAntwort:
-    def __init__(self, uebung_id, antwort, korrekte_antwort):
-        self.uebung_id = uebung_id
+    def __init__(self, uebung_id, antwort, korrekte_antwort, wiederholt):
+        self.__wiederholt = wiederholt
+        if not self.__wiederholt:
+            self.uebung_id = uebung_id
+        else:
+            self.uebung_id = uebung_id + "+"
         self.antwort = antwort
         self.korrekte_antwort = korrekte_antwort
 
         falsche_antwort_dict[self.uebung_id] = self
 
+    def get_wiederholt(self):
+        return self.__wiederholt
 # Randomly picks exercises from chosen "Teilgebiet" until limit is reached
 def aufgaben_picken(limit):
     if aufgaben_dict == {}:
@@ -93,6 +99,9 @@ def antwort_check(antwort, aufgabe, index):
         if antwort == aufgabe.korrekt:
             print("\nDie Antwort wurde korrigiert")
             korrigierte_merken(aufgabe)
+        else:
+            print("\nDie Antwort ist falsch.")
+            falsch_merken(index, aufgabe, antwort)
     else:
         if antwort == aufgabe.korrekt:
             print("\nDie Antwort ist richtig.")
@@ -116,7 +125,8 @@ def antwort_finden(aufgabe, antwort):
 def falsch_merken(index, aufgabe, antwort):
     FalscheAntwort(aufgabe.uebung_id,
                    antwort_finden(aufgabe,antwort),
-                   aufgabe.moeglichkeiten[(aufgabe.korrekt-1)])
+                   aufgabe.moeglichkeiten[(aufgabe.korrekt-1)],
+                   aufgabe.get_wiederholt())
     if aufgabe.uebung_id not in falsch_beantwortet:
         aufgabe.set_wiederholt()
         falsch_beantwortet.append(aufgabe.uebung_id)
@@ -146,29 +156,45 @@ def akitve_aufgaben_objekte_erstellen():
 
 def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(5):
+    if aufgaben_picken(int(spinbox.get())):
         return
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
         aufgabe_bearbeiten(index, aufgaben_dict[aufgabe])
+
+def statistik_ausgeben():
+    stats_der_richtigen()
+    stats_der_falschen()
+    stats_der_korrigierten()
+    print(f"Aus {len(zu_loesende_aufgaben_list)} Aufgaben hast du "
+          f"{len(richtig_beantwortet)} Richtig, "
+          f"{len(falsch_beantwortet) + (len(zu_loesende_aufgaben_list) - len(richtig_beantwortet) - len(falsch_beantwortet) - len(korrigiert_beantwortet))} Falsch und "
+          f"{len(korrigiert_beantwortet)} Korrigiert")
+    resetting()
+
+def stats_der_richtigen():
     print(len(richtig_beantwortet), " Richtige Antworten")
     for x in richtig_beantwortet:
         print(x)
+
+def stats_der_falschen():
     print(len(falsch_beantwortet), " Falsche Antworten")
     for antwort in falsche_antwort_dict:
+        antwort = antwort.strip("+")
         print(antwort, '\n')
         print(aufgaben_dict[antwort].aufgabenbeschreibung, '\n')
         print(aufgaben_dict[antwort].uebungs_beschreibung, "\n")
         print("Die richtige Antwort ist: ", falsche_antwort_dict[antwort].korrekte_antwort)
         print("Du hast: ", falsche_antwort_dict[antwort].antwort , " ausgewählt")
+
+def stats_der_korrigierten():
     print(len(korrigiert_beantwortet), "Korrigiert")
     for x in korrigiert_beantwortet:
         print(x)
-    print(f"Aus {len(zu_loesende_aufgaben_list)} Aufgaben hast du {len(richtig_beantwortet)} Richtig, {len(falsch_beantwortet)} Falsch und {len(korrigiert_beantwortet)} Korrigiert")
-    resetting()
 
 def button_start():
     aufgaben_initialisieren()
+    statistik_ausgeben()
 
 # Clears all dictionaries
 def resetting():
@@ -178,8 +204,8 @@ def resetting():
     richtig_beantwortet.clear()
 
 if __name__ == "__main__":
-    root = Tk.Tk()
-    BereichCheckbox(root).create("#ffffff")
-    start = Tk.Button(root, text="Start", command=button_start)
+    root = Tk()
+    #BereichCheckbox(root).create("#ffffff")
+    start = Button(root, text="Start", command=button_start)
     start.pack()
     root.mainloop()
