@@ -1,23 +1,39 @@
 import tkinter as tk
-import json
+import json #will become useless
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from Programmlogik import aufgaben_logik
 
 # JSON-Daten laden
 with open("json.json", "r", encoding="utf-8") as f:
     daten = json.load(f)
 
 frames = []
+frame_dict = {}
 current_index = 0
 
+class AufgabenFrame:
+    def __init__(self, uebung_id):
+        self.uebung_id = uebung_id
+
+        frame_dict[self.uebung_id] = self
+
+    def show(self):
+        frame_dict[self.uebung_id].pack(fill="x", pady=5)
+
+    def hide(self):
+        frame_dict[self.uebung_id].pack_forget()
+'''        
 def show_frame(index):
     for frame in frames:
         frame.pack_forget()
     frames[index].pack(fill="x", pady=5)
-
+'''
 def next_frame():
     global current_index
     current_index += 1
     if current_index < len(frames):
-        show_frame(current_index)
+        pass#show_frame(current_index)
     else:
         print("Ende erreicht")
 
