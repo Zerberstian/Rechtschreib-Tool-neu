@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
-from BereichCheckbox import BereichCheckbox
+from GUI.BereichCheckbox import BereichCheckbox
 
 # logic_der_zweite.jsonladen()
 # Json must be in directory
