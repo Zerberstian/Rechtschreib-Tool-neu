@@ -247,9 +247,7 @@ def reset_all_color():
                 pass
 
         for child in widget.winfo_children():
-
             update_widgets_in_reset(child)
-
     update_widgets_in_reset(window)  # Start recursion here
 
 # Frames
