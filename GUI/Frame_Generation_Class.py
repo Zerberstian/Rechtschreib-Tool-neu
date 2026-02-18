@@ -1,16 +1,9 @@
 import tkinter as tk
 import json
-from tkinter.constants import DISABLED
 
 # JSON-Daten laden
 with open("json.json", "r", encoding="utf-8") as f:
     daten = json.load(f)
-
-root = tk.Tk()
-root.title("Dynamische Frames")
-
-main_frame = tk.Frame(root)
-main_frame.pack(padx=10, pady=10)
 
 frames = []
 current_index = 0
@@ -42,27 +35,34 @@ def button_click(frame, richtige_antwort, gewaehlte_antwort):
     # Nach 1 Sekunde nächste Frage
     root.after(1000, next_frame)
 
-# Frames generieren
-for eintrag in daten:
-    frame = tk.Frame(main_frame, bd=2, relief="groove", padx=10, pady=10)
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Dynamische Frames")
 
-    frage_label = tk.Label(frame, text=eintrag["frage"], font=("Arial", 25, "bold"))
-    frage_label.pack(anchor="w")
+    main_frame = tk.Frame(root)
+    main_frame.pack(padx=10, pady=10)
 
-    for antwort in eintrag["antworten"]:
-        btn = tk.Button(
-            frame,
-            text=antwort,
-            font=("Arial", 20, "bold"),
-            command=lambda f=frame,
-                           r=eintrag["richtig"],
-                           a=antwort: button_click(f, r, a)
+    # Frames generieren
+    for eintrag in daten:
+        frame = tk.Frame(main_frame, bd=2, relief="groove", padx=10, pady=10)
+
+        frage_label = tk.Label(frame, text=eintrag["frage"], font=("Arial", 25, "bold"))
+        frage_label.pack(anchor="w")
+
+        for antwort in eintrag["antworten"]:
+            btn = tk.Button(
+                frame,
+                text=antwort,
+                font=("Arial", 20, "bold"),
+                command=lambda f=frame,
+                               r=eintrag["richtig"],
+                               a=antwort: button_click(f, r, a)
             )
-        btn.pack(side="left", padx=5, pady=5)
+            btn.pack(side="left", padx=5, pady=5)
 
-    frames.append(frame)
+        frames.append(frame)
 
-# Erste Frage anzeigen
-show_frame(0)
+    # Erste Frage anzeigen
+    show_frame(0)
 
-root.mainloop()
+    root.mainloop()
