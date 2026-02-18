@@ -460,7 +460,21 @@ def edit_teilgebiet_menu(teilgebiete, teil_idx, bereich_idx, data):
             print(f"   ID: {new_task['Uebung_id']}")
             print(f"   Frage: {new_task['UebungsBeschreibung']}")
             print(f"   Optionen: {new_task['Moeglichkeiten']}")
-            korrekte_option = new_task['Moeglichkeiten'][new_task['KorrekteAntwort']-1][0] if new_task['Moeglichkeiten'] else '❌'
+            moeg = new_task.get('Moeglichkeiten') or [] # previous handling did not allow "IstSpeziell"-Tasks to be configured by the editor, due to the index being out of range
+            # old line: the korrekte_option = new_task['Moeglichkeiten'][new_task['KorrekteAntwort']-1][0] if new_task['Moeglichkeiten'] else '❌'
+            idx = new_task.get('KorrekteAntwort', 0) - 1
+
+            if 0 <= idx < len(moeg):
+                # for normal tasks
+                eintrag = moeg[idx]
+                if isinstance(eintrag, (list, tuple)) and eintrag:
+                    korrekte_option = eintrag[0]
+                else:
+                    # now also allowing strings (but still the indexes) in order to be able to handle "IstSpeziell"-Tasks properly, and allowing  
+                    korrekte_option = eintrag
+            else:
+                korrekte_option = '❌'
+            
             print(f"   Korrekt: {new_task['KorrekteAntwort']} → {korrekte_option}")
             if new_task['Infotext']:
                 print(f"   Info: {new_task['Infotext']}")
@@ -501,7 +515,7 @@ def edit_single_task(uebungen_liste, task_idx, data):
     
     korrekt_idx = task.get('KorrekteAntwort', 0)
     moeglichkeiten = task.get('Moeglichkeiten', [])
-    korrekte_option = moeglichkeiten[korrekt_idx-1] if moeglichkeiten and 0 < korrekt_idx <= len(moeglichkeiten) else "❌ Ungültig"
+    korrekte_option = moeglichkeiten[korrekt_idx-1] if moeglichkeiten and 0 < korrekt_idx <= len(moeglichkeiten) else "🥸 wahrscheinlich speziell"
     print(f"✅ KorrekteAntwort: {korrekt_idx} → '{korrekte_option}'")
     
     if moeglichkeiten:
