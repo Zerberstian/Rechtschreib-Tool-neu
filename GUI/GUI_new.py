@@ -133,32 +133,6 @@ def show_color_picker():
     ColorPickerBackFrame.grid(row=0, column=1, sticky=NW, ipadx=5)
     ColorExampleFrame.grid(row=1, column=3, sticky=NW, ipadx=5)
     ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
-'''
-def pick_color_fg():
-    color = colorchooser.askcolor(title="Farbe auswählen")
-    if color[1]:
-        MenuText.config(fg=color[1])
-        for widget in MenuFrame.winfo_children():
-            if isinstance(widget, Button):
-                widget.config(fg=color[1])
-        for widget in CheckBoxFrameS.winfo_children():
-            if isinstance(widget, Button):
-                widget.config(fg=color[1])
-        for widget in ButtonFrameSB.winfo_children():
-            if isinstance(widget, Button):
-                widget.config(fg=color[1])
-        for widget in SpinBoxFrame.winfo_children():
-            if isinstance(widget, (Button, Label)):
-                widget.config(fg=color[1])
-            if isinstance(widget, Spinbox):
-                widget.config(fg=color[1])
-        for widget in ColorPickerFrame.winfo_children():
-            if isinstance(widget, Button):
-                widget.config(fg=color[1])
-        for widget in ColorPickerButtonFrame.winfo_children():
-            if isinstance(widget, Button):
-                widget.config(fg=color[1])
-'''
 
 selected_bg_color = None
 selected_fg_color = None
@@ -250,6 +224,19 @@ def reset_all_color():
         for child in widget.winfo_children():
             update_widgets_in_reset(child)
     update_widgets_in_reset(window)  # Start recursion here
+
+    def reset_to_default_desighn(widget):
+        default_bg_white = "#ffffff"
+        ColorExampleFrame.config(bg=default_bg_white)
+        if isinstance(widget, (Label, Frame)):
+            try:
+                widget.config(bg=default_bg_white)
+
+            except Exception:
+                print("Error2 xD")
+                pass
+        for widget in ColorExampleFrame.winfo_children():
+            reset_to_default_desighn(widget)
 
 # Frames
 ##############################################################################
