@@ -1,13 +1,12 @@
 import sys
 import os
-from logic_der_zweite import *
 import random
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from GUI.BereichCheckbox import *
-from GUI.GUI_new import on_value_change
-
+from Programmlogik.logic_der_zweite import *
 
 aufgaben_dict = {} # Contains "Uebung_id"s to load exercises
+ausgewaehlte_aufgaben = []
 zu_loesende_aufgaben_list = []
 falsche_antwort_dict = {}
 falsch_beantwortet = []
@@ -47,7 +46,10 @@ class Aufgabe:
 
 # Skulldunno warum ich das Privat gemacht habe
     def set_wiederholt(self):
-        self.__wiederholt = True
+        if not self.__wiederholt:
+            self.__wiederholt = True
+        else:
+            self.__wiederholt = False
 
     def get_wiederholt(self):
         return self.__wiederholt
@@ -68,11 +70,11 @@ class FalscheAntwort:
         return self.__wiederholt
 # Randomly picks exercises from chosen "Teilgebiet" until limit is reached
 def aufgaben_picken(limit):
-    if aufgaben_dict == {}:
-        return False, print("Das Dict ist Leer. Haben Sie nichts ausgewählt?")
+    if not ausgewaehlte_aufgaben:
+        return False, print("Haben Sie nichts ausgewählt?")
     x = 0
     while x < limit:
-        uebung_id = random.choice(list(aufgaben_dict.keys()))
+        uebung_id = random.choice(ausgewaehlte_aufgaben)
         if uebung_id not in zu_loesende_aufgaben_list:
             zu_loesende_aufgaben_list.append(uebung_id)
             print(zu_loesende_aufgaben_list[-1])
@@ -140,7 +142,7 @@ def falsch_beantwortet_einfuegen(index, aufgabe):
     except ValueError:
         print("Der Index ist nicht gefunden!")
 
-def aufgabe_bearbeiten(index, aufgabe):
+def aufgabe_bearbeiten_konsole(index, aufgabe):
     if aufgabe.get_wiederholt():
         print("WIEDERHOLUNG_________!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! deutlich genug?")
     print(aufgabe.aufgabenbeschreibung, '\n')
@@ -149,18 +151,23 @@ def aufgabe_bearbeiten(index, aufgabe):
     antwort = int_input()
     antwort_check(antwort, aufgabe, index)
 
-def akitve_aufgaben_objekte_erstellen():
-    aktiv = get_active()
-    for eintrag in list_uebungen(aktiv):
+def aufgaben_obejekte_erstellen():
+    for eintrag in list_uebungen(list_titels(list_uebungsbereiche())):
         Aufgabe(eintrag)
 
-def aufgaben_initialisieren():
-    akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(int(on_value_change())):
+def list_aktive_aufgaben():
+    for eintrag in list_uebungen(get_active()):
+        ausgewaehlte_aufgaben.append(eintrag)
+
+def aufgaben_initialisieren(aufgaben_limit):
+    list_aktive_aufgaben()
+    if aufgaben_picken(aufgaben_limit):
         return
+
+def aufgaben_anfangen_konsole():
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
-        aufgabe_bearbeiten(index, aufgaben_dict[aufgabe])
+        aufgabe_bearbeiten_konsole(index, aufgaben_dict[aufgabe])
 
 def statistik_ausgeben():
     stats_der_richtigen()
@@ -193,17 +200,22 @@ def stats_der_korrigierten():
         print(x)
 
 def button_start():
-    aufgaben_initialisieren()
+    aufgaben_initialisieren(5)
+    aufgaben_anfangen_konsole()
     statistik_ausgeben()
 
 # Clears all dictionaries
 def resetting():
-    aufgaben_dict.clear()
+    for eintrag in aufgaben_dict:
+        aufgaben_dict[eintrag].set_wiederholt()
+    ausgewaehlte_aufgaben.clear()
     zu_loesende_aufgaben_list.clear()
     falsch_beantwortet.clear()
     richtig_beantwortet.clear()
     korrigiert_beantwortet.clear()
     falsche_antwort_dict.clear()
+
+aufgaben_obejekte_erstellen()
 
 if __name__ == "__main__":
     root = Tk()

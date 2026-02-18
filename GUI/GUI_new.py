@@ -5,10 +5,10 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
+from Programmlogik import aufgaben_logik
 from GUI.BereichCheckbox import BereichCheckbox, get_active
+from GUI import Frame_Generation_Class
 
-# logic_der_zweite.jsonladen()
-# Json must be in directory
 
 def on_value_change():
     try:
@@ -42,7 +42,11 @@ def callback_value_100():
 def start_logic():
     print("Start der logik")
     print(spinbox.get(), "= value check 2")
+    aufgaben_logik.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
+    Frame_Generation_Class.start_frame_generation()
+    #aufgaben_logik.aufgaben_anfangen_konsole()
+    #aufgaben_logik.statistik_ausgeben()
 
 def combined_command():
         on_value_change()

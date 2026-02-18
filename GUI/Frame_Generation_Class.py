@@ -51,6 +51,9 @@ def button_click(frame, richtige_antwort, gewaehlte_antwort):
     # Nach 1 Sekunde nächste Frage
     root.after(1000, next_frame)
 
+def start_frame_generation():
+    pass
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Dynamische Frames")
