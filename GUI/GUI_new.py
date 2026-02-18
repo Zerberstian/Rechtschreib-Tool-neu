@@ -202,8 +202,8 @@ def pick_color_all():
         headline.config(fg=BG_Farbe)
     else:
         print("omegalul")
-
-def reset_all_color():
+'''
+def reset_all_color(): #global
     global BG_Farbe
     default_bg = BG_Farbe
     print(default_bg, "default")
@@ -221,18 +221,61 @@ def reset_all_color():
             update_widgets_in_reset(child)
     update_widgets_in_reset(window)  # Start recursion here
 
-    def reset_to_default_desighn(widget):
-        default_bg_white = "#ffffff"
-        ColorExampleFrame.config(bg=default_bg_white)
-        if isinstance(widget, (Label, Frame)):
-            try:
-                widget.config(bg=default_bg_white)
+def reset_to_default_design(widget):
+    default_bg_white = "#ffffff"
+    ColorExampleFrame.config(bg=default_bg_white)
+    if isinstance(widget, (Label, Frame)):
+        try:
+            widget.config(bg=default_bg_white)
+            print("Troll lol lol lol lol loloho")
+        except Exception:
+            print("Error2 xD")
+            pass
+    for widget in ColorExampleFrame.winfo_children():
+        reset_to_default_design(widget)
 
+def reset_and_default(widget):
+    reset_all_color()
+    for widget in ColorExampleFrame.winfo_children():
+        reset_to_default_design(widget)
+'''
+def reset_all_color():
+    global BG_Farbe
+    default_bg = BG_Farbe
+    print(default_bg, "default")
+    headline.config(bg=default_bg, fg=default_bg)
+
+    def update_widgets_in_reset(widget):
+        if isinstance(widget, (Label, Frame)) or widget == window:
+            try:
+                widget.config(bg=default_bg)
             except Exception:
-                print("Error2 xD")
                 pass
-        for widget in ColorExampleFrame.winfo_children():
-            reset_to_default_desighn(widget)
+
+        for child in widget.winfo_children():
+            update_widgets_in_reset(child)
+
+    update_widgets_in_reset(window)
+
+
+def reset_to_default_design(widget):
+    default_bg_white = "#ffffff"
+    ColorExampleFrame.config(bg=default_bg_white)
+
+    if isinstance(widget, (Label, Frame)):
+        try:
+            widget.config(bg=default_bg_white)
+        except Exception:
+            pass
+
+    for child in widget.winfo_children():
+        reset_to_default_design(child)
+
+
+def reset_and_default(widget):
+    reset_all_color()
+    for child in ColorExampleFrame.winfo_children():
+        reset_to_default_design(child)
 
 # Frames
 ##############################################################################
