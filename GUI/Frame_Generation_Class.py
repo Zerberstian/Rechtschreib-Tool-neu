@@ -2,7 +2,7 @@ import tkinter as tk
 import json
 
 # JSON-Daten laden
-with open("fg_json.json", "r", encoding="utf-8") as f:
+with open("json.json", "r", encoding="utf-8") as f:
     daten = json.load(f)
 
 root = tk.Tk()

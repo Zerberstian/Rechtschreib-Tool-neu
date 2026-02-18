@@ -4,7 +4,7 @@ from logic_der_zweite import *
 import random
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from GUI.BereichCheckbox import *
-from GUI.GUI_new import spinbox
+from GUI.GUI_new import on_value_change
 
 
 aufgaben_dict = {} # Contains "Uebung_id"s to load exercises
@@ -156,7 +156,7 @@ def akitve_aufgaben_objekte_erstellen():
 
 def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(int(spinbox.get())):
+    if aufgaben_picken(on_value_change()):
         return
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)

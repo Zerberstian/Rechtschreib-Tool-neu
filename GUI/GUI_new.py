@@ -5,7 +5,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
-from BereichCheckbox import BereichCheckbox
+from GUI.BereichCheckbox import BereichCheckbox
 
 # logic_der_zweite.jsonladen()
 # Json must be in directory
@@ -27,6 +27,7 @@ def on_value_change():
         spinbox.delete(0, END)
         spinbox.insert(0, 10)
         print(spinbox.get(), "bei ungültiger spinbox.get()")
+    return spinbox.get()
 
 # Max 10 questions -> quickselct (logic)
 def callback_value_10():
