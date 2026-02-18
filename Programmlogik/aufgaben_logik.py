@@ -156,7 +156,7 @@ def akitve_aufgaben_objekte_erstellen():
 
 def aufgaben_initialisieren():
     akitve_aufgaben_objekte_erstellen()
-    if aufgaben_picken(on_value_change()):
+    if aufgaben_picken(int(on_value_change())):
         return
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
