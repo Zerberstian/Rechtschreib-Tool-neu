@@ -9,42 +9,43 @@ from Programmlogik import aufgaben_logik
 from GUI.BereichCheckbox import BereichCheckbox, get_active
 from GUI import Frame_Generation_Class
 
+BtnFontArt = "Arial"        #Button Font Style (all Btn)
 
 def on_value_change():
     try:
         print(f"{spinbox.get()} = Wert in Spinbox")  # Print for debugging purposes
         if int(spinbox.get()) > 100:
             spinbox.delete(0, END)
-            spinbox.insert(0, 100)
+            spinbox.insert(0, "100")
 
         elif int(spinbox.get()) < 1:
             spinbox.delete(0, END)
-            spinbox.insert(0, 1)
+            spinbox.insert(0, "1")
 
     except ValueError:
         messagebox.showerror("Ungültige Eingabe",
                                 "Start mit Standardwert für Aufgabenmenge (10).")
         spinbox.delete(0, END)
-        spinbox.insert(0, 10)
+        spinbox.insert(0, "10")
         print(spinbox.get(), "bei ungültiger spinbox.get()")
     return spinbox.get()
 
 # Max 10 questions -> quickselct (logic)
 def callback_value_10():
     spinbox.delete(0, END)
-    spinbox.insert(0, 10)
+    spinbox.insert(0, "10")
 
 # Max 100 questions -> quickselect (logic)
 def callback_value_100():
     spinbox.delete(0, END)
-    spinbox.insert(0, 100)
+    spinbox.insert(0, "100")
 
 def start_logic():
     print("Start der logik")
     print(spinbox.get(), "= value check 2")
     aufgaben_logik.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
-    Frame_Generation_Class.start_frame_generation()
+    Frame_Generation_Class.start_frame_generation(logicFrame, BtnFontArt)
     #aufgaben_logik.aufgaben_anfangen_konsole()
     #aufgaben_logik.statistik_ausgeben()
 
@@ -65,7 +66,7 @@ def to_start():
 BG_Farbe = "#E0470A"        #Background Color Value (general)
 Btn_BG_Farbe = "#ffffff"    #Background Color (all Btn except Spinbox & Buttons)
 Btn_FG_Farbe = "#000000"    #BUtton fg Color
-BtnFontArt = "Arial"        #Button Font Style (all Btn)
+
 BtnFontGroesse = 30         #Button Font size (all Btn)
 inside_Padding_Y = 0       #Button Inside pady Value (Main Menu)
 
@@ -388,11 +389,11 @@ Button(ColorPickerBackFrame,
 
 # Button for going back to Main Menu
 Button(logicFrame,
-        text="zurück",
+        text="abbrechen",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=back_to_main_frame,
-        ).grid(row=3, column=3, padx=5, pady=5)
+        ).grid(row=0, column=0, padx=5, pady=5)
 
 Button(ColorPickerButtonFrame,
         text="Hintergrund",

@@ -9,26 +9,41 @@ with open("json.json", "r", encoding="utf-8") as f:
     daten = json.load(f)
 
 frames = []
-frame_dict = {}
+aufgaben_frame_dict = {}
 current_index = 0
 
 class AufgabenFrame:
-    def __init__(self, uebung_id):
+    def __init__(self, uebung_id, master, font):
+        self.frame_id = len(aufgaben_frame_dict)
         self.uebung_id = uebung_id
+        self.master = master
+        self.font = font
 
-        frame_dict[self.uebung_id] = self
+        aufgaben_frame_dict[self.frame_id] = self
 
+        self.frame = tk.Frame(self.master)
+        self.label = tk.Label(self.frame, text=aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung, font=(self.font, 30))
+        self.label.pack(side="left")
+        self.buttonframe = tk.Frame(self.frame)
+        self.buttonframe.pack()
+        for index, antwort_moeglichkeit in enumerate(aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten):
+            btn = tk.Button(
+                self.buttonframe,
+                text=antwort_moeglichkeit,
+                font=(self.font, 15),
+                command=lambda x=antwort_moeglichkeit: x(x),
+            )
     def show(self):
-        frame_dict[self.uebung_id].pack(fill="x", pady=5)
+        self.frame.grid(row = 1, column = 1)
 
     def hide(self):
-        frame_dict[self.uebung_id].pack_forget()
-'''        
+        self.frame.pack_forget()
+
 def show_frame(index):
     for frame in frames:
         frame.pack_forget()
     frames[index].pack(fill="x", pady=5)
-'''
+
 def next_frame():
     global current_index
     current_index += 1
@@ -51,7 +66,10 @@ def button_click(frame, richtige_antwort, gewaehlte_antwort):
     # Nach 1 Sekunde nächste Frage
     root.after(1000, next_frame)
 
-def start_frame_generation():
+def start_frame_generation(master, font):
+    aufgabe = aufgaben_logik.zu_loesende_aufgaben_list[current_index]
+    AufgabenFrame(aufgabe, master, font)
+    aufgaben_frame_dict[current_index].show()
     pass
 
 if __name__ == "__main__":
@@ -81,7 +99,6 @@ if __name__ == "__main__":
 
         frames.append(frame)
 
-    # Erste Frage anzeigen
     show_frame(0)
 
     root.mainloop()
