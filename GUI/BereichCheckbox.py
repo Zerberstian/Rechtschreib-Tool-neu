@@ -2,7 +2,7 @@ from functools import partial
 from tkinter import *
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from Programmlogik import logic_der_zweite
+from Programmlogik import json_laden_logik
 
 
 ober_dict = {}
