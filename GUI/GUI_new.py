@@ -141,12 +141,10 @@ print(f"{selected_fg_color} (def None fg)")
 
 def pick_color_test_fg():
     global selected_fg_color
-
     color = colorchooser.askcolor()
     if color[1]:
         selected_fg_color = color[1]
         print(f"{selected_fg_color} pick_color_test_fg")
-
         for widget in ColorExampleFrame.winfo_children():
             try:
                 widget.config(fg=selected_fg_color)
@@ -155,7 +153,6 @@ def pick_color_test_fg():
 
 def pick_color_test_bg():
     global selected_bg_color
-
     color = colorchooser.askcolor(title="Farbe auswählen")
     if color[1]:  # Hex value
         selected_bg_color = color[1]  # Save it
@@ -172,7 +169,6 @@ def apply_bg_color(color):
         if isinstance(widget, (Label, Frame)) or widget == window:
             try:
                 widget.config(bg=color)
-
             except Exception:
                 pass
         # Still recurse through children
@@ -186,7 +182,6 @@ def apply_fg_color(color):
         if isinstance(widget, Label):
             try:
                 widget.config(fg=color)
-
             except Exception:
                 pass
         # Still recurse through children
@@ -248,33 +243,26 @@ def reset_all_color():
     default_bg = BG_Farbe
     print(default_bg, "default")
     headline.config(bg=default_bg, fg=default_bg)
-
     def update_widgets_in_reset(widget):
         if isinstance(widget, (Label, Frame)) or widget == window:
             try:
                 widget.config(bg=default_bg)
             except Exception:
                 pass
-
         for child in widget.winfo_children():
             update_widgets_in_reset(child)
-
     update_widgets_in_reset(window)
-
 
 def reset_to_default_design(widget):
     default_bg_white = "#ffffff"
     ColorExampleFrame.config(bg=default_bg_white)
-
     if isinstance(widget, (Label, Frame)):
         try:
             widget.config(bg=default_bg_white)
         except Exception:
             pass
-
     for child in widget.winfo_children():
         reset_to_default_design(child)
-
 
 def reset_and_default(widget):
     reset_all_color()
