@@ -428,7 +428,10 @@ Label(ColorExampleFrame,
         fg="#000000").pack(anchor="n", pady=5, padx=5)
 
 Label(ColorExampleFrame,
-        text=f"Bitte die drei folgenden Wortarten unterscheiden:\nNomen = geben den Begriffen einen Namen: Ewigkeit, Geist, Mathematik\nVerben = alles was man tun kann: essen, läuft, malt, denkst\nAdjektive = beschreiben wie etwas ist: rot, warm, lang, schwer, eklig\n",
+        text=f"Bitte die drei folgenden Wortarten unterscheiden:\n"
+            f"Nomen = geben den Begriffen einen Namen: Ewigkeit, Geist, Mathematik\n"
+            f"Verben = alles was man tun kann: essen, läuft, malt, denkst\n"
+            f"Adjektive = beschreiben wie etwas ist: rot, warm, lang, schwer, eklig\n",
         font=(BtnFontArt, 20),
         bg="#ffffff",
         fg="#000000").pack(anchor="n", pady=5, padx=5)
@@ -442,7 +445,6 @@ button1 = Button(
     font=(BtnFontArt, BtnFontGroesse),
 )
 button1.pack(side="left", pady=5, padx=5)
-
 button1.config(state=DISABLED)
 
 button2 = Button(ColorExampleButtonFrame,
