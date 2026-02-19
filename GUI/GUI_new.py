@@ -350,13 +350,24 @@ Button(MenuFrame,
         fg=Btn_FG_Farbe,
         command=show_select_frame,
         ).pack(anchor="w",fill="x", pady=5, ipady=inside_Padding_Y)
-
+'''
 # Button to open the color picker
 Button(MenuFrame,
         text="Farbwahl",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=show_color_picker
+        ).pack(anchor="w",fill="x", pady=5)
+'''
+def not_ready():
+    messagebox.showinfo("Info", "Aus zeitlichen Gründen wird dieses Feature zu einem späteren Zeitpunkt implementiert.")
+
+# Button to open the color picker
+Button(MenuFrame,
+        text="Farbwahl",
+        font=(BtnFontArt, BtnFontGroesse),
+        bg=Btn_BG_Farbe,
+        command=not_ready,
         ).pack(anchor="w",fill="x", pady=5)
 
 # Button for going back to Main Menu
@@ -408,6 +419,10 @@ Button(ColorPickerButtonFrame,
         bg=Btn_BG_Farbe,
         command=lambda: pick_color_all()
         ).pack(anchor="w",fill="x", pady=5, padx=5)
+
+for widget in ColorPickerButtonFrame.winfo_children(): # disables all buttons in this frame
+    if isinstance(widget, Button):
+        widget.config(state=DISABLED)
 
 Label(ColorExampleFrame,
         text=f"Nomen-Verb-Adjektiv Teil 1\n",
