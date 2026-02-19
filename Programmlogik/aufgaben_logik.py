@@ -101,16 +101,20 @@ def antwort_check(antwort, aufgabe, index):
         if antwort == aufgabe.korrekt:
             print("\nDie Antwort wurde korrigiert")
             korrigierte_merken(aufgabe)
+            return True
         else:
             print("\nDie Antwort ist falsch.")
             falsch_merken(index, aufgabe, antwort)
+            return False
     else:
         if antwort == aufgabe.korrekt:
             print("\nDie Antwort ist richtig.")
             richtig_merken(aufgabe)
+            return True
         else:
             print("\nDie Antwort ist falsch.")
             falsch_merken(index, aufgabe, antwort)
+            return False
 
 def korrigierte_merken(aufgabe):
     korrigiert_beantwortet.append(aufgabe.uebung_id)

@@ -45,7 +45,8 @@ def start_logic():
     print(spinbox.get(), "= value check 2")
     aufgaben_logik.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
-    Frame_Generation_Class.start_frame_generation(logicFrame, BtnFontArt)
+    Frame_Generation_Class.frame_generation(logicFrame, BtnFontArt)
+
     #aufgaben_logik.aufgaben_anfangen_konsole()
     #aufgaben_logik.statistik_ausgeben()
 

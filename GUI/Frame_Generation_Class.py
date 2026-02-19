@@ -1,16 +1,9 @@
 import tkinter as tk
-import json #will become useless
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import aufgaben_logik
 
-# JSON-Daten laden
-with open("json.json", "r", encoding="utf-8") as f:
-    daten = json.load(f)
-
-frames = []
 aufgaben_frame_dict = {}
-current_index = 0
 
 class AufgabenFrame:
     def __init__(self, uebung_id, master, font):
@@ -22,83 +15,69 @@ class AufgabenFrame:
         aufgaben_frame_dict[self.frame_id] = self
 
         self.frame = tk.Frame(self.master)
-        self.label = tk.Label(self.frame, text=aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung, font=(self.font, 20))
-        self.label.pack(side="left")
-        self.buttonframe = tk.Frame(self.frame)
+        self.frame2 = tk.Frame(self.frame)
+        self.frame2.pack(fill="both", expand=True)
+        self.aufgabenbeschreibung_label = tk.Label(self.frame2,
+                              text=aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung,
+                              font=(self.font, 20))
+        self.aufgabenbeschreibung_label.pack()
+        self.uebungs_beschreibung_label = tk.Label(self.frame2,
+                                                   text=aufgaben_logik.aufgaben_dict[uebung_id].uebungs_beschreibung,
+                                                   font=(self.font, 20))
+        self.uebungs_beschreibung_label.pack()
+        self.buttonframe = tk.Frame(self.frame2)
         self.buttonframe.pack()
         for index, antwort_moeglichkeit in enumerate(aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten):
             btn = tk.Button(
                 self.buttonframe,
                 text=antwort_moeglichkeit,
                 font=(self.font, 15),
-                command=lambda x=antwort_moeglichkeit: x(x),
+                command=lambda f= self.buttonframe,
+                               antwort=index+1,
+                               korrekte_antwort = aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten[aufgaben_logik.aufgaben_dict[self.uebung_id].korrekt - 1],
+                               aufgabe= aufgaben_logik.aufgaben_dict[self.uebung_id],
+                               frame_id = self.frame_id: AufgabenFrame.button_click(self, f, antwort, aufgabe, frame_id, korrekte_antwort),
             )
+            btn.grid(row=0, column=index, padx=1, pady=1)
     def show(self):
         self.frame.grid(row = 1, column = 1)
 
     def hide(self):
-        self.frame.pack_forget()
+        self.frame.grid_forget()
 
-def show_frame(index):
-    for frame in frames:
-        frame.pack_forget()
-    frames[index].pack(fill="x", pady=5)
+    def warten(self):
+        print("Fertig warten")
+        self.hide()
+        frame_generation(self.master, self.font)
 
-def next_frame():
-    global current_index
-    current_index += 1
-    if current_index < len(frames):
-        pass#show_frame(current_index)
-    else:
-        print("Ende erreicht")
+    def button_click(self, frame, x, aufgabe, frame_id, korrekte_antwort):
+        aufgaben_logik.antwort_check(x, aufgabe, frame_id)
+        # Buttons einfärben
+        for widget in frame.winfo_children():
+            print(widget)
+            if isinstance(widget, tk.Button):
+                print("Ist Button")
+                if widget["text"] == korrekte_antwort:
+                    widget.config(bg="#12a505", fg="#ffffff") # richtige Antwort grün
+                    print("Button Grun")
+                elif widget["text"] != korrekte_antwort:
+                    widget.config(bg="#ff0000", fg="#ffffff")  # falsche Antwort rot
+                    print("Button Rot")
+                widget.config(state="disabled", disabledforeground="#ffffff")
+                print("Button disabled")
+        frame.update()
+        return self.master.after(1000, self.warten())
 
-def button_click(frame, richtige_antwort, gewaehlte_antwort):
-    print(f"Gewählte Antwort: {gewaehlte_antwort}")
-
-    # Buttons einfärben
-    for widget in frame.winfo_children():
-        if isinstance(widget, tk.Button):
-            if widget["text"] == richtige_antwort:
-                widget.config(bg="#12a505", fg="#ffffff")  # richtige Antwort grün
-            elif widget["text"] == gewaehlte_antwort:
-                widget.config(bg="#ff0000", fg="#ffffff")  # falsche Antwort rot
-            widget.config(state="disabled")
-    # Nach 1 Sekunde nächste Frage
-    root.after(1000, next_frame)
-
-def start_frame_generation(master, font):
-    aufgabe = aufgaben_logik.zu_loesende_aufgaben_list[current_index]
+def frame_generation(master, font):
+    try:
+        aufgabe = aufgaben_logik.zu_loesende_aufgaben_list[len(aufgaben_frame_dict)]
+    except IndexError:
+        return reset(), aufgaben_logik.statistik_ausgeben()
     AufgabenFrame(aufgabe, master, font)
-    aufgaben_frame_dict[current_index].show()
-    pass
+    aufgaben_frame_dict[len(aufgaben_frame_dict)-1].show()
+    return print("Deine Aufgabe wurde geladen")
+def reset():
+    aufgaben_frame_dict.clear()
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Dynamische Frames")
-
-    main_frame = tk.Frame(root)
-    main_frame.pack(padx=10, pady=10)
-
-    # Frames generieren
-    for eintrag in daten:
-        frame = tk.Frame(main_frame, bd=2, relief="groove", padx=10, pady=10)
-
-        frage_label = tk.Label(frame, text=eintrag["frage"], font=("Arial", 25, "bold"))
-        frage_label.pack(anchor="w")
-
-        for antwort in eintrag["antworten"]:
-            btn = tk.Button(
-                frame,
-                text=antwort,
-                font=("Arial", 20, "bold"),
-                command=lambda f=frame,
-                               r=eintrag["richtig"],
-                               a=antwort: button_click(f, r, a)
-            )
-            btn.pack(side="left", padx=5, pady=5)
-
-        frames.append(frame)
-
-    show_frame(0)
-
-    root.mainloop()
+    print("deutsche pass")
