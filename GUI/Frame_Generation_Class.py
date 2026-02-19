@@ -22,7 +22,7 @@ class AufgabenFrame:
         aufgaben_frame_dict[self.frame_id] = self
 
         self.frame = tk.Frame(self.master)
-        self.label = tk.Label(self.frame, text=aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung, font=(self.font, 30))
+        self.label = tk.Label(self.frame, text=aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung, font=(self.font, 20))
         self.label.pack(side="left")
         self.buttonframe = tk.Frame(self.frame)
         self.buttonframe.pack()
