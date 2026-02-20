@@ -177,31 +177,42 @@ def statistik_ausgeben():
     stats_der_richtigen()
     stats_der_falschen()
     stats_der_korrigierten()
+    resetting()
+
+def stats_gesamt():
     print(f"Aus {len(zu_loesende_aufgaben_list)} Aufgaben hast du "
           f"{len(richtig_beantwortet)} Richtig, "
           f"{len(falsch_beantwortet) + (len(zu_loesende_aufgaben_list) - len(richtig_beantwortet) - len(falsch_beantwortet) - len(korrigiert_beantwortet))} Falsch und "
           f"{len(korrigiert_beantwortet)} Korrigiert")
-    resetting()
 
 def stats_der_richtigen():
+    antworten_liste = []
     print(len(richtig_beantwortet), " Richtige Antworten")
-    for x in richtig_beantwortet:
-        print(x)
+    for antwort in richtig_beantwortet:
+        print(antwort)
+        antworten_liste.append(antwort)
+    return antworten_liste
 
 def stats_der_falschen():
+    antworten_liste = []
     print(len(falsch_beantwortet), " Falsche Antworten")
     for antwort in falsche_antwort_dict:
         antwort = antwort.strip("+")
-        print(antwort, '\n')
-        print(aufgaben_dict[antwort].aufgabenbeschreibung, '\n')
-        print(aufgaben_dict[antwort].uebungs_beschreibung, "\n")
-        print("Die richtige Antwort ist: ", falsche_antwort_dict[antwort].korrekte_antwort)
-        print("Du hast: ", falsche_antwort_dict[antwort].antwort , " ausgewählt")
-
+        string_antwort = (f"{antwort}\n"
+                          f"{aufgaben_dict[antwort].aufgabenbeschreibung}\n"
+                          f"{aufgaben_dict[antwort].uebungs_beschreibung}\n"
+                          f"Die richtige Antwort ist: {falsche_antwort_dict[antwort].korrekte_antwort}\n"
+                          f"Du hast: {falsche_antwort_dict[antwort].antwort} ausgewählt")
+        print(string_antwort)
+        antworten_liste.append(string_antwort)
+    return antworten_liste
 def stats_der_korrigierten():
+    antworten_liste = []
     print(len(korrigiert_beantwortet), "Korrigiert")
-    for x in korrigiert_beantwortet:
-        print(x)
+    for antwort in korrigiert_beantwortet:
+        print(antwort)
+        antworten_liste.append(antwort)
+    return antworten_liste
 
 def button_start():
     aufgaben_initialisieren(5)

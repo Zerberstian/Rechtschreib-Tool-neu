@@ -5269,7 +5269,7 @@
         },
         {
           "Titel": "Fehlersuche",
-          "Aufgabenbeschreibung": "Bitte die Fehler der Groß- und Kleinschreibung finden.\nManchmal wurde ein Nomen klein statt groß geschrieben und manchmal wurden Adjektive oder Verben groß geschrieben.\n***Wenn das falsche Wort gefunden wurde, bitte das Wort anklicken und mit Doppelklick bestätigen.***",
+          "Aufgabenbeschreibung": "Bitte die Fehler der Groß- und Kleinschreibung finden.\nManchmal wurde ein Nomen klein statt groß geschrieben und manchmal wurden Adjektive oder Verben groß geschrieben.\n",
           "UebungenListe": [
             {
               "Moeglichkeiten": [

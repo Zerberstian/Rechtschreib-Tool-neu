@@ -72,7 +72,7 @@ def frame_generation(master, font):
     try:
         aufgabe = aufgaben_logik.zu_loesende_aufgaben_list[len(aufgaben_frame_dict)]
     except IndexError:
-        return reset(), aufgaben_logik.statistik_ausgeben()
+        return print("Fertig mit allen Aufgaben"), reset(), aufgaben_logik.statistik_ausgeben()
     AufgabenFrame(aufgabe, master, font)
     aufgaben_frame_dict[len(aufgaben_frame_dict)-1].show()
     return print("Deine Aufgabe wurde geladen")
