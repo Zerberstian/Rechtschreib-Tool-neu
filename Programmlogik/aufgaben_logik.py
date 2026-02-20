@@ -174,13 +174,17 @@ def aufgaben_anfangen_konsole():
         aufgabe_bearbeiten_konsole(index, aufgaben_dict[aufgabe])
 
 def statistik_ausgeben():
+    """
     stats_der_richtigen()
     stats_der_falschen()
     stats_der_korrigierten()
+    stats_gesamt()
     resetting()
+    """
+    return stats_der_richtigen(),stats_der_falschen(),stats_der_korrigierten(),stats_gesamt()#,resetting()
 
 def stats_gesamt():
-    print(f"Aus {len(zu_loesende_aufgaben_list)} Aufgaben hast du "
+    return(f"Aus {len(zu_loesende_aufgaben_list)} Aufgaben hast du "
           f"{len(richtig_beantwortet)} Richtig, "
           f"{len(falsch_beantwortet) + (len(zu_loesende_aufgaben_list) - len(richtig_beantwortet) - len(falsch_beantwortet) - len(korrigiert_beantwortet))} Falsch und "
           f"{len(korrigiert_beantwortet)} Korrigiert")
@@ -189,7 +193,7 @@ def stats_der_richtigen():
     antworten_liste = []
     print(len(richtig_beantwortet), " Richtige Antworten")
     for antwort in richtig_beantwortet:
-        print(antwort)
+        #print(antwort)
         antworten_liste.append(antwort)
     return antworten_liste
 
@@ -202,15 +206,15 @@ def stats_der_falschen():
                           f"{aufgaben_dict[antwort].aufgabenbeschreibung}\n"
                           f"{aufgaben_dict[antwort].uebungs_beschreibung}\n"
                           f"Die richtige Antwort ist: {falsche_antwort_dict[antwort].korrekte_antwort}\n"
-                          f"Du hast: {falsche_antwort_dict[antwort].antwort} ausgewählt")
-        print(string_antwort)
+                          f"Du hast: {falsche_antwort_dict[antwort].antwort} ausgewählt\n\n")
+        #print(string_antwort)
         antworten_liste.append(string_antwort)
     return antworten_liste
 def stats_der_korrigierten():
     antworten_liste = []
     print(len(korrigiert_beantwortet), "Korrigiert")
     for antwort in korrigiert_beantwortet:
-        print(antwort)
+        #print(antwort)
         antworten_liste.append(antwort)
     return antworten_liste
 
@@ -220,6 +224,7 @@ def button_start():
     statistik_ausgeben()
 
 # Clears all dictionaries
+
 def resetting():
     for eintrag in aufgaben_dict:
         aufgaben_dict[eintrag].set_wiederholt()

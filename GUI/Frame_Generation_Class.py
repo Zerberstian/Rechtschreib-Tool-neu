@@ -2,8 +2,37 @@ import tkinter as tk
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import aufgaben_logik
+import matplotlib.pyplot as plt
 
 aufgaben_frame_dict = {}
+statistik_frame_list = []
+
+class StatistikFrame:
+    def __init__(self, master, font, stats):
+        self.master = master
+        self.font = font
+        self.stats_der_richtigen = stats[0]
+        self.stats_der_falschen = stats[1]
+        self.stats_der_korrigierten = stats[2]
+        self.stats_gesamt = stats[3]
+
+        statistik_frame_list.append(self)
+
+        self.frame = tk.Frame(self.master)
+        self.frame2 = tk.Frame(self.frame)
+        self.frame2.pack()
+        self.gesamt_label = tk.Label(self.frame2, text=self.stats_gesamt)
+        self.gesamt_label.pack(fill="both",expand=True, padx=5, pady=5)
+        self.falschen_text = tk.Text(self.frame2)
+        self.falschen_text.pack(padx=5, pady=5)
+        for stat in self.stats_der_falschen:
+            self.falschen_text.insert(tk.END, stat)
+
+    def stats_show(self):
+        self.frame.grid(row=1, column=1)
+
+    def stats_hide(self):
+        self.frame.grid_forget()
 
 class AufgabenFrame:
     def __init__(self, uebung_id, master, font):
@@ -48,7 +77,7 @@ class AufgabenFrame:
     def warten(self):
         print("Fertig warten")
         self.hide()
-        frame_generation(self.master, self.font)
+        aufgaben_frame_generation(self.master, self.font)
 
     def button_click(self, frame, x, aufgabe, frame_id, korrekte_antwort):
         aufgaben_logik.antwort_check(x, aufgabe, frame_id)
@@ -68,16 +97,21 @@ class AufgabenFrame:
         frame.update()
         return self.master.after(1000, self.warten())
 
-def frame_generation(master, font):
+def aufgaben_frame_generation(master, font):
     try:
         aufgabe = aufgaben_logik.zu_loesende_aufgaben_list[len(aufgaben_frame_dict)]
     except IndexError:
-        return print("Fertig mit allen Aufgaben"), reset(), aufgaben_logik.statistik_ausgeben()
+        return print("Fertig mit allen Aufgaben"), reset(), statistik_frame_generation(master, font)
     AufgabenFrame(aufgabe, master, font)
     aufgaben_frame_dict[len(aufgaben_frame_dict)-1].show()
     return print("Deine Aufgabe wurde geladen")
+
+def statistik_frame_generation(master, font):
+    StatistikFrame(master, font, aufgaben_logik.statistik_ausgeben())
+    aufgaben_logik.resetting()
+    statistik_frame_list[-1].stats_show()
+
 def reset():
     aufgaben_frame_dict.clear()
-
 if __name__ == "__main__":
     print("deutsche pass")

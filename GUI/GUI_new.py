@@ -45,7 +45,7 @@ def start_logic():
     print(spinbox.get(), "= value check 2")
     aufgaben_logik.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
-    Frame_Generation_Class.frame_generation(logicFrame, BtnFontArt)
+    Frame_Generation_Class.aufgaben_frame_generation(logicFrame, BtnFontArt)
 
     #aufgaben_logik.aufgaben_anfangen_konsole()
     #aufgaben_logik.statistik_ausgeben()
@@ -120,6 +120,7 @@ def back_to_main_frame():
     MenuText.grid(row=1,column=1, sticky=NW)
     logicFrame.grid_forget()
     ColorPickerFrame.grid_forget()
+    Frame_Generation_Class.statistik_frame_list[-1].stats_hide()
 
 def open_instruction_pdf():
     project_root = os.path.dirname(os.path.dirname(__file__))
