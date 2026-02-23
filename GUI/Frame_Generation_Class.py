@@ -21,9 +21,13 @@ class StatistikFrame:
         self.frame = tk.Frame(self.master)
         self.frame2 = tk.Frame(self.frame)
         self.frame2.pack()
-        self.gesamt_label = tk.Label(self.frame2, text=self.stats_gesamt)
+        self.gesamt_label = tk.Label(self.frame2, text=self.stats_gesamt, font=self.font)
         self.gesamt_label.pack(fill="both",expand=True, padx=5, pady=5)
-        self.falschen_text = tk.Text(self.frame2)
+        self.falschen_text = tk.Text(self.frame2,
+                                        font=self.font,
+                                        fg="#ff1111",
+                                        bg="#000000",
+                                        wrap=tk.WORD,)
         self.falschen_text.pack(padx=5, pady=5)
         for stat in self.stats_der_falschen:
             self.falschen_text.insert(tk.END, stat)
