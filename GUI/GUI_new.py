@@ -122,6 +122,9 @@ def back_to_main_frame():
     ColorPickerFrame.grid_forget()
     Frame_Generation_Class.statistik_frame_list[-1].stats_hide()
     aufgaben_logik.resetting()
+    for frame in Frame_Generation_Class.aufgaben_frame_dict:
+        frame.hide()
+    Frame_Generation_Class.reset()
 
 def open_instruction_pdf():
     project_root = os.path.dirname(os.path.dirname(__file__))
