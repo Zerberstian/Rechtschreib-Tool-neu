@@ -96,12 +96,12 @@ icon_path = os.path.join(project_root, "Assets", "srhIcon.png")
 icon = PhotoImage(file=icon_path)
 window.iconphoto(True, icon)                                          # Changing the tk icon to srh icon
 window.iconphoto(True, icon)
-
+'''
 window.bind("<F4>", lambda event: show_color_picker())
 # ^ Hotkey for swaping Menu bc im genuinely about to crash out if i have to press Farbenwahl one more Time
 window.bind("<F3>", lambda event: back_to_main_frame())
 # ^ back to main Menu Hotkey
-
+'''
 # Changing between frames
 def show_start_frame():
     logicFrame.grid(row=0, column=0, sticky=NW)
