@@ -14,8 +14,32 @@ import re
 # regex pattern used for finding the predecessor id for auto-id generation
 
 # pip install GitPython (requirements.txt) - as Git is essential for automatically pushing the new version to GitHub
+from tkinter import *
 
-current_context = []  # globally used for displaying the current state in the menu 
+current_context = []  # globally used for displaying the current state in the menu
+FRAME_BG = "#E0470A"
+window = Tk()
+x_pos = -9
+y_pos = 0
+window.geometry(f"{window.winfo_screenwidth()}x{window.winfo_screenheight()}+{x_pos}+{y_pos}")
+window.minsize(800, 600)
+window.config(bg=FRAME_BG)
+
+MenuFrame = Frame(window)
+MenuFrame.config(bg=FRAME_BG)
+MenuFrame.grid(row=1, column=0, padx=10, pady=10)
+
+ButtonFrame = Frame(MenuFrame)
+ButtonFrame.config(bg=FRAME_BG)
+ButtonFrame.pack(side=LEFT)
+
+Button(ButtonFrame, text="Alle Bereiche anzeigen").pack(fill=X, pady=2)
+Button(ButtonFrame, text="Bereich bearbeiten").pack(fill=X, pady=2)
+Button(ButtonFrame, text="Neuen Bereich hinzufügen").pack(fill=X, pady=2)
+Button(ButtonFrame, text="Aufgabe per ID suchen & bearbeiten").pack(fill=X,pady=2)
+Button(ButtonFrame, text="Speichern & GitHub Commit").pack(fill=X, pady=2)
+Button(ButtonFrame, text="Statistik").pack(fill=X, pady=2)
+Button(ButtonFrame, text="Beenden").pack(fill=X, pady=2)
 
 def generate_auto_id(bereich_idx, teilgebiet_idx, uebungen_liste):
     # generating new ids based on the predecessor id
@@ -602,7 +626,7 @@ def edit_single_task(uebungen_liste, task_idx, data):
         print(f"\n📊 Status: {task.get('Uebung_id')} | {task.get('UebungsBeschreibung', '')[:30]}... | Korrekt: '{korrekte_option}'")
 
 if __name__ == "__main__":
-    
+    window.mainloop()
     cleanup_old_temps(os.path.dirname(__file__), 'temp_repo')
     print("═" * 70)
     print("📝 AUFGABENEDITOR V6 - AUTO-COMMIT NACH NEUER AUFGABE".center(70))
