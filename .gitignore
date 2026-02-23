@@ -22,3 +22,6 @@ Programmlogik/json_cache.json
 # Other files
 # --------------------
 RechtschreibTool.spec
+
+Aufgabeneditor/gui.py
+#currently ignored just to not spam commits 
