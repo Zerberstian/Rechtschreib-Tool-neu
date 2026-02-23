@@ -235,12 +235,6 @@ def resetting():
     richtig_beantwortet.clear()
     korrigiert_beantwortet.clear()
     falsche_antwort_dict.clear()
-    print(f"{len(ausgewaehlte_aufgaben),
-    (zu_loesende_aufgaben_list),
-    (falsch_beantwortet),
-    (richtig_beantwortet),
-    (korrigiert_beantwortet),
-    (falsche_antwort_dict)}")
 
 aufgaben_obejekte_erstellen()
 
