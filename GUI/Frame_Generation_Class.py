@@ -73,7 +73,7 @@ class AufgabenFrame:
                 wraplength=500,
                 command=lambda f= self.buttonframe,
                                antwort=index+1,
-                               korrekte_antwort = aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten[aufgaben_logik.aufgaben_dict[self.uebung_id].korrekt - 1],
+                               korrekte_antwort = aufgaben_logik.aufgaben_dict[self.uebung_id].korrekt,
                                aufgabe= aufgaben_logik.aufgaben_dict[self.uebung_id],
                                frame_id = self.frame_id: AufgabenFrame.button_click(self, f, antwort, aufgabe, frame_id, korrekte_antwort),
             )
@@ -92,14 +92,14 @@ class AufgabenFrame:
     def button_click(self, frame, x, aufgabe, frame_id, korrekte_antwort):
         aufgaben_logik.antwort_check(x, aufgabe, frame_id)
         # Buttons einfärben
-        for widget in frame.winfo_children():
-            print(widget)
+        for index, widget in enumerate(frame.winfo_children()):
+            print(index)
             if isinstance(widget, tk.Button):
                 print("Ist Button")
-                if widget["text"] == korrekte_antwort:
+                if index + 1 == korrekte_antwort:
                     widget.config(bg="#12a505", fg="#ffffff") # richtige Antwort grün
                     print("Button Grun")
-                elif widget["text"] != korrekte_antwort:
+                elif index + 1 != korrekte_antwort:
                     widget.config(bg="#ff0000", fg="#ffffff")  # falsche Antwort rot
                     print("Button Rot")
                 widget.config(state="disabled", disabledforeground="#ffffff")
@@ -115,6 +115,7 @@ def aufgaben_frame_generation(master, font):
         statistik_frame_generation(master, font)
         return print("Fertig mit allen Aufgaben")
     AufgabenFrame(aufgabe, master, font)
+    
     aufgaben_frame_dict[len(aufgaben_frame_dict)-1].show()
     return print("Deine Aufgabe wurde geladen")
 
