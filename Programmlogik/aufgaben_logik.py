@@ -201,11 +201,11 @@ def stats_der_falschen():
     antworten_liste = []
     print(len(falsch_beantwortet), " Falsche Antworten")
     for antwort in falsche_antwort_dict:
-        antwort = antwort.strip("+")
-        print(antwort)
-        string_antwort = (f"{antwort}\n"
-                          f"{aufgaben_dict[antwort].aufgabenbeschreibung}\n"
-                          f"{aufgaben_dict[antwort].uebungs_beschreibung}\n"
+        antwort_stripped = antwort.strip("+")
+        print(antwort_stripped)
+        string_antwort = (f"{antwort_stripped}\n"
+                          f"{aufgaben_dict[antwort_stripped].aufgabenbeschreibung}\n"
+                          f"{aufgaben_dict[antwort_stripped].uebungs_beschreibung}\n"
                           f"Die richtige Antwort ist: {falsche_antwort_dict[antwort].korrekte_antwort}\n"
                           f"Du hast: {falsche_antwort_dict[antwort].antwort} ausgewählt\n\n")
         #print(string_antwort)
