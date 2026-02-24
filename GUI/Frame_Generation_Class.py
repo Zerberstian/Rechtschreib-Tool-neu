@@ -28,10 +28,11 @@ class StatistikFrame:
                                         font=self.font,
                                         fg="#ff1111",
                                         bg="#000000",
-                                        wrap="word",)
+                                        wrap="word")
         self.falschen_text.pack(padx=5, pady=5)
         for stat in self.stats_der_falschen:
             self.falschen_text.insert(tk.END, stat)
+        self.falschen_text.config(state="disabled")
 
     def stats_show(self):
         self.frame.grid(row=1, column=1)
@@ -55,10 +56,12 @@ class AufgabenFrame:
                                                   height=10,
                                                   font=(self.font, 20),
                                                   wrap="word")
-        self.aufgabenbeschreibung_textbox.insert(tk.END,
-                                                 f"""{aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung}
-                                                        
+        self.aufgabenbeschreibung_textbox.insert(tk.END,f"""{self.uebung_id}
+{aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung}
+                                                      
 {aufgaben_logik.aufgaben_dict[uebung_id].uebungs_beschreibung}""")
+        self.aufgabenbeschreibung_textbox.config(state="disabled")
+
         self.aufgabenbeschreibung_textbox.pack()
         self.buttonframe = tk.Frame(self.frame2)
         self.buttonframe.pack()
@@ -66,7 +69,7 @@ class AufgabenFrame:
             btn = tk.Button(
                 self.buttonframe,
                 text=antwort_moeglichkeit,
-                font=(self.font, 40),
+                font=(self.font, 30),
                 wraplength=500,
                 command=lambda f= self.buttonframe,
                                antwort=index+1,
