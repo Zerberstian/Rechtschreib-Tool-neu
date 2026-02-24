@@ -2,7 +2,8 @@ import tkinter as tk
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import aufgaben_logik
-import matplotlib.pyplot as plt
+from matplotlib import figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 aufgaben_frame_dict = {}
 statistik_frame_list = []
@@ -27,7 +28,7 @@ class StatistikFrame:
                                         font=self.font,
                                         fg="#ff1111",
                                         bg="#000000",
-                                        wrap=tk.WORD,)
+                                        wrap="word",)
         self.falschen_text.pack(padx=5, pady=5)
         for stat in self.stats_der_falschen:
             self.falschen_text.insert(tk.END, stat)
@@ -50,21 +51,23 @@ class AufgabenFrame:
         self.frame = tk.Frame(self.master)
         self.frame2 = tk.Frame(self.frame)
         self.frame2.pack(fill="both", expand=True)
-        self.aufgabenbeschreibung_label = tk.Label(self.frame2,
-                              text=aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung,
-                              font=(self.font, 20))
-        self.aufgabenbeschreibung_label.pack()
-        self.uebungs_beschreibung_label = tk.Label(self.frame2,
-                                                   text=aufgaben_logik.aufgaben_dict[uebung_id].uebungs_beschreibung,
-                                                   font=(self.font, 20))
-        self.uebungs_beschreibung_label.pack()
+        self.aufgabenbeschreibung_textbox = tk.Text(self.frame2,
+                                                  height=10,
+                                                  font=(self.font, 20),
+                                                  wrap="word")
+        self.aufgabenbeschreibung_textbox.insert(tk.END,
+                                                 f"""{aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung}
+                                                        
+{aufgaben_logik.aufgaben_dict[uebung_id].uebungs_beschreibung}""")
+        self.aufgabenbeschreibung_textbox.pack()
         self.buttonframe = tk.Frame(self.frame2)
         self.buttonframe.pack()
         for index, antwort_moeglichkeit in enumerate(aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten):
             btn = tk.Button(
                 self.buttonframe,
                 text=antwort_moeglichkeit,
-                font=(self.font, 15),
+                font=(self.font, 40),
+                wraplength=500,
                 command=lambda f= self.buttonframe,
                                antwort=index+1,
                                korrekte_antwort = aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten[aufgaben_logik.aufgaben_dict[self.uebung_id].korrekt - 1],
