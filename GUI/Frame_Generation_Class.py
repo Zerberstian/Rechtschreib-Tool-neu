@@ -1,8 +1,10 @@
 import tkinter as tk
 import sys, os
+from importlib.metadata import requires
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import aufgaben_logik
-from matplotlib import figure
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 aufgaben_frame_dict = {}
@@ -21,7 +23,9 @@ class StatistikFrame:
 
         self.frame = tk.Frame(self.master)
         self.frame2 = tk.Frame(self.frame)
-        self.frame2.pack()
+        self.frame2.grid(row=0, column=0)
+        self.frame3 = tk.Frame(self.frame)
+        self.frame3.grid(row=0, column=1, ipadx=60)
         self.gesamt_label = tk.Label(self.frame2, text=self.stats_gesamt, font=self.font)
         self.gesamt_label.pack(fill="both",expand=True, padx=5, pady=5)
         self.falschen_text = tk.Text(self.frame2,
@@ -33,6 +37,22 @@ class StatistikFrame:
         for stat in self.stats_der_falschen:
             self.falschen_text.insert(tk.END, stat)
         self.falschen_text.config(state="disabled")
+        self.fig = Figure(figsize=(1, 5), dpi=100)
+        self.diagramm = self.fig.add_subplot()
+        bottom = 0
+        width = 1
+        part = self.diagramm.bar(0, len(self.stats_der_richtigen), width=width, label="Richtig", bottom=bottom, color="green")
+        bottom += len(self.stats_der_richtigen)
+        self.diagramm.bar_label(part, label_type="center")
+        part = self.diagramm.bar(0, len(self.stats_der_korrigierten), width=width, label="Korrigiert", bottom=bottom, color="yellow")
+        bottom += len(self.stats_der_korrigierten)
+        self.diagramm.bar_label(part, label_type="center")
+        part = self.diagramm.bar(0, len(self.stats_der_falschen), width=width, label="Falsch", bottom=bottom, color="red")
+        self.diagramm.bar_label(part, label_type="center")
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame3)
+        self.canvas.get_tk_widget().config()
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
 
     def stats_show(self):
         self.frame.grid(row=1, column=1)
@@ -115,7 +135,7 @@ def aufgaben_frame_generation(master, font):
         statistik_frame_generation(master, font)
         return print("Fertig mit allen Aufgaben")
     AufgabenFrame(aufgabe, master, font)
-    
+
     aufgaben_frame_dict[len(aufgaben_frame_dict)-1].show()
     return print("Deine Aufgabe wurde geladen")
 
