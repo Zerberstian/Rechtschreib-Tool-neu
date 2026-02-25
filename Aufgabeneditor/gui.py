@@ -3,18 +3,19 @@ from tkinter import ttk, messagebox, simpledialog
 import aufgabeneditor as editor
 import json
 
+
 class AufgabenGUI:
     def __init__(self, master):
         self.master = master
         self.master.title("📝 Aufgabeneditor GUI - Vollständige Bearbeitung")
         self.master.geometry("1200x800")
         self.data = editor.load_local_data()
-       
+        
         if not self.data:
             messagebox.showerror("Fehler", "Keine Aufgaben gefunden! Bitte zuerst versioncheck.py ausführen.")
             self.master.destroy()
             return
-       
+        
         self.left_frame = ttk.Frame(master, padding=10, width=300)
         self.right_frame = ttk.Frame(master, padding=10)
         self.left_frame.pack(side="left", fill="y")
@@ -25,7 +26,7 @@ class AufgabenGUI:
         self.bereich_list = tk.Listbox(self.left_frame, height=12)
         self.bereich_list.pack(fill="both", expand=True, pady=(0,10))
         self.bereich_list.bind("<<ListboxSelect>>", self.on_bereich_select)
-       
+        
         ttk.Label(self.left_frame, text="📖 TEILGEBIETE", font=("Arial", 11, "bold")).pack(anchor="w")
         self.teil_list = tk.Listbox(self.left_frame, height=10)
         self.teil_list.pack(fill="both", expand=True, pady=(0,10))
@@ -38,7 +39,7 @@ class AufgabenGUI:
         ttk.Button(btn_frame, text="💾 Speichern & Commit", command=self.save_data).pack(fill="x", pady=(5,0))
 
         self.teil_header = ttk.Label(self.right_frame, text="📂 Kein Bereich/Teilgebiet ausgewählt",
-                                   font=("Arial", 14, "bold"), foreground="blue")
+                                      font=("Arial", 14, "bold"), foreground="blue")
         self.teil_header.pack(pady=10)
 
         columns = ("ID", "Beschreibung", "Korrekt", "Optionen")
@@ -137,118 +138,187 @@ class AufgabenGUI:
             })
             self.refresh_teilgebiete()
 
+    # NEW: Helper function to create option input fields dynamically - handles both normal tasks (3 options) and special tasks (1 field)
+    def create_option_fields(self, dialog, task=None):
+        """Creates individual input fields for each answer option. Automatically detects special tasks (1 option) vs normal tasks (3 options)"""
+        option_frame = ttk.LabelFrame(dialog, text="📋 Antwortoptionen", padding=10)
+        option_frame.pack(fill="both", expand=True, pady=10)
+        
+        self.option_entries = []  # Store references to all option entry fields
+        
+        # Determine number of options based on task type
+        if task and len(task.get("Moeglichkeiten", [])) == 1:
+            # SPECIAL TASK: Only 1 field for the special text/content
+            ttk.Label(option_frame, text="Spezialtext/Inhalt:").pack(anchor="w")
+            entry = tk.Text(option_frame, height=3, width=60)
+            if task:
+                entry.insert("1.0", task["Moeglichkeiten"][0])
+            entry.pack(pady=5, fill="x")
+            self.option_entries.append(entry)
+        else:
+            # NORMAL TASK: 3 separate fields for options 1,2,3
+            for i in range(3):
+                frame = ttk.Frame(option_frame)
+                frame.pack(fill="x", pady=2)
+                
+                # Option number label
+                ttk.Label(frame, text=f"Option {i+1}:", width=10).pack(side="left")
+                
+                # Text entry field
+                entry = tk.Text(frame, height=2, width=50)
+                if task and i < len(task.get("Moeglichkeiten", [])):
+                    # Pre-fill with existing option if editing
+                    option_text = task["Moeglichkeiten"][i]
+                    entry.insert("1.0", option_text if isinstance(option_text, str) else option_text[0])
+                else:
+                    # Default text for new tasks
+                    entry.insert("1.0", f"Option {i+1}")
+                entry.pack(side="right", fill="x", expand=True, padx=(10,0))
+                
+                self.option_entries.append(entry)
+        
+        return option_frame
+
+    # MODIFIED: Now uses individual option fields instead of JSON input
     def add_task(self):
         if self.current_bereich_idx is None or self.current_teil_idx is None:
             messagebox.showerror("Fehler", "Bitte Bereich UND Teilgebiet auswählen.")
             return
-       
+        
         teil = self.data[self.current_bereich_idx]['Teilgebiet'][self.current_teil_idx]
         auto_id = editor.generate_auto_id(self.current_bereich_idx, self.current_teil_idx, teil.get('UebungenListe', []))
-       
+        
         dialog = tk.Toplevel(self.master)
-        dialog.title(f"Neue Aufgabe {auto_id}")
-        dialog.geometry("500x400")
+        dialog.title(f"🆕 Neue Aufgabe {auto_id}")
+        dialog.geometry("600x550")
         dialog.transient(self.master)
         dialog.grab_set()
-       
-        ttk.Label(dialog, text=f"ID: {auto_id} (automatisch)").pack(pady=10)
-       
-        ttk.Label(dialog, text="Übungsbeschreibung:").pack(anchor="w")
-        beschr_entry = tk.Text(dialog, height=4, width=60)
-        beschr_entry.pack(pady=5, fill="x")
-       
-        ttk.Label(dialog, text="Möglichkeiten (JSON-Liste):").pack(anchor="w", pady=(20,0))
-        moeg_entry = tk.Text(dialog, height=6, width=60)
-        moeg_entry.insert("1.0", '[["Option 1"], ["Option 2"], ["Option 3"]]')
-        moeg_entry.pack(pady=5, fill="x")
-       
-        ttk.Label(dialog, text="Korrekte Antwort (1-3):").pack(anchor="w", pady=(10,0))
-        korrekt_entry = ttk.Entry(dialog)
-        korrekt_entry.insert(0, "1")
-        korrekt_entry.pack(pady=5, fill="x")
-       
-        ttk.Label(dialog, text="Infotext (optional):").pack(anchor="w", pady=(10,0))
-        info_entry = tk.Text(dialog, height=3, width=60)
-        info_entry.pack(pady=5, fill="x")
-       
+        
+        ttk.Label(dialog, text=f"ID: {auto_id} (automatisch)", font=("Arial", 11, "bold")).pack(pady=10)
+        
+        # Description field
+        ttk.Label(dialog, text="📝 Übungsbeschreibung:").pack(anchor="w", padx=10)
+        self.beschr_entry = tk.Text(dialog, height=4, width=70)
+        self.beschr_entry.pack(pady=5, padx=10, fill="x")
+        
+        # NEW: Dynamic option fields instead of JSON
+        self.create_option_fields(dialog)
+        
+        # Correct answer selector
+        ttk.Label(dialog, text="✅ Korrekte Antwort (1-3):").pack(anchor="w", padx=10, pady=(15,0))
+        self.korrekt_entry = ttk.Entry(dialog, width=10)
+        self.korrekt_entry.insert(0, "1")
+        self.korrekt_entry.pack(pady=5, padx=10, fill="x")
+        
+        # Optional info text
+        ttk.Label(dialog, text="ℹ️ Infotext (optional):").pack(anchor="w", padx=10, pady=(10,0))
+        self.info_entry = tk.Text(dialog, height=3, width=70)
+        self.info_entry.pack(pady=5, padx=10, fill="x")
+        
         def create_task():
             try:
+                # Convert option fields back to proper JSON list format
+                moeglichkeiten = []
+                for entry in self.option_entries:
+                    text_content = entry.get("1.0", tk.END).strip()
+                    if text_content:
+                        moeglichkeiten.append([text_content])  # Store as list with single string
+                
                 new_task = {
                     "Uebung_id": auto_id,
-                    "UebungsBeschreibung": beschr_entry.get("1.0", tk.END).strip(),
-                    "Moeglichkeiten": json.loads(moeg_entry.get("1.0", tk.END).strip()),
-                    "KorrekteAntwort": int(korrekt_entry.get()),
-                    "Infotext": info_entry.get("1.0", tk.END).strip()
+                    "UebungsBeschreibung": self.beschr_entry.get("1.0", tk.END).strip(),
+                    "Moeglichkeiten": moeglichkeiten,
+                    "KorrekteAntwort": int(self.korrekt_entry.get()),
+                    "Infotext": self.info_entry.get("1.0", tk.END).strip()
                 }
                 teil.setdefault("UebungenListe", []).append(new_task)
                 self.refresh_tasks()
                 self.update_header()
                 dialog.destroy()
+                messagebox.showinfo("✅ Erfolg", f"Aufgabe {auto_id} erstellt!")
             except Exception as e:
-                messagebox.showerror("Fehler", f"Ungültiges Format: {e}")
-       
-        ttk.Button(dialog, text="✅ Erstellen", command=create_task).pack(pady=20)
+                messagebox.showerror("❌ Fehler", f"Fehler beim Erstellen:\n{e}")
+        
+        btn_frame = ttk.Frame(dialog)
+        btn_frame.pack(pady=20)
+        ttk.Button(btn_frame, text="✅ Aufgabe erstellen", command=create_task).pack(pady=5)
+        ttk.Button(btn_frame, text="❌ Abbrechen", command=dialog.destroy).pack(pady=5)
 
+    # MODIFIED: Full task editing with individual option fields instead of JSON
     def edit_task_full(self):
         sel = self.tree.focus()
         if not sel:
             messagebox.showerror("Fehler", "Bitte Aufgabe auswählen.")
             return
-       
+        
         values = self.tree.item(sel, 'values')
         task_id = values[0]
         result = editor.find_task_by_id(self.data, task_id)
         if not result:
             return
         bereich_idx, teil_idx, task_idx, task = result
-       
+        
         dialog = tk.Toplevel(self.master)
-        dialog.title(f"Bearbeite {task_id}")
-        dialog.geometry("600x500")
+        dialog.title(f"✏️ Bearbeite Aufgabe {task_id}")
+        dialog.geometry("650x600")
         dialog.transient(self.master)
         dialog.grab_set()
-       
+        
         ttk.Label(dialog, text=f"ID: {task_id} 🔒", font=("Arial", 12, "bold")).pack(pady=10)
-       
-        ttk.Label(dialog, text="Übungsbeschreibung:").pack(anchor="w")
-        beschr_var = tk.StringVar(value=task.get("UebungsBeschreibung", ""))
-        beschr_entry = tk.Text(dialog, height=4, width=70)
-        beschr_entry.insert("1.0", beschr_var.get())
-        beschr_entry.pack(pady=5, fill="x")
-       
-        ttk.Label(dialog, text="Möglichkeiten (JSON):").pack(anchor="w", pady=(20,0))
-        moeg_text = json.dumps(task.get("Moeglichkeiten", []), indent=2, ensure_ascii=False)
-        moeg_entry = tk.Text(dialog, height=8, width=70)
-        moeg_entry.insert("1.0", moeg_text)
-        moeg_entry.pack(pady=5, fill="x")
-       
-        ttk.Label(dialog, text="Korrekte Antwort (Index 1-3):").pack(anchor="w", pady=(10,0))
+        
+        # Description field
+        ttk.Label(dialog, text="📝 Übungsbeschreibung:").pack(anchor="w", padx=10)
+        beschr_entry = tk.Text(dialog, height=4, width=80)
+        beschr_entry.insert("1.0", task.get("UebungsBeschreibung", ""))
+        beschr_entry.pack(pady=5, padx=10, fill="x")
+        
+        # NEW: Dynamic option fields for editing (pre-filled with existing values)
+        self.create_option_fields(dialog, task)
+        
+        # Correct answer field
+        ttk.Label(dialog, text="✅ Korrekte Antwort (Index 1-3):").pack(anchor="w", padx=10, pady=(10,0))
         korrekt_var = tk.StringVar(value=str(task.get("KorrekteAntwort", 1)))
-        korrekt_entry = ttk.Entry(dialog, textvariable=korrekt_var)
-        korrekt_entry.pack(pady=5, fill="x")
-       
-        ttk.Label(dialog, text="Infotext:").pack(anchor="w", pady=(10,0))
-        info_text = task.get("Infotext", "")
-        info_entry = tk.Text(dialog, height=4, width=70)
-        info_entry.insert("1.0", info_text)
-        info_entry.pack(pady=5, fill="x")
-       
+        korrekt_entry = ttk.Entry(dialog, textvariable=korrekt_var, width=10)
+        korrekt_entry.pack(pady=5, padx=10, fill="x")
+        
+        # Info text
+        ttk.Label(dialog, text="ℹ️ Infotext:").pack(anchor="w", padx=10, pady=(10,0))
+        info_entry = tk.Text(dialog, height=3, width=80)
+        info_entry.insert("1.0", task.get("Infotext", ""))
+        info_entry.pack(pady=5, padx=10, fill="x")
+        
+        # NEW: Important notice about saving
+        notice_frame = ttk.LabelFrame(dialog, text="💾 WICHTIG", foreground="orange", padding=8)
+        notice_frame.pack(fill="x", padx=10, pady=10)
+        ttk.Label(notice_frame, 
+                 text="✅ Änderungen werden automatisch übernommen wenn du dieses Fenster schließt.\n💾 Danach 'Speichern & Commit' im Hauptfenster drücken!").pack()
+        
         def save_changes():
             try:
+                # Update task with new values from individual option fields
                 task["UebungsBeschreibung"] = beschr_entry.get("1.0", tk.END).strip()
-                task["Moeglichkeiten"] = json.loads(moeg_entry.get("1.0", tk.END).strip())
+                
+                # Convert option fields back to JSON format
+                moeglichkeiten = []
+                for entry in self.option_entries:
+                    text_content = entry.get("1.0", tk.END).strip()
+                    if text_content:
+                        moeglichkeiten.append([text_content])
+                
+                task["Moeglichkeiten"] = moeglichkeiten
                 task["KorrekteAntwort"] = int(korrekt_var.get())
                 task["Infotext"] = info_entry.get("1.0", tk.END).strip()
+                
                 self.refresh_tasks()
                 dialog.destroy()
-                messagebox.showinfo("Erfolg", "Aufgabe gespeichert!")
+                messagebox.showinfo("✅ Erfolg", f"Aufgabe {task_id} aktualisiert!")
             except Exception as e:
-                messagebox.showerror("Fehler", f"Fehler beim Speichern: {e}")
-       
+                messagebox.showerror("❌ Fehler", f"Fehler beim Speichern:\n{e}")
+        
         btn_frame = ttk.Frame(dialog)
         btn_frame.pack(pady=20)
-        ttk.Button(btn_frame, text="💾 Speichern", command=save_changes).pack(side="left", padx=10)
-        ttk.Button(btn_frame, text="❌ Abbrechen", command=dialog.destroy).pack(side="left")
+        ttk.Button(btn_frame, text="💾 Änderungen übernehmen", command=save_changes).pack(side="left", padx=10)
+        ttk.Button(btn_frame, text="❌ Schließen (Änderungen verwerfen)", command=dialog.destroy).pack(side="left")
 
     def delete_task(self):
         sel = self.tree.focus()
@@ -286,6 +356,7 @@ class AufgabenGUI:
         status = "🟢 Erfolg" if success else "🟡 Nur lokal"
         messagebox.showinfo("Speichern", f"Änderungen gespeichert!\n{status}")
         self.refresh_bereiche()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
