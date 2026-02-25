@@ -39,6 +39,9 @@ class StatistikFrame:
         self.falschen_text.config(state="disabled")
         self.fig = Figure(figsize=(1, 5), dpi=100)
         self.diagramm = self.fig.add_subplot()
+        self.diagramm.title.set_text("Antworten")
+        self.diagramm.xaxis.set_ticks([])
+        self.diagramm.yaxis.set_ticks([])
         bottom = 0
         width = 1
         part = self.diagramm.bar(0, len(self.stats_der_richtigen), width=width, label="Richtig", bottom=bottom, color="green")
@@ -53,6 +56,7 @@ class StatistikFrame:
         self.canvas.get_tk_widget().config()
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side="top", fill="both", expand=True)
+        self.diagramm.legend()
 
     def stats_show(self):
         self.frame.grid(row=1, column=1)
@@ -73,7 +77,7 @@ class AufgabenFrame:
         self.frame2 = tk.Frame(self.frame)
         self.frame2.pack(fill="both", expand=True)
         self.aufgabenbeschreibung_textbox = tk.Text(self.frame2,
-                                                  height=10,
+                                                  height=11,
                                                   font=(self.font, 20),
                                                   wrap="word")
         self.aufgabenbeschreibung_textbox.insert(tk.END,f"""{self.uebung_id}
@@ -89,7 +93,7 @@ class AufgabenFrame:
             btn = tk.Button(
                 self.buttonframe,
                 text=antwort_moeglichkeit,
-                font=(self.font, 30),
+                font=(self.font, 25),
                 wraplength=500,
                 command=lambda f= self.buttonframe,
                                antwort=index+1,
