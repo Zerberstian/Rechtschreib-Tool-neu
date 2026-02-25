@@ -312,7 +312,7 @@ ColorPickerBackFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
 
 ColorExampleFrame = Frame(ColorPickerFrame, bg="#ffffff")
 
-
+statisticFrame = Frame(window, bg=BG_Farbe)
 ##############################################################################
 
 SelectFrame.grid_rowconfigure(0, weight=1)
