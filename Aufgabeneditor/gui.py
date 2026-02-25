@@ -54,10 +54,11 @@ class AufgabenGUI:
         self.tree.column("Optionen", width=200)
         self.tree.pack(expand=True, fill="both", pady=(0,10))
 
+        # renamed buttons
         btn_frame_right = ttk.Frame(self.right_frame)
         btn_frame_right.pack(fill="x")
-        ttk.Button(btn_frame_right, text="➕ Neue Aufgabe", command=self.add_task).pack(side="left", padx=5)
-        ttk.Button(btn_frame_right, text="✏️ Vollständig bearbeiten", command=self.edit_task_full).pack(side="left", padx=5)
+        ttk.Button(btn_frame_right, text="➕ Neue Aufgabe im Teilgebiet erstellen", command=self.add_task).pack(side="left", padx=5)
+        ttk.Button(btn_frame_right, text="✏️ Bearbeiten", command=self.edit_task_full).pack(side="left", padx=5)
         ttk.Button(btn_frame_right, text="🗑️ Löschen", command=self.delete_task).pack(side="left", padx=5)
         ttk.Button(btn_frame_right, text="🔍 Suche ID...", command=self.search_task).pack(side="right", padx=5)
 
@@ -138,7 +139,7 @@ class AufgabenGUI:
             })
             self.refresh_teilgebiete()
 
-    # NEW: Helper function to create option input fields dynamically - handles both normal tasks (3 options) and special tasks (1 field)
+    # Helper function to create option input fields dynamically - handles both normal tasks (3 options) and special tasks (1 field)
     def create_option_fields(self, dialog, task=None):
         """Creates individual input fields for each answer option. Automatically detects special tasks (1 option) vs normal tasks (3 options)"""
         option_frame = ttk.LabelFrame(dialog, text="📋 Antwortoptionen", padding=10)
@@ -179,7 +180,6 @@ class AufgabenGUI:
         
         return option_frame
 
-    # MODIFIED: Now uses individual option fields instead of JSON input
     def add_task(self):
         if self.current_bereich_idx is None or self.current_teil_idx is None:
             messagebox.showerror("Fehler", "Bitte Bereich UND Teilgebiet auswählen.")
@@ -201,7 +201,7 @@ class AufgabenGUI:
         self.beschr_entry = tk.Text(dialog, height=4, width=70)
         self.beschr_entry.pack(pady=5, padx=10, fill="x")
         
-        # NEW: Dynamic option fields instead of JSON
+        # Dynamic option fields instead of JSON
         self.create_option_fields(dialog)
         
         # Correct answer selector
@@ -244,7 +244,6 @@ class AufgabenGUI:
         ttk.Button(btn_frame, text="✅ Aufgabe erstellen", command=create_task).pack(pady=5)
         ttk.Button(btn_frame, text="❌ Abbrechen", command=dialog.destroy).pack(pady=5)
 
-    # MODIFIED: Full task editing with individual option fields instead of JSON
     def edit_task_full(self):
         sel = self.tree.focus()
         if not sel:
@@ -272,7 +271,7 @@ class AufgabenGUI:
         beschr_entry.insert("1.0", task.get("UebungsBeschreibung", ""))
         beschr_entry.pack(pady=5, padx=10, fill="x")
         
-        # NEW: Dynamic option fields for editing (pre-filled with existing values)
+        # Dynamic option fields for editing (pre-filled with existing values)
         self.create_option_fields(dialog, task)
         
         # Correct answer field
@@ -287,7 +286,7 @@ class AufgabenGUI:
         info_entry.insert("1.0", task.get("Infotext", ""))
         info_entry.pack(pady=5, padx=10, fill="x")
         
-        # NEW: Important notice about saving
+        #  notice about saving
         notice_frame = ttk.LabelFrame(dialog, text="💾 WICHTIG", foreground="orange", padding=8)
         notice_frame.pack(fill="x", padx=10, pady=10)
         ttk.Label(notice_frame, 
