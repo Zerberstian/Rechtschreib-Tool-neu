@@ -1,6 +1,5 @@
 import tkinter as tk
 import sys, os
-from importlib.metadata import requires
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import aufgaben_logik
