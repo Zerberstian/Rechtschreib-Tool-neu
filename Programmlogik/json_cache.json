@@ -1,9 +1,9 @@
 {
-  "version": 26,
-  "lastUpdated": "2026-02-18T11:30:46.506212",
-  "etag": "W/\"561c742d78f89ee7399415ae248b2f91cbb43d7cff43d7c53c972d29c2932b9c\"",
-  "totalAufgaben": 7386,
-  "size": 2470917,
+  "version": 39,
+  "lastUpdated": "2026-02-26T15:00:50.495702",
+  "etag": "W/\"a2a20ae29dfb1ed27df3312b9857a0ee45835f6695495709b1f4a522f8e5e510\"",
+  "totalAufgaben": 7387,
+  "size": 2471501,
   "data": [
     {
       "Uebungsbereich": "Groß- und Kleinschreibung",
@@ -75608,6 +75608,36 @@
         }
       ],
       "Uebungsbereich_id": 6
+    },
+    {
+      "Uebungsbereich": "test",
+      "Teilgebiet": [
+        {
+          "Titel": "test",
+          "Aufgabenbeschreibung": "test",
+          "UebungenListe": [
+            {
+              "Uebung_id": "7.1.1",
+              "UebungsBeschreibung": "test",
+              "Moeglichkeiten": [
+                [
+                  "test"
+                ],
+                [
+                  "test"
+                ],
+                [
+                  "test"
+                ]
+              ],
+              "KorrekteAntwort": 1,
+              "Infotext": "test"
+            }
+          ],
+          "IstSpeziell": false,
+          "Teilgebiet_id": "7.1"
+        }
+      ]
     }
   ]
 }
