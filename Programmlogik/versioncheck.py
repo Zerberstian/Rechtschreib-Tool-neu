@@ -134,10 +134,3 @@ if __name__ == "__main__":
     # aufgaben_data[0]['Teilgebiet'][0]['UebungenListe'][0]  -> First task
     print(f"🔵 {len(aufgaben_data)} exercise areas\n" + "=" * 60 + "\n")
     input("Press Enter to exit...")
-
-"""
-IMPORTANT: Versioning is currently local. Cache creation determines the version,
-so different users might have identical tasks but different version numbers
-==> This can be fixed by automatically writing the version during commits via
-    the editor, ensuring the actual version is always displayed and stored on GitHub
-"""
