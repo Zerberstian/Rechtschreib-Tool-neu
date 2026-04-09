@@ -65,8 +65,8 @@ def to_start():
 
 # Main style constants
 BG_Farbe = "#E0470A"        #Background Color Value (general)
-Btn_BG_Farbe = "#ffffff"    #Background Color (all Btn except Spinbox & Buttons)
-Btn_FG_Farbe = "#000000"    #BUtton fg Color
+Btn_BG_Farbe = "#E0470A"    #Background Color (all Btn except Spinbox & Buttons)
+Btn_FG_Farbe = "#FFFFFF"    #BUtton fg Color
 
 BtnFontGroesse = 30         #Button Font size (all Btn)
 inside_Padding_Y = 0       #Button Inside pady Value (Main Menu)
@@ -92,10 +92,13 @@ window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))      
 window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  # F12 = enter fullscreen
 window.title("Rechtschreibtool")                                                        # changing Title from tk to Rechtschreibtool
 window.configure(bg=BG_Farbe)                                                           # backround Color to SRH Color
-icon_path = os.path.join(project_root, "Assets", "srhIcon.png")
+
+icon_window_path = os.path.join(project_root, "Assets", "srhIcon.ico" \
+"")
+window.iconbitmap(icon_window_path)
+
+icon_path = os.path.join(project_root, "Assets", "srhIcon2.png")
 icon = PhotoImage(file=icon_path)
-window.iconphoto(True, icon)                                          # Changing the tk icon to srh icon
-window.iconphoto(True, icon)
 '''
 window.bind("<F4>", lambda event: show_color_picker())
 # ^ Hotkey for swaping Menu bc im genuinely about to crash out if i have to press Farbenwahl one more Time
@@ -120,6 +123,7 @@ def back_to_main_frame():
     MenuText.grid(row=1,column=1, sticky=NW)
     logicFrame.grid_forget()
     ColorPickerFrame.grid_forget()
+    
     try :
         Frame_Generation_Class.statistik_frame_list[-1].stats_hide()
     except IndexError:
@@ -290,7 +294,7 @@ SelectFrame = Frame(window, bg=BG_Farbe)
 
 # Frame for managing grid
 CheckBoxFrameS = Frame(SelectFrame, bg=BG_Farbe)
-CheckBoxFrameS.grid(row=1, column=1, sticky=N)
+CheckBoxFrameS.grid(row=1, column=1,  sticky=N)
 
 # Frame for managing grid
 ButtonFrameSB = Frame(SelectFrame, bg=BG_Farbe)
@@ -329,7 +333,7 @@ voidLabel = Label(SelectFrame, bg=BG_Farbe)
 voidLabel.grid(row=0, column=1, sticky=NW)
 
 # Iconlabel
-iconLabel = Label(MenuFrame, image=icon, bg=Btn_BG_Farbe)
+iconLabel = Label(MenuFrame, image=icon, bg=BG_Farbe)
 iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
 # Adding a big title
@@ -352,14 +356,32 @@ MenuText = Label(window,
 
 MenuText.grid(row=1,column=1, sticky=NW)
 
-# Button for starting the select options
-Button(MenuFrame,
-        text="Start",
+
+#defining a function for a default button
+def create_button(parent, text, command, **kwargs):
+    return Button(
+        parent,
+        text=text,
         font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        fg=Btn_FG_Farbe,
-        command=show_select_frame,
-        ).pack(anchor="w",fill="x", pady=5, ipady=inside_Padding_Y)
+        bg="#ffffff",
+        fg="#000000",
+        activebackground="#f2f2f2",
+        activeforeground="#000000",
+        bd=0,
+        highlightthickness=0,
+        padx=20,
+        pady=10,
+        command=command,
+        **kwargs  # erlaubt extra Parameter wie grid/pack später
+    )
+
+# Button for starting the select options
+create_button(
+    MenuFrame,
+    "Start",
+    show_select_frame
+).pack(anchor="w", fill="x", pady=8)
+
 '''
 # Button to open the color picker
 Button(MenuFrame,
@@ -367,68 +389,72 @@ Button(MenuFrame,
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=show_color_picker
-        ).pack(anchor="w",fill="x", pady=5)
+        ).pack(anchor="w",fill="x", pady=15)
 '''
 def not_ready():
     messagebox.showinfo("Info", "Aus zeitlichen Gründen wird dieses Feature zu einem späteren Zeitpunkt implementiert.")
 
 # Button to open the color picker
-Button(MenuFrame,
-        text="Farbwahl",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=not_ready,
-        ).pack(anchor="w",fill="x", pady=5)
+create_button(
+    MenuFrame,
+    "Farbwah",
+    not_ready
+).pack(anchor="w", fill="x", pady=8)
 
 # Button for going back to Main Menu
-Button(ButtonFrameSB,
-        text="zurück",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=back_to_main_frame,
-        ).pack(anchor="w" ,fill="x", pady=5, padx=5)
+create_button(
+    ButtonFrameSB,
+    "Zurück",
+    back_to_main_frame
+).pack(anchor="w", fill="x", pady=8)
+
 
 # Button for going back to Main Menu
 Button(ColorPickerBackFrame,
-        text="zurück",
+        text="Zurück",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=back_to_main_frame,
-        ).grid(row=0, column=0, pady=5, padx=5)
+        ).grid(row=0, column=0, pady=15, padx=5)
 
 # Button for going back to Main Menu
+
+
 Button(logicFrame,
-        text="abbrechen",
+        text="Abbrechen",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
+        bg=BG_Farbe,
+        fg=Btn_FG_Farbe,
+        bd=0,
+        highlightthickness=0,
         command=back_to_main_frame,
-        ).grid(row=0, column=0, padx=5, pady=5)
+        ).grid(row=0, column=0, padx=5, pady=15)
 
 Button(ColorPickerButtonFrame,
         text="Hintergrund",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_test_bg()).pack(anchor="w",fill="x", pady=5, padx=5)
+        command=lambda: pick_color_test_bg()).pack(anchor="w",fill="x", pady=15, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
-        command=lambda: pick_color_test_fg()).pack(anchor="w",fill="x", pady=5, padx=5)
+        command=lambda: pick_color_test_fg()).pack(anchor="w",fill="x", pady=15, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="reset color",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=lambda: reset_all_color()
-        ).pack(anchor="w",fill="x", pady=5, padx=5)
+        ).pack(anchor="w",fill="x", pady=15, padx=5)
 
 Button(ColorPickerButtonFrame,
         text="anwenden",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=lambda: pick_color_all()
-        ).pack(anchor="w",fill="x", pady=5, padx=5)
+        ).pack(anchor="w",fill="x", pady=15, padx=5)
 
 for widget in ColorPickerButtonFrame.winfo_children(): # disables all buttons in this frame
     if isinstance(widget, Button):
@@ -438,7 +464,7 @@ Label(ColorExampleFrame,
         text=f"Nomen-Verb-Adjektiv Teil 1\n",
         font=(BtnFontArt, BtnFontGroesse),
         bg="#ffffff",
-        fg="#000000").pack(anchor="n", pady=5, padx=5)
+        fg="#000000").pack(anchor="n", pady=15, padx=5)
 
 Label(ColorExampleFrame,
         text=f"Bitte die drei folgenden Wortarten unterscheiden:\n"
@@ -447,81 +473,79 @@ Label(ColorExampleFrame,
             f"Adjektive = beschreiben wie etwas ist: rot, warm, lang, schwer, eklig\n",
         font=(BtnFontArt, 20),
         bg="#ffffff",
-        fg="#000000").pack(anchor="n", pady=5, padx=5)
+        fg="#000000").pack(anchor="n", pady=15, padx=5)
 
 ColorExampleButtonFrame = Frame(ColorExampleFrame, bg="#ffffff")
-ColorExampleButtonFrame.pack(anchor="n", pady=5, padx=5)
+ColorExampleButtonFrame.pack(anchor="n", pady=15, padx=5)
 
 button1 = Button(
     ColorExampleButtonFrame,
     text="Nomen",
     font=(BtnFontArt, BtnFontGroesse),
 )
-button1.pack(side="left", pady=5, padx=5)
+button1.pack(side="left", pady=15, padx=5)
 button1.config(state=DISABLED)
 
 button2 = Button(ColorExampleButtonFrame,
         text="Verb",
         font=(BtnFontArt, BtnFontGroesse),
         )
-button2.pack(side="left", pady=5, padx=5)
+button2.pack(side="left", pady=15, padx=5)
 button2.config(state=DISABLED)
 
 button3 = Button(ColorExampleButtonFrame,
         text="Adjektiv",
         font=(BtnFontArt, BtnFontGroesse),
         )
-button3.pack(side="left", pady=5, padx=5)
+button3.pack(side="left", pady=15, padx=5)
 button3.config(state=DISABLED)
 
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
         text="10",
+        fg="#ffffff",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=callback_value_10,
-        ).grid(row=3, column=0, padx=5, pady=5, ipadx=15)
+        ).grid(row=3, column=0, padx=5, pady=15, ipadx=15)
 
 # Max 100 questions -> quickselct (logic)
 Button(SpinBoxFrame,
         text="100",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
+        fg="#ffffff",
         command=callback_value_100,
         ).grid(row=3,
             column=1,
             padx=5,
-            pady=5)
+            pady=15)
 
 # Button for explaination of the programm (it opens the PDF in same folder as the files)
-Button(MenuFrame,
-        text="Erklärung",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=open_instruction_pdf,
-        ).pack(anchor="w",
-            fill="x",
-            pady=5,
-            ipady=inside_Padding_Y)
+create_button(
+    MenuFrame,
+    "Erklärung",
+    open_instruction_pdf
+).pack(anchor="w", fill="x", pady=8)
+
+
 
 # sys exit
-Button(MenuFrame,
-        text="Beenden",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=sys.exit,).pack(anchor="w",
-                                fill="x",
-                                pady=5,
-                                ipady=inside_Padding_Y)
+create_button(
+    MenuFrame,
+    "Beenden",
+    sys.exit
+).pack(anchor="w", fill="x", pady=8)
 Label(SpinBoxFrame,
-        bg="#ffffff",
+        bg="#E0470A",
+        fg="#ffffff",
         text=f"Gib die Menge\n "
             f"an Aufgaben an:\n "
             f"(1-100)",
         font=("Arial", 18)).grid(row=0,
                                 column=0,
                                 columnspan=2,
-                                pady=5,
+                                pady=15,
                                 ipadx=13)
 
 # Spinbox
@@ -539,20 +563,24 @@ spinbox.insert(0, 10)  # Setting default value to 10
 spinbox.grid(row=2,
                 column=0,
                 columnspan=2,
-                pady=5,
+                pady=15,
                 ipadx=23)
 
-# Logic + extras
+
+
 Button(SpinBoxFrame,
-        bg=Btn_BG_Farbe,
+        bg=BG_Farbe,
+        fg="#ffffff",
         text="Start",
+        bd=0,
+        highlightthickness=0,
         font=(BtnFontArt, BtnFontGroesse),
-        command=to_start).grid(row=4,
+        command=to_start).grid( row=4,
                                 column=0,
                                 columnspan=2,
                                 ipadx=50,
                                 padx=5,
-                                pady=5)
+                                pady=15,)
 
 # Creating checkboxes
 BereichCheckbox(CheckBoxFrameS).create("#ffffff")
