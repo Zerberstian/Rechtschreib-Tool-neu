@@ -68,8 +68,8 @@ class BereichCheckbox:
                 text=f"{bereich}",
                 font=("Arial", 30),
                 bg="#ffffff",
-                highlightthickness=0,
-                bd=0,
+                highlightthickness=1,
+                bd=1,
                 variable=self.ausgeklappt_dict[f"{bereich}"],
                 onvalue=1,
                 offvalue=0,
@@ -92,11 +92,13 @@ class BereichCheckbox:
                 activebackground="#E0470A",
                 activeforeground="#ffffff",
                 font=("Arial", 28),
-                highlightthickness=0,
-                bd=0,
+                highlightthickness=1,
+                bd=1,
                 padx=20,
                 pady=1
             )
+            cb_ober.config(highlightbackground="red", highlightcolor="red", highlightthickness=10, relief=SOLID)
+
             cb_ober.grid(pady=8, padx=8, sticky=NSEW, column=0, row=0)
 
             # initial einfärben
@@ -110,12 +112,15 @@ class BereichCheckbox:
 
                 # Unter-Checkboxen nur setzen (ohne Farbe)
                 selected = ober_dict[bereich].get()
-
                 widgets = list(self.frame_dict[f"{bereich}2"].children.values())
+
                 for i, (titel, var) in enumerate(unter_dict[bereich].items()):
                     var.set(selected)
                     self.update_checkbox_color(widgets[i], var)
 
+                # Hauptkategorie aktualisieren
+                self.ausgeklappt_dict[bereich].set(1)
+                self.ausklappen(bereich)
             cb_ober.config(command=ober_command)
 
             # Unter-Checkboxen
