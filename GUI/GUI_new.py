@@ -65,8 +65,8 @@ def to_start():
 
 # Main style constants
 BG_Farbe = "#E0470A"        #Background Color Value (general)
-Btn_BG_Farbe = "#ffffff"    #Background Color (all Btn except Spinbox & Buttons)
-Btn_FG_Farbe = "#000000"    #BUtton fg Color
+Btn_BG_Farbe = "#E0470A"    #Background Color (all Btn except Spinbox & Buttons)
+Btn_FG_Farbe = "#FFFFFF"    #BUtton fg Color
 
 BtnFontGroesse = 30         #Button Font size (all Btn)
 inside_Padding_Y = 0       #Button Inside pady Value (Main Menu)
@@ -123,6 +123,7 @@ def back_to_main_frame():
     MenuText.grid(row=1,column=1, sticky=NW)
     logicFrame.grid_forget()
     ColorPickerFrame.grid_forget()
+    
     try :
         Frame_Generation_Class.statistik_frame_list[-1].stats_hide()
     except IndexError:
@@ -293,7 +294,7 @@ SelectFrame = Frame(window, bg=BG_Farbe)
 
 # Frame for managing grid
 CheckBoxFrameS = Frame(SelectFrame, bg=BG_Farbe)
-CheckBoxFrameS.grid(row=1, column=1, sticky=N)
+CheckBoxFrameS.grid(row=1, column=1,  sticky=N)
 
 # Frame for managing grid
 ButtonFrameSB = Frame(SelectFrame, bg=BG_Farbe)
@@ -380,6 +381,7 @@ create_button(
     "Start",
     show_select_frame
 ).pack(anchor="w", fill="x", pady=8)
+
 '''
 # Button to open the color picker
 Button(MenuFrame,
@@ -402,14 +404,14 @@ create_button(
 # Button for going back to Main Menu
 create_button(
     ButtonFrameSB,
-    "zurück",
+    "Zurück",
     back_to_main_frame
 ).pack(anchor="w", fill="x", pady=8)
 
 
 # Button for going back to Main Menu
 Button(ColorPickerBackFrame,
-        text="zurück",
+        text="Zurück",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=back_to_main_frame,
@@ -419,9 +421,12 @@ Button(ColorPickerBackFrame,
 
 
 Button(logicFrame,
-        text="abbrechen",
+        text="Abbrechen",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
+        bg=BG_Farbe,
+        fg=Btn_FG_Farbe,
+        bd=0,
+        highlightthickness=0,
         command=back_to_main_frame,
         ).grid(row=0, column=0, padx=5, pady=15)
 
@@ -498,6 +503,7 @@ button3.config(state=DISABLED)
 # Max 10 questions -> quickselct (logic)
 Button(SpinBoxFrame,
         text="10",
+        fg="#ffffff",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=callback_value_10,
@@ -508,6 +514,7 @@ Button(SpinBoxFrame,
         text="100",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
+        fg="#ffffff",
         command=callback_value_100,
         ).grid(row=3,
             column=1,
@@ -530,7 +537,8 @@ create_button(
     sys.exit
 ).pack(anchor="w", fill="x", pady=8)
 Label(SpinBoxFrame,
-        bg="#ffffff",
+        bg="#E0470A",
+        fg="#ffffff",
         text=f"Gib die Menge\n "
             f"an Aufgaben an:\n "
             f"(1-100)",
@@ -558,17 +566,21 @@ spinbox.grid(row=2,
                 pady=15,
                 ipadx=23)
 
-# Logic + extras
+
+
 Button(SpinBoxFrame,
-        bg=Btn_BG_Farbe,
+        bg=BG_Farbe,
+        fg="#ffffff",
         text="Start",
+        bd=0,
+        highlightthickness=0,
         font=(BtnFontArt, BtnFontGroesse),
-        command=to_start).grid(row=4,
+        command=to_start).grid( row=4,
                                 column=0,
                                 columnspan=2,
                                 ipadx=50,
                                 padx=5,
-                                pady=15)
+                                pady=15,)
 
 # Creating checkboxes
 BereichCheckbox(CheckBoxFrameS).create("#ffffff")
