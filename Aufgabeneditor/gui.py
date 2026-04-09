@@ -42,7 +42,6 @@ class AufgabenGUI:
         # Perform cleanup of old temporary directories to keep the workspace clean
         editor.cleanup_old_temps(os.path.dirname(editor.__file__), 'temp_repo')
 
-        self.setup_styles()
         self.create_widgets()
         
         # Track the currently selected category and sub-category
@@ -333,7 +332,7 @@ class AufgabenGUI:
             self.data.append({"Uebungsbereich": name.strip(), "Teilgebiet": []})
             self.refresh_bereiche()
 
-    def edit_bereich(self):
+    def edit_bereich(self): 
         if self.current_bereich_idx is None: return
         old = self.data[self.current_bereich_idx]["Uebungsbereich"]
         new = simpledialog.askstring("Bearbeiten", "Neuer Kategoriename:", initialvalue=old)
