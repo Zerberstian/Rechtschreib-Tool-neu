@@ -1,6 +1,8 @@
-# Currently, tasks must be manually edited and pushed to [https://github.com/orphcvs/Aufgabenkatalog/tree/main]
-# as the editor is not yet implemented
-# However, version checking and auto-update on program startup work when changes are made
+
+"""
+NOTICE: This programm should be started when the user opens the programm - A Quick Popup should notice the User of Updates if available - And reload the tasklist automatically - Blocking Userinput for that short Timeframe.
+The Taskcatalogue is located here: https://github.com/orphcvs/Aufgabenkatalog/tree/main
+"""
 
 import requests
 import json
