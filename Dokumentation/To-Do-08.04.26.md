@@ -2,7 +2,7 @@
 ## nach dem Praktikum ist noch zu tun:
 
 
-- design der Statistik augenfreundlicher machen
+- design der Statistik augenfreundlicher machen/responsive 
 - Textausgabe der Aufgaben in Statistik formatieren 
 - design der Aufgaben anpassen (z.B. Frame zentrieren)
 - Einlesen in Logik und optimiren/bessere lösung finden für "isSpecial" Aufgaben
