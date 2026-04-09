@@ -62,7 +62,7 @@ class BereichCheckbox:
                         offvalue=0,
                         command=partial(BereichCheckbox.toggle_unter_dict, self, bereich),
                         ).grid(pady=5, padx=5,sticky=NSEW, column=0, row=0)
-            for titelindex, titel in enumerate(json_laden_logik.list_titels(bereich)):
+            for titelindex, titel in enumerate(json_laden_logik.list_teilgebiet_titels(bereich)):
                 var = IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
                 box = Checkbutton(self.frame_dict[f"{bereich}2"],
