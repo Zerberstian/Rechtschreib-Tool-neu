@@ -8,13 +8,13 @@ class AufgabenkatalogDto:
                  etag: str,
                  total_aufgaben: int,
                  size: int,
-                 data: list[UebungsbereichDto]):
+                 data: list[UebungsbereichDto] | None):
         self.version: int = version
         self.last_updated: str = last_updated
         self.etag: str = etag
         self.total_aufgaben: int = total_aufgaben
         self.size: int = size
-        self.data: list[UebungsbereichDto] = data
+        self.data: list[UebungsbereichDto] | None = data
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "AufgabenkatalogDto":
@@ -24,5 +24,8 @@ class AufgabenkatalogDto:
             etag=data["etag"],
             total_aufgaben=data["totalAufgaben"],
             size=data["size"],
-            data=[UebungsbereichDto.from_dict(i) for i in data["data"]]
+            data=[UebungsbereichDto.from_dict(i)
+                  for i in data["data"]]
+                  if ("data" in data and data["data"] != [])
+                  else None
         )
