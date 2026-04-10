@@ -189,5 +189,5 @@ def get_active():
 if __name__ == "__main__":
     json_laden_logik.jsonladen()
     root = Tk()
-    BereichCheckbox(root).create("#E0470A")
+    BereichCheckbox(root).create("#FFFFFF")
     root.mainloop()

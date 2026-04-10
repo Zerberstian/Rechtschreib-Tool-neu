@@ -45,7 +45,7 @@ def start_logic():
     print(spinbox.get(), "= value check 2")
     aufgaben_logik.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
-    Frame_Generation_Class.aufgaben_frame_generation(logicFrame, BtnFontArt)
+    Frame_Generation_Class.aufgaben_frame_generation(aufgaben_container, BtnFontArt)
 
     #aufgaben_logik.aufgaben_anfangen_konsole()
     #aufgaben_logik.statistik_ausgeben()
@@ -107,9 +107,19 @@ window.bind("<F3>", lambda event: back_to_main_frame())
 '''
 # Changing between frames
 def show_start_frame():
-    logicFrame.grid(row=0, column=0, sticky=NW)
-    SelectFrame.place_forget()
+    logicFrame.grid(row=0, column=0, sticky="nsew")
 
+    logicFrame.grid_rowconfigure(0, weight=1)
+    logicFrame.grid_rowconfigure(1, weight=0)
+
+
+    # 👉 NEU: Container für Aufgaben
+    global aufgaben_container
+    aufgaben_container = Frame(logicFrame, bg=BG_Farbe)
+    aufgaben_container.grid(row=1, column=1, sticky="nsew", padx=100 )
+
+    SelectFrame.place_forget()
+    
 def show_select_frame():
     MenuFrame.grid_forget()
     headline.grid_forget()
@@ -427,8 +437,8 @@ Button(logicFrame,
         fg=Btn_FG_Farbe,
         bd=0,
         highlightthickness=0,
-        command=back_to_main_frame,
-        ).grid(row=0, column=0, padx=5, pady=15)
+        command=back_to_main_frame, 
+        ).grid(row=0, column=1, pady=20 , padx=100, sticky="nws")
 
 Button(ColorPickerButtonFrame,
         text="Hintergrund",

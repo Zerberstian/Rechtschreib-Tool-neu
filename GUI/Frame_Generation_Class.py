@@ -22,9 +22,9 @@ class StatistikFrame:
 
         self.frame = tk.Frame(self.master)
         self.frame2 = tk.Frame(self.frame)
-        self.frame2.grid(row=0, column=0)
+        self.frame2.grid(row=0, column=1)
         self.frame3 = tk.Frame(self.frame)
-        self.frame3.grid(row=0, column=1, ipadx=60)
+        self.frame3.grid(row=0, column=2, ipadx=60)
         self.gesamt_label = tk.Label(self.frame2, text=self.stats_gesamt, font=self.font)
         self.gesamt_label.pack(fill="both",expand=True, padx=5, pady=5)
         self.falschen_text = tk.Text(self.frame2,
@@ -73,9 +73,23 @@ class AufgabenFrame:
         aufgaben_frame_dict[self.frame_id] = self
 
         self.frame = tk.Frame(self.master)
+        self.master.grid_rowconfigure(0, weight=1)
+        self.master.grid_columnconfigure(0, weight=1)
+        # Outer Frame (füllt alles)
         self.frame2 = tk.Frame(self.frame)
         self.frame2.pack(fill="both", expand=True)
-        self.aufgabenbeschreibung_textbox = tk.Text(self.frame2,
+
+        # 👉 NEU: Center-Container
+        self.center_frame = tk.Frame(self.frame2)
+        self.frame2.grid_rowconfigure(0, weight=1)
+        self.frame2.grid_rowconfigure(1, weight=0)
+        self.frame2.grid_rowconfigure(2, weight=1)
+
+        self.frame2.grid_columnconfigure(0, weight=1)
+
+        self.center_frame = tk.Frame(self.frame2)
+        self.center_frame.grid(row=1, column=0)
+        self.aufgabenbeschreibung_textbox = tk.Text(self.center_frame,
                                                   height=11,
                                                   font=(self.font, 20),
                                                   wrap="word")
@@ -86,7 +100,7 @@ class AufgabenFrame:
         self.aufgabenbeschreibung_textbox.config(state="disabled")
 
         self.aufgabenbeschreibung_textbox.pack()
-        self.buttonframe = tk.Frame(self.frame2)
+        self.buttonframe = tk.Frame(self.center_frame)
         self.buttonframe.pack()
         for index, antwort_moeglichkeit in enumerate(aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten):
             btn = tk.Button(
@@ -102,7 +116,7 @@ class AufgabenFrame:
             )
             btn.grid(row=0, column=index, padx=1, pady=1)
     def show(self):
-        self.frame.grid(row = 1, column = 1)
+        self.frame.grid(row=0, column=0, sticky="nsew")
 
     def hide(self):
         self.frame.grid_forget()
