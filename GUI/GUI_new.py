@@ -293,7 +293,7 @@ MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)
 SelectFrame = Frame(window, bg=BG_Farbe)
 
 # Frame for managing grid
-CheckBoxFrameS = Frame(SelectFrame, bg=BG_Farbe)
+CheckBoxFrameS = Frame(SelectFrame, highlightthickness=0, bd=0, bg=BG_Farbe)
 CheckBoxFrameS.grid(row=1, column=1,  sticky=N)
 
 # Frame for managing grid
@@ -589,6 +589,7 @@ BereichCheckbox(CheckBoxFrameS).create("#ffffff")
 Franzosen Grrr
 щ(゜ロ゜щ)
 jk
+
 '''
 
 

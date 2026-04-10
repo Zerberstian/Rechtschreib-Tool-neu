@@ -31,10 +31,12 @@ class BereichCheckbox:
                 cb_widget.config(fg="#E0470A")  # orange
             else:
                 cb_widget.config(fg="#000000")  # schwarz
-            
+
+
     # Creates canvas with checkboxes
     def create(self,color):
-        canvas_for_checkbox = Canvas(self.master, height=432)
+        
+        canvas_for_checkbox = Canvas(self.master, height=600)
         vertical_scrollbar = Scrollbar(self.master, command=canvas_for_checkbox.yview)
         main_checkbox_frame = Frame(canvas_for_checkbox, bg=color)
         canvas_for_checkbox.create_window((0,0),anchor="nw" ,  window=main_checkbox_frame)
@@ -42,6 +44,10 @@ class BereichCheckbox:
         vertical_scrollbar.pack(side="right", fill="y")
         canvas_for_checkbox.pack(expand=True, fill="both")
 
+        def _on_mousewheel(event):
+            canvas_for_checkbox.yview_scroll(int(-1*(event.delta/120)), "units")
+
+        canvas_for_checkbox.bind_all("<MouseWheel>", _on_mousewheel)
 
 
         def on_configure(event):
@@ -58,7 +64,7 @@ class BereichCheckbox:
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
             frame.pack(fill="both")
-            frame2 = Frame(frame, bg="white")
+            frame2 = Frame(frame, bg="#FFFFFF")
             self.frame_dict[f"{bereich}2"] = frame2
             self.ausgeklappt_dict[f"{bereich}"] = IntVar(value=0)
 
@@ -183,5 +189,5 @@ def get_active():
 if __name__ == "__main__":
     json_laden_logik.jsonladen()
     root = Tk()
-    BereichCheckbox(root).create("#ffffff")
+    BereichCheckbox(root).create("#E0470A")
     root.mainloop()
