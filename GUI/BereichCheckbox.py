@@ -1,22 +1,22 @@
 from functools import partial
-from tkinter import *
+from tkinter import * # type: ignore
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import json_laden_logik
 
 
-ober_dict = {}
-unter_dict = {}
+ober_dict: dict[str, IntVar] = {}
+unter_dict: dict[str, dict[str, IntVar]] = {}
 
 class BereichCheckbox:
-    def __init__(self, master):
-        self.master = master
-        self.frame_dict = {}
-        self.ausgeklappt_dict = {}
-        self.checkbox_list = []
+    def __init__(self, master: Tk):
+        self.master: Tk = master
+        self.frame_dict: dict[str, Frame] = {}
+        self.ausgeklappt_dict: dict[str, IntVar] = {}
+        self.checkbox_list: list[Checkbutton] = []
 
     # Funktion innerhalb der Klasse BereichCheckbox
-    def update_checkbox_color(self, cb_widget, var, is_ober=False):
+    def update_checkbox_color(self, cb_widget: Checkbutton, var: IntVar, is_ober: bool = False):
         """Färbt Ober-Checkbox komplett, Unter-Checkbox nur Text."""
         
         if is_ober:
@@ -33,18 +33,16 @@ class BereichCheckbox:
                 cb_widget.config(fg="#000000")  # schwarz
             
     # Creates canvas with checkboxes
-    def create(self,color):
+    def create(self,color: str):
         canvas_for_checkbox = Canvas(self.master, height=432)
-        vertical_scrollbar = Scrollbar(self.master, command=canvas_for_checkbox.yview)
+        vertical_scrollbar = Scrollbar(self.master, command=canvas_for_checkbox.yview) # type: ignore
         main_checkbox_frame = Frame(canvas_for_checkbox, bg=color)
         canvas_for_checkbox.create_window((0,0),anchor="nw" ,  window=main_checkbox_frame)
         canvas_for_checkbox.configure(yscrollcommand=vertical_scrollbar.set)
         vertical_scrollbar.pack(side="right", fill="y")
         canvas_for_checkbox.pack(expand=True, fill="both")
 
-
-
-        def on_configure(event):
+        def on_configure(_: Event) -> None:
             canvas_for_checkbox.configure(scrollregion=canvas_for_checkbox.bbox("all"))
             canvas_for_checkbox.update_idletasks()
             canvas_for_checkbox.config(
@@ -53,7 +51,7 @@ class BereichCheckbox:
         main_checkbox_frame.bind("<Configure>", on_configure)
 
         # Fills checkboxes with "Uebungsbereich"
-        for index, bereich in enumerate(json_laden_logik.list_uebungsbereiche()):
+        for _, bereich in enumerate(json_laden_logik.list_uebungsbereiche()):
             frame = Frame(main_checkbox_frame, bg=color)
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
@@ -105,7 +103,7 @@ class BereichCheckbox:
             self.update_checkbox_color(cb_ober, ober_dict[bereich], is_ober=True)
 
             # Farb-Update beim Klick
-            def ober_command(bereich=bereich, cb=cb_ober):
+            def ober_command(bereich: str = bereich, cb: Checkbutton = cb_ober):
                 
                 # Farbe der Ober-Checkbox aktualisieren
                 self.update_checkbox_color(cb, ober_dict[bereich], is_ober=True)
@@ -114,9 +112,11 @@ class BereichCheckbox:
                 selected = ober_dict[bereich].get()
                 widgets = list(self.frame_dict[f"{bereich}2"].children.values())
 
-                for i, (titel, var) in enumerate(unter_dict[bereich].items()):
+                for i, (_, var) in enumerate(unter_dict[bereich].items()):
+                    wid = widgets[i]
                     var.set(selected)
-                    self.update_checkbox_color(widgets[i], var)
+                    if isinstance(wid, Checkbutton):
+                        self.update_checkbox_color(wid, var)
 
                 # Hauptkategorie aktualisieren
                 self.ausgeklappt_dict[bereich].set(1)
@@ -124,7 +124,7 @@ class BereichCheckbox:
             cb_ober.config(command=ober_command)
 
             # Unter-Checkboxen
-            for titelindex, titel in enumerate(json_laden_logik.list_teilgebiet_titels(bereich)):
+            for _, titel in enumerate(json_laden_logik.list_teilgebiet_titels(bereich)):
                 var = IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
                 cb_box = Checkbutton(
@@ -143,36 +143,40 @@ class BereichCheckbox:
                 cb_box.pack(anchor="w", pady=2, padx=5)
 
                 # Farb-Update bei Klick
-                def box_command(var=var, cb=cb_box, bereich=bereich):
+                def box_command(var: IntVar = var,
+                                cb: Checkbutton = cb_box,
+                                bereich: str = bereich) -> None:
                     self.update_checkbox_color(cb, var)
                     self.update_hauptkategorie(bereich)
                 cb_box.config(command=box_command)
                 self.update_checkbox_color(cb_box, var)  # initial
 
-    def ausklappen(self, bereich):
+    def ausklappen(self, bereich: str) -> None:
         if self.ausgeklappt_dict[bereich].get() == 1:
             self.frame_dict[f"{bereich}2"].grid(sticky="W", column=1, row=1)
             # Unter-Checkboxen beim Öffnen einfärben
             widgets = list(self.frame_dict[f"{bereich}2"].children.values())
-            for i, (titel, var) in enumerate(unter_dict[bereich].items()):
-                self.update_checkbox_color(widgets[i], var)
+            for i, (_, var) in enumerate(unter_dict[bereich].items()):
+                wid = widgets[i]
+                if isinstance(wid, Checkbutton):
+                    self.update_checkbox_color(wid, var)
         else:
             self.frame_dict[f"{bereich}2"].grid_forget()
 
-    def toggle_unter_dict(self,bereich):
+    def toggle_unter_dict(self,bereich: str) -> None:
         wert = ober_dict[f"{bereich}"].get()
         for var in unter_dict[f"{bereich}"].values():
             var.set(wert)
 
-    def update_hauptkategorie(self, haupt):
+    def update_hauptkategorie(self, haupt: str) -> None:
         if all(var.get() for var in unter_dict[haupt].values()):
             ober_dict[haupt].set(1)
         else:
             ober_dict[haupt].set(0)
 
-def get_active():
-    aktiv = []
-    for bereich, titel_var in unter_dict.items():
+def get_active() -> list[str]:
+    aktiv: list[str] = []
+    for _, titel_var in unter_dict.items():
         for titel, var in titel_var.items():
             if var.get() == 1:
                 aktiv.append(titel)
