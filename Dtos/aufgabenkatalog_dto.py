@@ -18,6 +18,11 @@ class AufgabenkatalogDto:
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "AufgabenkatalogDto":
+        uebungsbereiche: list[Any] | dict[str, Any] = data.get('data', [])
+
+        if not isinstance(uebungsbereiche, list):
+            uebungsbereiche = [uebungsbereiche]
+
         return AufgabenkatalogDto(
             version=data["version"],
             last_updated=data["lastUpdated"],
@@ -25,7 +30,20 @@ class AufgabenkatalogDto:
             total_aufgaben=data["totalAufgaben"],
             size=data["size"],
             data=[UebungsbereichDto.from_dict(i)
-                  for i in data["data"]]
-                  if ("data" in data and data["data"] != [])
+                  for i in uebungsbereiche]
+                  if uebungsbereiche
                   else None
         )
+    
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "version": self.version,
+            "lastUpdated": self.last_updated,
+            "etag": self.etag,
+            "totalAufgaben": self.total_aufgaben,
+            "size": self.size,
+            "data": [i.to_dict()
+                     for i in self.data]
+                     if self.data
+                     else None
+        }

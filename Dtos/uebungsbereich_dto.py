@@ -12,11 +12,26 @@ class UebungsbereichDto:
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "UebungsbereichDto":
+        teilgebiet: list[Any] | dict[str, Any] = data.get("Teilgebiet", [])
+
+        if not isinstance(teilgebiet, list):
+            teilgebiet = [teilgebiet]
+
         return UebungsbereichDto(
             uebungsbereich=data["Uebungsbereich"],
             uebungsbereich_id=data["Uebungsbereich_id"],
             teilgebiete=[TeilgebietDto.from_dict(i)
-                         for i in data["Teilgebiet"]]
-                         if ("Teilgebiet" in data and data["Teilgebiet"] != [])
+                         for i in teilgebiet]
+                         if teilgebiet
                          else None,
         )
+    
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "Uebungsbereich": self.uebungsbereich,
+            "Uebungsbereich_id": self.uebungsbereich_id,
+            "Teilgebiet": [i.to_dict()
+                           for i in self.teilgebiete]
+                           if self.teilgebiete
+                           else None
+        }

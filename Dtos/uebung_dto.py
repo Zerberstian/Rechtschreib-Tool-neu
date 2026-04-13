@@ -22,3 +22,12 @@ class UebungDto:
             uebungs_beschreibung=data["uebungs_beschreibung"],
             uebung_id=data["uebung_id"]
         )
+    
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "moeglichkeiten": self.moeglichkeiten,
+            "korrekte_antwort": self.korrekte_antwort,
+            "infotext": self.infotext,
+            "uebungs_beschreibung": self.uebungs_beschreibung,
+            "uebung_id": self.uebung_id
+        }
