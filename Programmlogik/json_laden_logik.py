@@ -92,5 +92,3 @@ def get_aufgabenbeschreibung(teilgebiet_id: str) -> str:
             if teilgebiet_id == teilgebiet.teilgebiet_id:
                 return teilgebiet.aufgabenbeschreibung
     return ""
-
-jsonladen()
