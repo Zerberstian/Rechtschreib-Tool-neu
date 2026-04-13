@@ -159,7 +159,7 @@ def aufgabe_bearbeiten_konsole(index: int, aufgabe: Aufgabe):
     antwort = int_input()
     antwort_check(antwort, aufgabe, index)
 
-def aufgaben_obejekte_erstellen():
+def aufgaben_objekte_erstellen():
     for eintrag in list_uebungen(list_teilgebiet_titels(list_uebungsbereiche())):
         Aufgabe(eintrag)
 
@@ -249,7 +249,6 @@ def resetting():
     korrigiert_beantwortet.clear()
     falsche_antwort_dict.clear()
 
-aufgaben_obejekte_erstellen()
 
 if __name__ == "__main__":
     root = Tk()
