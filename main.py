@@ -24,8 +24,8 @@ sys.path.insert(0, BASE_DIR)
 from GUI.GUI_new import *  # importing GUI completely
 from GUI.BereichCheckbox import BereichCheckbox
 try:
+    import Programmlogik.aufgaben_logik as aufgaben_logik
     from Programmlogik.json_laden_logik import list_uebungen
-    from Programmlogik.aufgaben_logik import *
 except ImportError:
     print("Warnung: Programmlogik Module nicht gefunden")
 
