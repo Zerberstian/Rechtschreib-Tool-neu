@@ -1,3 +1,4 @@
+# type: ignore
 import sys
 import os
 import Programmlogik.json_laden_logik
@@ -9,10 +10,8 @@ Programmlogik.json_laden_logik.jsonladen()
 Programmlogik.aufgaben_logik.aufgaben_objekte_erstellen()
 
 # dynamic base-path (important when trying to create .exe)
-if getattr(sys, 'frozen', False):
-    BASE_DIR = sys._MEIPASS
-else:
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR: str = (sys._MEIPASS if getattr(sys, 'frozen', False)
+                 else os.path.dirname(os.path.abspath(__file__)))
 
 # relative import of the modules (relative regarding BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'GUI'))
