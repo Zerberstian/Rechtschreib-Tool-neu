@@ -23,7 +23,7 @@ def list_uebungsbereiche() -> list[str]:
 # Function to list every "Teilgebiet" of an "Uebungsbereich"
 def list_teilgebiet_titels(bereich_input: str | list[str]) -> list[str]:
     titels: list[str] = []
-    bereiche = bereich_input if type(bereich_input) == list else [bereich_input]
+    bereiche = bereich_input if isinstance(bereich_input, list) else [bereich_input]
 
     if not aufgabenkatalog.data:
         return titels
@@ -38,7 +38,7 @@ def list_teilgebiet_titels(bereich_input: str | list[str]) -> list[str]:
 # Function to list "UebungenListe" of a "Teilgebiet"
 def list_uebungen(teilgebiet_titels: str | list[str]) -> list[str]:
     aufgaben_liste: list[str] = []
-    titels = teilgebiet_titels if type(teilgebiet_titels) == list else [teilgebiet_titels]
+    titels = teilgebiet_titels if isinstance(teilgebiet_titels, list) else [teilgebiet_titels]
 
     if not aufgabenkatalog.data:
         return aufgaben_liste
