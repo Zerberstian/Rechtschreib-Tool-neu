@@ -18,8 +18,8 @@ class UebungsbereichDto:
             teilgebiet = [teilgebiet]
 
         return UebungsbereichDto(
-            uebungsbereich=data["Uebungsbereich"],
-            uebungsbereich_id=data["Uebungsbereich_id"],
+            uebungsbereich=data.get("Uebungsbereich", ""),
+            uebungsbereich_id=data.get("Uebungsbereich_id", 0),
             teilgebiete=[TeilgebietDto.from_dict(i)
                          for i in teilgebiet]
                          if teilgebiet

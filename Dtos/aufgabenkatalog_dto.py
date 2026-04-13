@@ -24,11 +24,11 @@ class AufgabenkatalogDto:
             uebungsbereiche = [uebungsbereiche]
 
         return AufgabenkatalogDto(
-            version=data["version"],
-            last_updated=data["lastUpdated"],
-            etag=data["etag"],
-            total_aufgaben=data["totalAufgaben"],
-            size=data["size"],
+            version=data.get("version", 0),
+            last_updated=data.get("lastUpdated", ""),
+            etag=data.get("etag", ""),
+            total_aufgaben=data.get("totalAufgaben", 0),
+            size=data.get("size", 0),
             data=[UebungsbereichDto.from_dict(i)
                   for i in uebungsbereiche]
                   if uebungsbereiche

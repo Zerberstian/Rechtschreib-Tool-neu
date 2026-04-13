@@ -26,12 +26,12 @@ class TeilgebietDto:
             uebungsliste = [uebungsliste]
 
         return TeilgebietDto(
-            titel=data["Titel"],
-            aufgabenbeschreibung=data["Aufgabenbeschreibung"],
-            ist_speziell=data["IstSpeziell"],
-            is_checked=data["IsChecked"],
-            expanded=data["Expanded"],
-            teilgebiet_id=data["Teilgebiet_id"],
+            titel=data.get("Titel", ""),
+            aufgabenbeschreibung=data.get("Aufgabenbeschreibung", ""),
+            ist_speziell=data.get("IstSpeziell", False),
+            is_checked=data.get("IsChecked", False),
+            expanded=data.get("Expanded", False),
+            teilgebiet_id=data.get("Teilgebiet_id", ""),
             uebungsliste=[UebungDto.from_dict(i)
                           for i in uebungsliste]
                           if uebungsliste

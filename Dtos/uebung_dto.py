@@ -16,11 +16,11 @@ class UebungDto:
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "UebungDto":
         return UebungDto(
-            moeglichkeiten=data["Moeglichkeiten"],
-            korrekte_antwort=data["KorrekteAntwort"],
-            infotext=data["Infotext"],
-            uebungs_beschreibung=data["UebungsBeschreibung"],
-            uebung_id=data["Uebung_id"]
+            moeglichkeiten=data.get("Moeglichkeiten", []),
+            korrekte_antwort=data.get("KorrekteAntwort", 0),
+            infotext=data.get("Infotext", None),
+            uebungs_beschreibung=data.get("UebungsBeschreibung", ""),
+            uebung_id=data.get("Uebung_id", "")
         )
     
     def to_dict(self) -> dict[str, Any]:
