@@ -14,7 +14,7 @@ richtig_beantwortet: list[str] = []
 korrigiert_beantwortet: list[str] = []
 
 class Aufgabe:
-    def __init__(self, uebung_id: str):
+    def __init__(self, uebung_id: str) -> None:
         self.__wiederholt = False
         self.uebung_id = uebung_id
         aufgabe = aufgabe_lesen(uebung_id)
@@ -47,17 +47,21 @@ class Aufgabe:
             return "Speziell Satz"
 
 # Skulldunno warum ich das Privat gemacht habe
-    def set_wiederholt(self):
+    def set_wiederholt(self) -> None:
         if not self.__wiederholt:
             self.__wiederholt = True
         else:
             self.__wiederholt = False
 
-    def get_wiederholt(self):
+    def get_wiederholt(self) -> bool:
         return self.__wiederholt
 
 class FalscheAntwort:
-    def __init__(self, uebung_id: str, antwort: str, korrekte_antwort: str, wiederholt: bool):
+    def __init__(self,
+                 uebung_id: str,
+                 antwort: str,
+                 korrekte_antwort: str,
+                 wiederholt: bool) -> None:
         self.__wiederholt = wiederholt
         if not self.__wiederholt:
             self.uebung_id = uebung_id
@@ -68,7 +72,7 @@ class FalscheAntwort:
 
         falsche_antwort_dict[self.uebung_id] = self
 
-    def get_wiederholt(self):
+    def get_wiederholt(self) -> bool:
         return self.__wiederholt
     
 # Randomly picks exercises from chosen "Teilgebiet" until limit is reached
@@ -88,7 +92,7 @@ def aufgaben_picken(limit: int) -> bool:
             break
     return True
 
-def moeglichkeiten_listen(aufgabe: Aufgabe):
+def moeglichkeiten_listen(aufgabe: Aufgabe) -> None:
     for _, entry in enumerate(aufgabe.moeglichkeiten):
         print(entry)
 
@@ -120,10 +124,10 @@ def antwort_check(antwort: int, aufgabe: Aufgabe, index: int) -> bool:
             falsch_merken(index, aufgabe, antwort)
             return False
 
-def korrigierte_merken(aufgabe: Aufgabe):
+def korrigierte_merken(aufgabe: Aufgabe) -> None:
     korrigiert_beantwortet.append(aufgabe.uebung_id)
 
-def richtig_merken(aufgabe: Aufgabe):
+def richtig_merken(aufgabe: Aufgabe) -> None:
     richtig_beantwortet.append(aufgabe.uebung_id)
 
 def antwort_finden(aufgabe: Aufgabe, antwort: int) -> str:
@@ -132,7 +136,7 @@ def antwort_finden(aufgabe: Aufgabe, antwort: int) -> str:
     except IndexError:
         return "Antwort außerhalb des gültigen Mengenbereiches."
 
-def falsch_merken(index: int, aufgabe: Aufgabe, antwort: int):
+def falsch_merken(index: int, aufgabe: Aufgabe, antwort: int) -> None:
     FalscheAntwort(aufgabe.uebung_id,
                    antwort_finden(aufgabe,antwort),
                    aufgabe.moeglichkeiten[(aufgabe.korrekt-1)],
@@ -143,14 +147,14 @@ def falsch_merken(index: int, aufgabe: Aufgabe, antwort: int):
         falsch_beantwortet_einfuegen(index, aufgabe.uebung_id)
 
 # Inserts exercises that were  answered wrong at a random spot in "aufgaben_liste"
-def falsch_beantwortet_einfuegen(index: int, aufgabe: str):
+def falsch_beantwortet_einfuegen(index: int, aufgabe: str) -> None:
     try:
         random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list))
         zu_loesende_aufgaben_list.insert(random_index, aufgabe)
     except ValueError:
         print("Der Index ist nicht gefunden!")
 
-def aufgabe_bearbeiten_konsole(index: int, aufgabe: Aufgabe):
+def aufgabe_bearbeiten_konsole(index: int, aufgabe: Aufgabe) -> None:
     if aufgabe.get_wiederholt():
         print("WIEDERHOLUNG_________!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! deutlich genug?")
     print(aufgabe.aufgabenbeschreibung, '\n')
@@ -159,25 +163,25 @@ def aufgabe_bearbeiten_konsole(index: int, aufgabe: Aufgabe):
     antwort = int_input()
     antwort_check(antwort, aufgabe, index)
 
-def aufgaben_objekte_erstellen():
+def aufgaben_objekte_erstellen() -> None:
     for eintrag in list_uebungen(list_teilgebiet_titels(list_uebungsbereiche())):
         Aufgabe(eintrag)
 
-def list_aktive_aufgaben():
+def list_aktive_aufgaben() -> None:
     for eintrag in list_uebungen(get_active()):
         ausgewaehlte_aufgaben.append(eintrag)
 
-def aufgaben_initialisieren(aufgaben_limit: int):
+def aufgaben_initialisieren(aufgaben_limit: int) -> None:
     list_aktive_aufgaben()
     if aufgaben_picken(aufgaben_limit):
         return
 
-def aufgaben_anfangen_konsole():
+def aufgaben_anfangen_konsole() -> None:
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
         aufgabe_bearbeiten_konsole(index, aufgaben_dict[aufgabe])
 
-def statistik_ausgeben():
+def statistik_ausgeben() -> tuple[list[str], list[str], list[str], str]:
     """
     stats_der_richtigen()
     stats_der_falschen()
@@ -232,14 +236,14 @@ def stats_der_korrigierten() -> list[str]:
         antworten_liste.append(antwort)
     return antworten_liste
 
-def button_start():
+def button_start() -> None:
     aufgaben_initialisieren(5)
     aufgaben_anfangen_konsole()
     statistik_ausgeben()
 
 # Clears all dictionaries
 
-def resetting():
+def resetting() -> None:
     for eintrag in aufgaben_dict:
         aufgaben_dict[eintrag].set_wiederholt()
     ausgewaehlte_aufgaben.clear()
