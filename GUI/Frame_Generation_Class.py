@@ -11,7 +11,7 @@ statistik_frame_list: list["StatistikFrame"] = []
 
 class StatistikFrame:
     def __init__(self,
-                 master: tk.Tk,
+                 master: tk.Tk | tk.Frame,
                  font: str,
                  stats: tuple[list[str], list[str], list[str], str]):
         self.master = master
@@ -82,7 +82,7 @@ class StatistikFrame:
         self.frame.grid_forget()
 
 class AufgabenFrame:
-    def __init__(self, uebung_id: str, master: tk.Tk, font: str):
+    def __init__(self, uebung_id: str, master: tk.Tk | tk.Frame, font: str):
         self.frame_id = len(aufgaben_frame_dict)
         self.uebung_id = uebung_id
         self.master = master
@@ -175,7 +175,7 @@ class AufgabenFrame:
         frame.update()
         self.master.after(1000, self.warten)
 
-def aufgaben_frame_generation(master: tk.Tk, font: str) -> None:
+def aufgaben_frame_generation(master: tk.Tk | tk.Frame, font: str) -> None:
     try:
         aufgabe = aufgaben_logik.zu_loesende_aufgaben_list[len(aufgaben_frame_dict)]
     except IndexError:
@@ -187,7 +187,7 @@ def aufgaben_frame_generation(master: tk.Tk, font: str) -> None:
     aufgaben_frame_dict[len(aufgaben_frame_dict)-1].show()
     return print("Deine Aufgabe wurde geladen")
 
-def statistik_frame_generation(master: tk.Tk, font: str) -> None:
+def statistik_frame_generation(master: tk.Tk | tk.Frame, font: str) -> None:
     StatistikFrame(master, font, aufgaben_logik.statistik_ausgeben())
     aufgaben_logik.resetting()
     statistik_frame_list[-1].stats_show()
