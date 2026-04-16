@@ -255,8 +255,8 @@ def resetting() -> None:
 
 
 if __name__ == "__main__":
-    root = Tk()
+    root: tk.Tk = tk.Tk()
     #BereichCheckbox(root).create("#ffffff")
-    start = Button(root, text="Start", command=button_start)
+    start = tk.Button(root, text="Start", command=button_start)
     start.pack()
     root.mainloop()
