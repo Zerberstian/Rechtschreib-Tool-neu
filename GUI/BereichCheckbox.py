@@ -1,22 +1,22 @@
 from functools import partial
-from tkinter import * # type: ignore
+import tkinter as tk
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from Programmlogik import json_laden_logik
 
 
-ober_dict: dict[str, IntVar] = {}
-unter_dict: dict[str, dict[str, IntVar]] = {}
+ober_dict: dict[str, tk.IntVar] = {}
+unter_dict: dict[str, dict[str, tk.IntVar]] = {}
 
 class BereichCheckbox:
-    def __init__(self, master: Tk):
-        self.master: Tk = master
-        self.frame_dict: dict[str, Frame] = {}
-        self.ausgeklappt_dict: dict[str, IntVar] = {}
-        self.checkbox_list: list[Checkbutton] = []
+    def __init__(self, master: tk.Tk | tk.Frame):
+        self.master: tk.Tk | tk.Frame = master
+        self.frame_dict: dict[str, tk.Frame] = {}
+        self.ausgeklappt_dict: dict[str, tk.IntVar] = {}
+        self.checkbox_list: list[tk.Checkbutton] = []
 
     # Funktion innerhalb der Klasse BereichCheckbox
-    def update_checkbox_color(self, cb_widget: Checkbutton, var: IntVar, is_ober: bool = False):
+    def update_checkbox_color(self, cb_widget: tk.Checkbutton, var: tk.IntVar, is_ober: bool = False):
         """Färbt Ober-Checkbox komplett, Unter-Checkbox nur Text."""
         
         if is_ober:
@@ -34,15 +34,15 @@ class BereichCheckbox:
             
     # Creates canvas with checkboxes
     def create(self,color: str):
-        canvas_for_checkbox = Canvas(self.master, height=432)
-        vertical_scrollbar = Scrollbar(self.master, command=canvas_for_checkbox.yview) # type: ignore
-        main_checkbox_frame = Frame(canvas_for_checkbox, bg=color)
+        canvas_for_checkbox = tk.Canvas(self.master, height=432)
+        vertical_scrollbar = tk.Scrollbar(self.master, command=canvas_for_checkbox.yview) # type: ignore
+        main_checkbox_frame = tk.Frame(canvas_for_checkbox, bg=color)
         canvas_for_checkbox.create_window((0,0),anchor="nw" ,  window=main_checkbox_frame)
         canvas_for_checkbox.configure(yscrollcommand=vertical_scrollbar.set)
         vertical_scrollbar.pack(side="right", fill="y")
         canvas_for_checkbox.pack(expand=True, fill="both")
 
-        def on_configure(_: Event) -> None:
+        def on_configure(_: tk.Event) -> None:
             canvas_for_checkbox.configure(scrollregion=canvas_for_checkbox.bbox("all"))
             canvas_for_checkbox.update_idletasks()
             canvas_for_checkbox.config(
@@ -52,16 +52,16 @@ class BereichCheckbox:
 
         # Fills checkboxes with "Uebungsbereich"
         for _, bereich in enumerate(json_laden_logik.list_uebungsbereiche()):
-            frame = Frame(main_checkbox_frame, bg=color)
+            frame = tk.Frame(main_checkbox_frame, bg=color)
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
             frame.pack(fill="both")
-            frame2 = Frame(frame, bg="white")
+            frame2 = tk.Frame(frame, bg="white")
             self.frame_dict[f"{bereich}2"] = frame2
-            self.ausgeklappt_dict[f"{bereich}"] = IntVar(value=0)
+            self.ausgeklappt_dict[f"{bereich}"] = tk.IntVar(value=0)
 
             # Haupt-Checkbutton für Auf-/Zuklappen
-            cb_ausklappen = Checkbutton(
+            cb_ausklappen = tk.Checkbutton(
                 frame,
                 text=f"{bereich}",
                 font=("Arial", 30),
@@ -74,12 +74,12 @@ class BereichCheckbox:
                 command=partial(BereichCheckbox.ausklappen, self, bereich),
                 indicatoron=False,
             )
-            cb_ausklappen.grid(pady=5, padx=5, sticky=NSEW, column=1, row=0)
+            cb_ausklappen.grid(pady=5, padx=5, sticky=tk.NSEW, column=1, row=0)
 
             # Ober-Checkbox
-            ober_dict[f"{bereich}"] = IntVar(value=0)
+            ober_dict[f"{bereich}"] = tk.IntVar(value=0)
             unter_dict[f"{bereich}"] = {}
-            cb_ober = Checkbutton(
+            cb_ober = tk.Checkbutton(
                 frame,
                 fg="#000000",
                 variable=ober_dict[f"{bereich}"],
@@ -95,15 +95,15 @@ class BereichCheckbox:
                 padx=20,
                 pady=1
             )
-            cb_ober.config(highlightbackground="red", highlightcolor="red", highlightthickness=10, relief=SOLID)
+            cb_ober.config(highlightbackground="red", highlightcolor="red", highlightthickness=10, relief=tk.SOLID)
 
-            cb_ober.grid(pady=8, padx=8, sticky=NSEW, column=0, row=0)
+            cb_ober.grid(pady=8, padx=8, sticky=tk.NSEW, column=0, row=0)
 
             # initial einfärben
             self.update_checkbox_color(cb_ober, ober_dict[bereich], is_ober=True)
 
             # Farb-Update beim Klick
-            def ober_command(bereich: str = bereich, cb: Checkbutton = cb_ober):
+            def ober_command(bereich: str = bereich, cb: tk.Checkbutton = cb_ober):
                 
                 # Farbe der Ober-Checkbox aktualisieren
                 self.update_checkbox_color(cb, ober_dict[bereich], is_ober=True)
@@ -115,7 +115,7 @@ class BereichCheckbox:
                 for i, (_, var) in enumerate(unter_dict[bereich].items()):
                     wid = widgets[i]
                     var.set(selected)
-                    if isinstance(wid, Checkbutton):
+                    if isinstance(wid, tk.Checkbutton):
                         self.update_checkbox_color(wid, var)
 
                 # Hauptkategorie aktualisieren
@@ -125,9 +125,9 @@ class BereichCheckbox:
 
             # Unter-Checkboxen
             for _, titel in enumerate(json_laden_logik.list_teilgebiet_titels(bereich)):
-                var = IntVar(value=0)
+                var = tk.IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
-                cb_box = Checkbutton(
+                cb_box = tk.Checkbutton(
                 self.frame_dict[f"{bereich}2"],
                 text=f"{titel}",
                 font=("Arial", 15),
@@ -143,8 +143,8 @@ class BereichCheckbox:
                 cb_box.pack(anchor="w", pady=2, padx=5)
 
                 # Farb-Update bei Klick
-                def box_command(var: IntVar = var,
-                                cb: Checkbutton = cb_box,
+                def box_command(var: tk.IntVar = var,
+                                cb: tk.Checkbutton = cb_box,
                                 bereich: str = bereich) -> None:
                     self.update_checkbox_color(cb, var)
                     self.update_hauptkategorie(bereich)
@@ -158,7 +158,7 @@ class BereichCheckbox:
             widgets = list(self.frame_dict[f"{bereich}2"].children.values())
             for i, (_, var) in enumerate(unter_dict[bereich].items()):
                 wid = widgets[i]
-                if isinstance(wid, Checkbutton):
+                if isinstance(wid, tk.Checkbutton):
                     self.update_checkbox_color(wid, var)
         else:
             self.frame_dict[f"{bereich}2"].grid_forget()
@@ -186,6 +186,6 @@ def get_active() -> list[str]:
 
 if __name__ == "__main__":
     json_laden_logik.jsonladen()
-    root = Tk()
+    root = tk.Tk()
     BereichCheckbox(root).create("#ffffff")
     root.mainloop()
