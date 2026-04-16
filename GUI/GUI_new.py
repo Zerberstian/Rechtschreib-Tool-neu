@@ -1,6 +1,3 @@
-from tkinter import *
-from tkinter import messagebox
-from tkinter import colorchooser
 import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
@@ -8,39 +5,42 @@ project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining f
 from Programmlogik import aufgaben_logik
 from GUI.BereichCheckbox import BereichCheckbox, get_active
 from GUI import Frame_Generation_Class
+from typing import Any, Callable
+import tkinter as tk
+from tkinter import messagebox, colorchooser
 
-BtnFontArt = "Arial"        #Button Font Style (all Btn)
+BtnFontArt: str = "Arial"        #Button Font Style (all Btn)
 
-def on_value_change():
+def on_value_change() -> str:
     try:
         print(f"{spinbox.get()} = Wert in Spinbox")  # Print for debugging purposes
         if int(spinbox.get()) > 100:
-            spinbox.delete(0, END)
+            spinbox.delete(0, tk.END) # type: ignore
             spinbox.insert(0, "100")
 
         elif int(spinbox.get()) < 1:
-            spinbox.delete(0, END)
+            spinbox.delete(0, tk.END) # type: ignore
             spinbox.insert(0, "1")
 
     except ValueError:
         messagebox.showerror("Ungültige Eingabe",
                                 "Start mit Standardwert für Aufgabenmenge (10).")
-        spinbox.delete(0, END)
+        spinbox.delete(0, tk.END) # type: ignore
         spinbox.insert(0, "10")
         print(spinbox.get(), "bei ungültiger spinbox.get()")
     return spinbox.get()
 
 # Max 10 questions -> quickselct (logic)
-def callback_value_10():
-    spinbox.delete(0, END)
+def callback_value_10() -> None:
+    spinbox.delete(0, tk.END) # type: ignore
     spinbox.insert(0, "10")
 
 # Max 100 questions -> quickselect (logic)
-def callback_value_100():
-    spinbox.delete(0, END)
+def callback_value_100() -> None:
+    spinbox.delete(0, tk.END) # type: ignore
     spinbox.insert(0, "100")
 
-def start_logic():
+def start_logic() -> None:
     print("Start der logik")
     print(spinbox.get(), "= value check 2")
     aufgaben_logik.aufgaben_initialisieren(int(on_value_change()))
@@ -50,29 +50,27 @@ def start_logic():
     #aufgaben_logik.aufgaben_anfangen_konsole()
     #aufgaben_logik.statistik_ausgeben()
 
-def combined_command():
-        on_value_change()
-        print(spinbox.get(), "= value check 1")
-        aktiv = get_active()
-        if not aktiv  == []:
-            start_logic()
-        else:
-            messagebox.showerror("Fehlende Auswahl",
-                                    "Es wurde kein Aufgabenbereich ausgewählt.")
+def to_start() -> None:
+    on_value_change()
+    print(spinbox.get(), "= value check 1")
+    aktiv = get_active()
+    if not aktiv  == []:
+        start_logic()
+    else:
+        messagebox.showerror("Fehlende Auswahl",
+                                "Es wurde kein Aufgabenbereich ausgewählt.")
 
-def to_start():
-    combined_command()
 
 # Main style constants
-BG_Farbe = "#E0470A"        #Background Color Value (general)
-Btn_BG_Farbe = "#E0470A"    #Background Color (all Btn except Spinbox & Buttons)
-Btn_FG_Farbe = "#FFFFFF"    #BUtton fg Color
+BG_Farbe: str = "#E0470A"     #Background Color Value (general)
+Btn_BG_Farbe: str = "#E0470A" #Background Color (all Btn except Spinbox & Buttons)
+Btn_FG_Farbe: str = "#FFFFFF" #BUtton fg Color
 
-BtnFontGroesse = 30         #Button Font size (all Btn)
-inside_Padding_Y = 0       #Button Inside pady Value (Main Menu)
+BtnFontGroesse: int = 30        #Button Font size (all Btn)
+inside_Padding_Y: int = 0       #Button Inside pady Value (Main Menu)
 
 # Defining window
-window = Tk()
+window: tk.Tk = tk.Tk()
 window.update_idletasks()
 
 # Spacing within the Window
@@ -82,23 +80,23 @@ window.grid_rowconfigure(1, weight=3)
 window.grid_columnconfigure(1, weight=3)
 
 # Generating fullscreen with a little offset to avoid taskbar issues
-x_pos = -9
-y_pos = 0
+x_pos: int = -9
+y_pos: int = 0
 window.geometry(f"{window.winfo_screenwidth()}x{window.winfo_screenheight()}+{x_pos}+{y_pos}")
 
 # Window-settings
 window.minsize(1100, 650)
-window.bind("<Escape>", lambda e: window.attributes("-fullscreen", False))              # Escape = exit fullscreen
-window.bind("<F12>", lambda e: window.attributes("-fullscreen", True))                  # F12 = enter fullscreen
-window.title("Rechtschreibtool")                                                        # changing Title from tk to Rechtschreibtool
-window.configure(bg=BG_Farbe)                                                           # backround Color to SRH Color
+window.bind("<Escape>", lambda e: set_fullscreen(window, False))
+window.bind("<F12>", lambda e: set_fullscreen(window, True))
+window.title("Rechtschreibtool")
+window.configure(bg=BG_Farbe) # backround Color to SRH Color
 
 icon_window_path = os.path.join(project_root, "Assets", "srhIcon.ico" \
 "")
-window.iconbitmap(icon_window_path)
+window.iconbitmap(icon_window_path) # type: ignore
 
 icon_path = os.path.join(project_root, "Assets", "srhIcon2.png")
-icon = PhotoImage(file=icon_path)
+icon = tk.PhotoImage(file=icon_path)
 '''
 window.bind("<F4>", lambda event: show_color_picker())
 # ^ Hotkey for swaping Menu bc im genuinely about to crash out if i have to press Farbenwahl one more Time
@@ -106,21 +104,21 @@ window.bind("<F3>", lambda event: back_to_main_frame())
 # ^ back to main Menu Hotkey
 '''
 # Changing between frames
-def show_start_frame():
-    logicFrame.grid(row=0, column=0, sticky=NW)
+def show_start_frame() -> None:
+    logicFrame.grid(row=0, column=0, sticky=tk.NW)
     SelectFrame.place_forget()
 
-def show_select_frame():
+def show_select_frame() -> None:
     MenuFrame.grid_forget()
     headline.grid_forget()
     SelectFrame.place(x=0, y=0, relwidth=1, relheight=1)
     MenuText.grid_forget()
 
-def back_to_main_frame():
-    MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW)
+def back_to_main_frame() -> None:
+    MenuFrame.grid(row=0, column=0, rowspan=2, sticky=tk.NW)
     SelectFrame.place_forget()
-    headline.grid(row=0,column=1, sticky=N)
-    MenuText.grid(row=1,column=1, sticky=NW)
+    headline.grid(row=0,column=1, sticky=tk.N)
+    MenuText.grid(row=1,column=1, sticky=tk.NW)
     logicFrame.grid_forget()
     ColorPickerFrame.grid_forget()
     
@@ -133,27 +131,30 @@ def back_to_main_frame():
     Frame_Generation_Class.reset()
     aufgaben_logik.resetting()
 
-def open_instruction_pdf():
+def set_fullscreen(win: tk.Tk, state: bool) -> None:
+    win.attributes("-fullscreen", state) # type: ignore
+
+def open_instruction_pdf() -> None:
     project_root = os.path.dirname(os.path.dirname(__file__))
     pdf_path = os.path.join(project_root, "Assets", "A.pdf")
     if sys.platform.startswith("win"):
         os.startfile(pdf_path)
 
-def show_color_picker():
+def show_color_picker() -> None:
     MenuFrame.grid_forget()
     MenuText.grid_forget()
     headline.grid_forget()
-    ColorPickerFrame.grid(row=0, column=0, sticky=NW, ipadx=5)
-    ColorPickerBackFrame.grid(row=0, column=1, sticky=NW, ipadx=5)
-    ColorExampleFrame.grid(row=1, column=3, sticky=NW, ipadx=5)
-    ColorPickerButtonFrame.grid(row=1, column=1, sticky=NSEW, ipadx=5, pady=30, padx=5)
+    ColorPickerFrame.grid(row=0, column=0, sticky=tk.NW, ipadx=5)
+    ColorPickerBackFrame.grid(row=0, column=1, sticky=tk.NW, ipadx=5)
+    ColorExampleFrame.grid(row=1, column=3, sticky=tk.NW, ipadx=5)
+    ColorPickerButtonFrame.grid(row=1, column=1, sticky=tk.NSEW, ipadx=5, pady=30, padx=5)
 
 selected_bg_color = None
 selected_fg_color = None
 print(f"{selected_bg_color} (def None bg)")
 print(f"{selected_fg_color} (def None fg)")
 
-def pick_color_test_fg():
+def pick_color_test_fg() -> None:
     global selected_fg_color
     color = colorchooser.askcolor()
     if color[1]:
@@ -161,57 +162,46 @@ def pick_color_test_fg():
         print(f"{selected_fg_color} pick_color_test_fg")
         for widget in ColorExampleFrame.winfo_children():
             try:
-                widget.config(fg=selected_fg_color)
-            except TclError:
+                widget.config(fg=selected_fg_color) # type: ignore
+            except tk.TclError:
                 pass
 
-def pick_color_test_bg():
+def pick_color_test_bg() -> None:
     global selected_bg_color
     color = colorchooser.askcolor(title="Farbe auswählen")
-    if color[1]:  # Hex value
-        selected_bg_color = color[1]  # Save it
+    if color[1]:
+        selected_bg_color = color[1]
         print(f"{selected_bg_color} pick_color_test_bg")
         # Preview only
         ColorExampleFrame.config(bg=selected_bg_color)
         for widget in ColorExampleFrame.winfo_children():
-            widget.config(bg=selected_bg_color)
+            widget.config(bg=selected_bg_color) # type: ignore
         headline.config(bg=selected_bg_color, fg=selected_bg_color)
 
-def apply_bg_color(color):
-    def update_widgets(widget):
-        # Only change bg for specific widget types
-        if isinstance(widget, (Label, Frame)) or widget == window:
-            try:
-                widget.config(bg=color)
-            except Exception:
-                pass
-        # Still recurse through children
-        for child in widget.winfo_children():
-            update_widgets(child)
-    update_widgets(window)
+def apply_color(widget: tk.Tk | tk.Widget, bg: str | None = None, fg: str | None = None) -> None:
+    try:
+        if bg is not None and (isinstance(widget, (tk.Label, tk.Frame))
+                               or widget is window): # type: ignore
+            widget.config(bg=bg) # type: ignore
 
-def apply_fg_color(color):
-    def update_widgets(widget):
-        # Only change bg for specific widget types
-        if isinstance(widget, Label):
-            try:
-                widget.config(fg=color)
-            except Exception:
-                pass
-        # Still recurse through children
-        for child in widget.winfo_children():
-            update_widgets(child)
-    update_widgets(window)
+        if fg is not None and isinstance(widget, tk.Label):
+            widget.config(fg=fg) # type: ignore
+
+    except Exception:
+        pass
+
+    # Recurse through children
+    for child in widget.winfo_children():
+        apply_color(child, bg=bg, fg=fg) # type: ignore
 
 def pick_color_all():
-    global selected_bg_color
     print(f"{selected_bg_color} pick_color_all")
-    if selected_bg_color is not None: # Only if a color was chosen
+    if selected_bg_color is not None:
         print("oi oi")
-        apply_bg_color(selected_bg_color)
+        apply_color(window, bg=selected_bg_color)
         print(BG_Farbe, "bg in all")
     elif selected_fg_color is not None:
-        apply_fg_color(selected_fg_color)
+        apply_color(window, fg=selected_fg_color)
         headline.config(fg=BG_Farbe)
     else:
         print("omegalul")
@@ -258,7 +248,7 @@ def reset_all_color():
     print(default_bg, "default")
     headline.config(bg=default_bg, fg=default_bg)
     def update_widgets_in_reset(widget):
-        if isinstance(widget, (Label, Frame)) or widget == window:
+        if isinstance(widget, (tk.Label, tk.Frame)) or widget == window:
             try:
                 widget.config(bg=default_bg)
             except Exception:
@@ -270,7 +260,7 @@ def reset_all_color():
 def reset_to_default_design(widget):
     default_bg_white = "#ffffff"
     ColorExampleFrame.config(bg=default_bg_white)
-    if isinstance(widget, (Label, Frame)):
+    if isinstance(widget, (tk.Label, tk.Frame)):
         try:
             widget.config(bg=default_bg_white)
         except Exception:
@@ -286,37 +276,37 @@ def reset_and_default(widget):
 # Frames
 ##############################################################################
 # Main window frame
-MenuFrame = Frame(window, bg=BG_Farbe)
-MenuFrame.grid(row=0, column=0, rowspan=2, sticky=NW, ipadx=5)
+MenuFrame = tk.Frame(window, bg=BG_Farbe)
+MenuFrame.grid(row=0, column=0, rowspan=2, sticky=tk.NW, ipadx=5)
 
 # Window for taskselection
-SelectFrame = Frame(window, bg=BG_Farbe)
+SelectFrame = tk.Frame(window, bg=BG_Farbe)
 
 # Frame for managing grid
-CheckBoxFrameS = Frame(SelectFrame, bg=BG_Farbe)
-CheckBoxFrameS.grid(row=1, column=1,  sticky=N)
+CheckBoxFrameS = tk.Frame(SelectFrame, bg=BG_Farbe)
+CheckBoxFrameS.grid(row=1, column=1,  sticky=tk.N)
 
 # Frame for managing grid
-ButtonFrameSB = Frame(SelectFrame, bg=BG_Farbe)
-ButtonFrameSB.grid(row=0, column=0, sticky=NW)
+ButtonFrameSB = tk.Frame(SelectFrame, bg=BG_Farbe)
+ButtonFrameSB.grid(row=0, column=0, sticky=tk.NW)
 
 # Frame for spinbox and buttons
-SpinBoxFrame = Frame(SelectFrame, bg=BG_Farbe)
-SpinBoxFrame.grid(row=1, column=2, rowspan=1, sticky=NW)
+SpinBoxFrame: tk.Frame = tk.Frame(SelectFrame, bg=BG_Farbe)
+SpinBoxFrame.grid(row=1, column=2, rowspan=1, sticky=tk.NW)
 
-logicFrame  =   Frame(window, bg=BG_Farbe)
+logicFrame  =   tk.Frame(window, bg=BG_Farbe)
 
-AufgabenFrameSeite = Frame(window, bg=BG_Farbe)
+AufgabenFrameSeite = tk.Frame(window, bg=BG_Farbe)
 
-ColorPickerFrame = Frame(window, bg=BG_Farbe)
+ColorPickerFrame = tk.Frame(window, bg=BG_Farbe)
 
-ColorPickerButtonFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
+ColorPickerButtonFrame = tk.Frame(ColorPickerFrame, bg=BG_Farbe)
 
-ColorPickerBackFrame = Frame(ColorPickerFrame, bg=BG_Farbe)
+ColorPickerBackFrame = tk.Frame(ColorPickerFrame, bg=BG_Farbe)
 
-ColorExampleFrame = Frame(ColorPickerFrame, bg="#ffffff")
+ColorExampleFrame = tk.Frame(ColorPickerFrame, bg="#ffffff")
 
-statisticFrame = Frame(window, bg=BG_Farbe)
+statisticFrame = tk.Frame(window, bg=BG_Farbe)
 ##############################################################################
 
 SelectFrame.grid_rowconfigure(0, weight=1)
@@ -329,23 +319,23 @@ SelectFrame.grid_rowconfigure(2, weight=1)
 SelectFrame.grid_columnconfigure(2, weight=0)
 
 # Label for spacing
-voidLabel = Label(SelectFrame, bg=BG_Farbe)
-voidLabel.grid(row=0, column=1, sticky=NW)
+voidLabel = tk.Label(SelectFrame, bg=BG_Farbe)
+voidLabel.grid(row=0, column=1, sticky=tk.NW)
 
 # Iconlabel
-iconLabel = Label(MenuFrame, image=icon, bg=BG_Farbe)
+iconLabel = tk.Label(MenuFrame, image=icon, bg=BG_Farbe)
 iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
 # Adding a big title
-headline = Label(window,
+headline = tk.Label(window,
                 text="",
                 font=(BtnFontArt, BtnFontGroesse),
                 bg=BG_Farbe,
                 fg=BG_Farbe)
 
-headline.grid(row=0,column=1, sticky=N)
+headline.grid(row=0,column=1, sticky=tk.N)
 
-MenuText = Label(window,
+MenuText = tk.Label(window,
                     text= f"Die offizielle und\n"         # Adding a Label with Text in the Center
                         f"verbesserte Version\n"
                         f"des Rechtschreibtools\n"
@@ -354,12 +344,13 @@ MenuText = Label(window,
                 bg=BG_Farbe,
                 fg="#ffffff")
 
-MenuText.grid(row=1,column=1, sticky=NW)
+MenuText.grid(row=1,column=1, sticky=tk.NW)
 
 
 #defining a function for a default button
-def create_button(parent, text, command, **kwargs):
-    return Button(
+def create_button(
+        parent: tk.Widget, text: str, command: Callable[[], None], **kwargs: Any) -> tk.Button:
+    return tk.Button(
         parent,
         text=text,
         font=(BtnFontArt, BtnFontGroesse),
@@ -408,9 +399,8 @@ create_button(
     back_to_main_frame
 ).pack(anchor="w", fill="x", pady=8)
 
-
 # Button for going back to Main Menu
-Button(ColorPickerBackFrame,
+tk.Button(ColorPickerBackFrame,
         text="Zurück",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
@@ -418,9 +408,7 @@ Button(ColorPickerBackFrame,
         ).grid(row=0, column=0, pady=15, padx=5)
 
 # Button for going back to Main Menu
-
-
-Button(logicFrame,
+tk.Button(logicFrame,
         text="Abbrechen",
         font=(BtnFontArt, BtnFontGroesse),
         bg=BG_Farbe,
@@ -430,26 +418,26 @@ Button(logicFrame,
         command=back_to_main_frame,
         ).grid(row=0, column=0, padx=5, pady=15)
 
-Button(ColorPickerButtonFrame,
+tk.Button(ColorPickerButtonFrame,
         text="Hintergrund",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=lambda: pick_color_test_bg()).pack(anchor="w",fill="x", pady=15, padx=5)
 
-Button(ColorPickerButtonFrame,
+tk.Button(ColorPickerButtonFrame,
         text="Textfarbe",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=lambda: pick_color_test_fg()).pack(anchor="w",fill="x", pady=15, padx=5)
 
-Button(ColorPickerButtonFrame,
+tk.Button(ColorPickerButtonFrame,
         text="reset color",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
         command=lambda: reset_all_color()
         ).pack(anchor="w",fill="x", pady=15, padx=5)
 
-Button(ColorPickerButtonFrame,
+tk.Button(ColorPickerButtonFrame,
         text="anwenden",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
@@ -457,16 +445,16 @@ Button(ColorPickerButtonFrame,
         ).pack(anchor="w",fill="x", pady=15, padx=5)
 
 for widget in ColorPickerButtonFrame.winfo_children(): # disables all buttons in this frame
-    if isinstance(widget, Button):
-        widget.config(state=DISABLED)
+    if isinstance(widget, tk.Button):
+        widget.config(state=tk.DISABLED)
 
-Label(ColorExampleFrame,
+tk.Label(ColorExampleFrame,
         text=f"Nomen-Verb-Adjektiv Teil 1\n",
         font=(BtnFontArt, BtnFontGroesse),
         bg="#ffffff",
         fg="#000000").pack(anchor="n", pady=15, padx=5)
 
-Label(ColorExampleFrame,
+tk.Label(ColorExampleFrame,
         text=f"Bitte die drei folgenden Wortarten unterscheiden:\n"
             f"Nomen = geben den Begriffen einen Namen: Ewigkeit, Geist, Mathematik\n"
             f"Verben = alles was man tun kann: essen, läuft, malt, denkst\n"
@@ -475,33 +463,33 @@ Label(ColorExampleFrame,
         bg="#ffffff",
         fg="#000000").pack(anchor="n", pady=15, padx=5)
 
-ColorExampleButtonFrame = Frame(ColorExampleFrame, bg="#ffffff")
+ColorExampleButtonFrame = tk.Frame(ColorExampleFrame, bg="#ffffff")
 ColorExampleButtonFrame.pack(anchor="n", pady=15, padx=5)
 
-button1 = Button(
+button1 = tk.Button(
     ColorExampleButtonFrame,
     text="Nomen",
     font=(BtnFontArt, BtnFontGroesse),
 )
 button1.pack(side="left", pady=15, padx=5)
-button1.config(state=DISABLED)
+button1.config(state=tk.DISABLED)
 
-button2 = Button(ColorExampleButtonFrame,
+button2 = tk.Button(ColorExampleButtonFrame,
         text="Verb",
         font=(BtnFontArt, BtnFontGroesse),
         )
 button2.pack(side="left", pady=15, padx=5)
-button2.config(state=DISABLED)
+button2.config(state=tk.DISABLED)
 
-button3 = Button(ColorExampleButtonFrame,
+button3 = tk.Button(ColorExampleButtonFrame,
         text="Adjektiv",
         font=(BtnFontArt, BtnFontGroesse),
         )
 button3.pack(side="left", pady=15, padx=5)
-button3.config(state=DISABLED)
+button3.config(state=tk.DISABLED)
 
 # Max 10 questions -> quickselct (logic)
-Button(SpinBoxFrame,
+tk.Button(SpinBoxFrame,
         text="10",
         fg="#ffffff",
         font=(BtnFontArt, BtnFontGroesse),
@@ -510,7 +498,7 @@ Button(SpinBoxFrame,
         ).grid(row=3, column=0, padx=5, pady=15, ipadx=15)
 
 # Max 100 questions -> quickselct (logic)
-Button(SpinBoxFrame,
+tk.Button(SpinBoxFrame,
         text="100",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
@@ -536,7 +524,7 @@ create_button(
     "Beenden",
     sys.exit
 ).pack(anchor="w", fill="x", pady=8)
-Label(SpinBoxFrame,
+tk.Label(SpinBoxFrame,
         bg="#E0470A",
         fg="#ffffff",
         text=f"Gib die Menge\n "
@@ -549,7 +537,7 @@ Label(SpinBoxFrame,
                                 ipadx=13)
 
 # Spinbox
-spinbox = Spinbox(SpinBoxFrame,
+spinbox = tk.Spinbox(SpinBoxFrame,
                     from_=1,
                     to=100,
                     increment=1,
@@ -557,8 +545,8 @@ spinbox = Spinbox(SpinBoxFrame,
                     font=("Arial", 20),
                     command=on_value_change)
 
-spinbox.delete(0, END)
-spinbox.insert(0, 10)  # Setting default value to 10
+spinbox.delete(0, tk.END) # type: ignore
+spinbox.insert(0, str(10))  # Setting default value to 10
 
 spinbox.grid(row=2,
                 column=0,
@@ -566,9 +554,7 @@ spinbox.grid(row=2,
                 pady=15,
                 ipadx=23)
 
-
-
-Button(SpinBoxFrame,
+tk.Button(SpinBoxFrame,
         bg=BG_Farbe,
         fg="#ffffff",
         text="Start",
