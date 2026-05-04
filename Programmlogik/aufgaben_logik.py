@@ -3,7 +3,7 @@ import os
 import random
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from GUI.BereichCheckbox import *
-from Programmlogik.json_laden_logik import *
+from Programmlogik import *
 
 aufgaben_dict: dict[str, "Aufgabe"] = {} # Contains "Uebung_id"s to load exercises
 ausgewaehlte_aufgaben: list[str] = []

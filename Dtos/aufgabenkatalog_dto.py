@@ -1,5 +1,5 @@
 from typing import Any
-from Dtos.uebungsbereich_dto import UebungsbereichDto
+from Dtos import *
 
 class AufgabenkatalogDto:
     def __init__(self,

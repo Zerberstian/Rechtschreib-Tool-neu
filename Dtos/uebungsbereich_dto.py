@@ -1,5 +1,5 @@
 from typing import Any
-from Dtos.teilgebiet_dto import TeilgebietDto
+from Dtos import *
 
 class UebungsbereichDto:
     def __init__(self,

@@ -2,7 +2,7 @@ from functools import partial
 import tkinter as tk
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from Programmlogik import json_laden_logik
+from Programmlogik import *
 
 
 ober_dict: dict[str, tk.IntVar] = {}
@@ -51,7 +51,7 @@ class BereichCheckbox:
         main_checkbox_frame.bind("<Configure>", on_configure)
 
         # Fills checkboxes with "Uebungsbereich"
-        for _, bereich in enumerate(json_laden_logik.list_uebungsbereiche()):
+        for _, bereich in enumerate(list_uebungsbereiche()):
             frame = tk.Frame(main_checkbox_frame, bg=color)
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
@@ -124,7 +124,7 @@ class BereichCheckbox:
             cb_ober.config(command=ober_command)
 
             # Unter-Checkboxen
-            for _, titel in enumerate(json_laden_logik.list_teilgebiet_titels(bereich)):
+            for _, titel in enumerate(list_teilgebiet_titels(bereich)):
                 var = tk.IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
                 cb_box = tk.Checkbutton(
@@ -185,7 +185,7 @@ def get_active() -> list[str]:
     return aktiv
 
 if __name__ == "__main__":
-    json_laden_logik.jsonladen()
+    jsonladen()
     root = tk.Tk()
     BereichCheckbox(root).create("#ffffff")
     root.mainloop()
