@@ -7,8 +7,7 @@ import requests
 import json
 import os
 from datetime import datetime
-from Dtos.aufgabenkatalog_dto import AufgabenkatalogDto
-from Dtos.uebungsbereich_dto import UebungsbereichDto
+from Dtos import *
 
 def count_aufgaben(data: list[UebungsbereichDto]) -> int:
     total = 0

@@ -1,7 +1,6 @@
 import json
 import os
-from Dtos.aufgabenkatalog_dto import AufgabenkatalogDto
-from Dtos.uebung_dto import UebungDto
+from Dtos import *
 
 aufgabenkatalog: AufgabenkatalogDto
 
