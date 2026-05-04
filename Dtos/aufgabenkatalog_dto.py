@@ -8,13 +8,13 @@ class AufgabenkatalogDto:
                  etag: str,
                  total_aufgaben: int,
                  size: int,
-                 data: list[UebungsbereichDto] | None):
+                 data: list[UebungsbereichDto]):
         self.version: int = version
         self.last_updated: str = last_updated
         self.etag: str = etag
         self.total_aufgaben: int = total_aufgaben
         self.size: int = size
-        self.data: list[UebungsbereichDto] | None = data
+        self.data: list[UebungsbereichDto] = data
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "AufgabenkatalogDto":
@@ -32,7 +32,7 @@ class AufgabenkatalogDto:
             data=[UebungsbereichDto.from_dict(i)
                   for i in uebungsbereiche]
                   if uebungsbereiche
-                  else None
+                  else []
         )
     
     def to_dict(self) -> dict[str, Any]:
@@ -47,3 +47,14 @@ class AufgabenkatalogDto:
                      if self.data
                      else None
         }
+    
+    @staticmethod
+    def create_empty():
+        return AufgabenkatalogDto(
+            version=0,
+            last_updated="",
+            etag="",
+            total_aufgaben=0,
+            size=0,
+            data=[]
+        )

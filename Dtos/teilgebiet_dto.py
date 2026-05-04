@@ -5,14 +5,14 @@ class TeilgebietDto:
     def __init__(self,
                  titel: str,
                  aufgabenbeschreibung: str,
-                 uebungsliste: list[UebungDto] | None,
+                 uebungsliste: list[UebungDto],
                  ist_speziell: bool,
                  is_checked: bool,
                  expanded: bool,
                  teilgebiet_id: str):
         self.titel: str = titel
         self.aufgabenbeschreibung: str = aufgabenbeschreibung
-        self.uebungsliste: list[UebungDto] | None = uebungsliste
+        self.uebungsliste: list[UebungDto] = uebungsliste
         self.ist_speziell: bool = ist_speziell
         self.is_checked: bool = is_checked
         self.expanded: bool = expanded
@@ -35,8 +35,7 @@ class TeilgebietDto:
             uebungsliste=[UebungDto.from_dict(i)
                           for i in uebungsliste]
                           if uebungsliste
-                          else None,
-            
+                          else []
         )
     
     def to_dict(self) -> dict[str, Any]:
@@ -52,3 +51,15 @@ class TeilgebietDto:
                               if self.uebungsliste
                               else None
         }
+    
+    @staticmethod
+    def create_empty():
+        return TeilgebietDto(
+            titel="",
+            aufgabenbeschreibung="",
+            uebungsliste=[],
+            ist_speziell=False,
+            is_checked=False,
+            expanded=False,
+            teilgebiet_id=""
+        )

@@ -4,10 +4,10 @@ from Dtos.teilgebiet_dto import TeilgebietDto
 class UebungsbereichDto:
     def __init__(self,
                  uebungsbereich: str,
-                 teilgebiete: list[TeilgebietDto] | None,
+                 teilgebiete: list[TeilgebietDto],
                  uebungsbereich_id: int):
         self.uebungsbereich: str = uebungsbereich
-        self.teilgebiete: list[TeilgebietDto] | None = teilgebiete
+        self.teilgebiete: list[TeilgebietDto] = teilgebiete
         self.uebungsbereich_id: int = uebungsbereich_id
 
     @staticmethod
@@ -23,7 +23,7 @@ class UebungsbereichDto:
             teilgebiete=[TeilgebietDto.from_dict(i)
                          for i in teilgebiet]
                          if teilgebiet
-                         else None,
+                         else [],
         )
     
     def to_dict(self) -> dict[str, Any]:
@@ -33,5 +33,13 @@ class UebungsbereichDto:
             "Teilgebiet": [i.to_dict()
                            for i in self.teilgebiete]
                            if self.teilgebiete
-                           else None
+                           else []
         }
+    
+    @staticmethod
+    def create_empty():
+        return UebungsbereichDto(
+            uebungsbereich="",
+            teilgebiete=[],
+            uebungsbereich_id=0
+        )

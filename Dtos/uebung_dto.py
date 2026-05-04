@@ -31,3 +31,13 @@ class UebungDto:
             "UebungsBeschreibung": self.uebungs_beschreibung,
             "Uebung_id": self.uebung_id
         }
+    
+    @staticmethod
+    def create_empty():
+        return UebungDto(
+            moeglichkeiten=[],
+            korrekte_antwort=0,
+            infotext=None,
+            uebungs_beschreibung="",
+            uebung_id=""
+        )
