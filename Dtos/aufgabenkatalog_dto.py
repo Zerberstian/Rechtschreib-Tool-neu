@@ -9,12 +9,12 @@ class AufgabenkatalogDto:
                  total_aufgaben: int,
                  size: int,
                  data: list[UebungsbereichDto]):
-        self.version: int = version
-        self.last_updated: str = last_updated
-        self.etag: str = etag
-        self.total_aufgaben: int = total_aufgaben
-        self.size: int = size
-        self.data: list[UebungsbereichDto] = data
+        self.version = version
+        self.last_updated = last_updated
+        self.etag = etag
+        self.total_aufgaben = total_aufgaben
+        self.size = size
+        self.data = data
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "AufgabenkatalogDto":

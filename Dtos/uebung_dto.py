@@ -7,11 +7,11 @@ class UebungDto:
                  infotext: str | None,
                  uebungs_beschreibung: str,
                  uebung_id: str):
-        self.moeglichkeiten: list[str] = moeglichkeiten
-        self.korrekte_antwort: int = korrekte_antwort
-        self.infotext: str | None = infotext
-        self.uebungs_beschreibung: str = uebungs_beschreibung
-        self.uebung_id: str = uebung_id
+        self.moeglichkeiten = moeglichkeiten
+        self.korrekte_antwort = korrekte_antwort
+        self.infotext = infotext
+        self.uebungs_beschreibung = uebungs_beschreibung
+        self.uebung_id = uebung_id
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "UebungDto":

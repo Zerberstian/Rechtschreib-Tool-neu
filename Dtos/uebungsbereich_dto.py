@@ -6,9 +6,9 @@ class UebungsbereichDto:
                  uebungsbereich: str,
                  teilgebiete: list[TeilgebietDto],
                  uebungsbereich_id: int):
-        self.uebungsbereich: str = uebungsbereich
-        self.teilgebiete: list[TeilgebietDto] = teilgebiete
-        self.uebungsbereich_id: int = uebungsbereich_id
+        self.uebungsbereich = uebungsbereich
+        self.teilgebiete = teilgebiete
+        self.uebungsbereich_id = uebungsbereich_id
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "UebungsbereichDto":

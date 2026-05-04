@@ -10,13 +10,13 @@ class TeilgebietDto:
                  is_checked: bool,
                  expanded: bool,
                  teilgebiet_id: str):
-        self.titel: str = titel
-        self.aufgabenbeschreibung: str = aufgabenbeschreibung
-        self.uebungsliste: list[UebungDto] = uebungsliste
-        self.ist_speziell: bool = ist_speziell
-        self.is_checked: bool = is_checked
-        self.expanded: bool = expanded
-        self.teilgebiet_id: str = teilgebiet_id
+        self.titel = titel
+        self.aufgabenbeschreibung = aufgabenbeschreibung
+        self.uebungsliste = uebungsliste
+        self.ist_speziell = ist_speziell
+        self.is_checked = is_checked
+        self.expanded = expanded
+        self.teilgebiet_id = teilgebiet_id
 
     @staticmethod
     def from_dict(data: dict[str, Any]) -> "TeilgebietDto":
