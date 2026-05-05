@@ -35,6 +35,17 @@ class AufgabenkatalogDto:
                   else []
         )
     
+    @staticmethod
+    def create_empty():
+        return AufgabenkatalogDto(
+            version=0,
+            last_updated="",
+            etag="",
+            total_aufgaben=0,
+            size=0,
+            data=[]
+        )
+    
     def to_dict(self) -> dict[str, Any]:
         return {
             "version": self.version,
@@ -47,14 +58,3 @@ class AufgabenkatalogDto:
                      if self.data
                      else None
         }
-    
-    @staticmethod
-    def create_empty():
-        return AufgabenkatalogDto(
-            version=0,
-            last_updated="",
-            etag="",
-            total_aufgaben=0,
-            size=0,
-            data=[]
-        )
