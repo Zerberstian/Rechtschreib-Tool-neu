@@ -1,8 +1,8 @@
 import sys
 import os
 import random
+import tkinter as tk
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from GUI.BereichCheckbox import *
 from Programmlogik import *
 
 aufgaben_dict: dict[str, "Aufgabe"] = {} # Contains "Uebung_id"s to load exercises
@@ -168,6 +168,11 @@ def aufgaben_objekte_erstellen() -> None:
         Aufgabe(eintrag)
 
 def list_aktive_aufgaben() -> None:
+    # Delayed import to avoid circular import at module load.
+    # get_active() needs GUI.BereichCheckbox,
+    # but GUI.BereichCheckbox needs aufgaben_logik
+    from GUI.BereichCheckbox import get_active
+
     for eintrag in list_uebungen(get_active()):
         ausgewaehlte_aufgaben.append(eintrag)
 

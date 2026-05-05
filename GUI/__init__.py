@@ -1,8 +1,8 @@
-from BereichCheckbox import (
+from GUI.BereichCheckbox import (
     BereichCheckbox,
     get_active
 )
-from Frame_Generation_Class import (
+from GUI.Frame_Generation_Class import (
     StatistikFrame,
     AufgabenFrame,
     aufgaben_frame_generation,

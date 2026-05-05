@@ -1,4 +1,4 @@
-from json_laden_logik import *
+from Programmlogik.json_laden_logik import *
 
 __all__ = [
     "jsonladen",
