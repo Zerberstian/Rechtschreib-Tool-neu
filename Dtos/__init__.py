@@ -4,6 +4,7 @@ from Dtos.teilgebiet_dto import TeilgebietDto
 from Dtos.uebung_dto import UebungDto
 from Dtos.uebungsbereich_dto import UebungsbereichDto
 from Dtos.editor_context_dto import EditorContextDto
+from Dtos.credentials_dto import CredentialsDto
 
 __all__ = [
 	"AufgabenkatalogDto",
@@ -12,4 +13,5 @@ __all__ = [
 	"UebungDto",
 	"UebungsbereichDto",
     "EditorContextDto",
+    "CredentialsDto",
 ]
