@@ -6,3 +6,8 @@ class EditorContextDto:
         self.bereich_name = bereich_name
         self.teilgebiet_name = teilgebiet_name
         self.aufgabe_label = aufgabe_label
+    
+    def clear(self):
+        self.bereich_name = ""
+        self.teilgebiet_name = ""
+        self.aufgabe_label = ""

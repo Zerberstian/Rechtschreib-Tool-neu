@@ -26,6 +26,14 @@ class UebungsbereichDto:
                          else [],
         )
     
+    @staticmethod
+    def create_empty():
+        return UebungsbereichDto(
+            uebungsbereich="",
+            teilgebiete=[],
+            uebungsbereich_id=0
+        )
+    
     def to_dict(self) -> dict[str, Any]:
         return {
             "Uebungsbereich": self.uebungsbereich,
@@ -35,11 +43,3 @@ class UebungsbereichDto:
                            if self.teilgebiete
                            else []
         }
-    
-    @staticmethod
-    def create_empty():
-        return UebungsbereichDto(
-            uebungsbereich="",
-            teilgebiete=[],
-            uebungsbereich_id=0
-        )

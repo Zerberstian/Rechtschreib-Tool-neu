@@ -38,6 +38,18 @@ class TeilgebietDto:
                           else []
         )
     
+    @staticmethod
+    def create_empty():
+        return TeilgebietDto(
+            titel="",
+            aufgabenbeschreibung="",
+            uebungsliste=[],
+            ist_speziell=False,
+            is_checked=False,
+            expanded=False,
+            teilgebiet_id=""
+        )
+    
     def to_dict(self) -> dict[str, Any]:
         return {
             "Titel": self.titel,
@@ -51,15 +63,3 @@ class TeilgebietDto:
                               if self.uebungsliste
                               else None
         }
-    
-    @staticmethod
-    def create_empty():
-        return TeilgebietDto(
-            titel="",
-            aufgabenbeschreibung="",
-            uebungsliste=[],
-            ist_speziell=False,
-            is_checked=False,
-            expanded=False,
-            teilgebiet_id=""
-        )

@@ -23,15 +23,6 @@ class UebungDto:
             uebung_id=data.get("Uebung_id", "")
         )
     
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "Moeglichkeiten": self.moeglichkeiten,
-            "Korrekte_antwort": self.korrekte_antwort,
-            "Infotext": self.infotext,
-            "UebungsBeschreibung": self.uebungs_beschreibung,
-            "Uebung_id": self.uebung_id
-        }
-    
     @staticmethod
     def create_empty():
         return UebungDto(
@@ -41,3 +32,12 @@ class UebungDto:
             uebungs_beschreibung="",
             uebung_id=""
         )
+    
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "Moeglichkeiten": self.moeglichkeiten,
+            "Korrekte_antwort": self.korrekte_antwort,
+            "Infotext": self.infotext,
+            "UebungsBeschreibung": self.uebungs_beschreibung,
+            "Uebung_id": self.uebung_id
+        }
