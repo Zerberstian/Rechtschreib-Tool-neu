@@ -9,16 +9,16 @@ import os
 from datetime import datetime
 from Dtos import *
 
-def count_aufgaben(data: list[UebungsbereichDto]) -> int:
+def count_aufgaben(data: list[FieldDto]) -> int:
     total = 0
     for bereich in data:
-        teilgebiete = bereich.teilgebiete if bereich.teilgebiete else []
+        teilgebiete = bereich.subfields if bereich.subfields else []
         for teil in teilgebiete:
-            uebungen = teil.uebungsliste if teil.uebungsliste else []
+            uebungen = teil.tasks if teil.tasks else []
             total += len(uebungen)
     return total
 
-def check_json_version() -> list[UebungsbereichDto]:
+def check_json_version() -> list[FieldDto]:
     RAW_URL = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"
     CACHE_FILE = "json_cache.json"
     
@@ -41,10 +41,10 @@ def check_json_version() -> list[UebungsbereichDto]:
         try:
             with open(CACHE_FILE, 'r', encoding='utf-8') as f:
                 cache = json.load(f)
-                aufgabenkatalog = AufgabenkatalogDto.from_dict(cache)
+                aufgabenkatalog = CatalogueDto.from_dict(cache)
                 local_etag = aufgabenkatalog.etag
                 local_version = aufgabenkatalog.version
-                local_data = aufgabenkatalog.data if aufgabenkatalog.data else []
+                local_data = aufgabenkatalog.fields if aufgabenkatalog.fields else []
             print(f"⚪ Local task version available: v{local_version} "
                   f"({count_aufgaben(local_data)} tasks)")
         except:
@@ -60,10 +60,10 @@ def check_json_version() -> list[UebungsbereichDto]:
     print("🧭 New task version found, downloading...")
     try:
         response = requests.get(RAW_URL, timeout=10)
-        remote_data_full = AufgabenkatalogDto.from_dict(response.json())
+        remote_data_full = CatalogueDto.from_dict(response.json())
         
         # Extracting the full set of tasks from GitHub
-        remote_data = remote_data_full.data if remote_data_full.data else []
+        remote_data = remote_data_full.fields if remote_data_full.fields else []
         
         # Now using the version stated in the Github-File - no longer incrementing locally
         remote_version = remote_data_full.version if remote_data_full.version else local_version + 1
@@ -71,13 +71,13 @@ def check_json_version() -> list[UebungsbereichDto]:
         file_size = len(response.content)
         
         # Clean and structured cache format also containing metadata
-        cache = AufgabenkatalogDto(
+        cache = CatalogueDto(
             version=remote_version,
             last_updated=datetime.now().isoformat(),
             etag=remote_etag,
-            total_aufgaben=aufgaben_anzahl,
+            total_tasks=aufgaben_anzahl,
             size=file_size,
-            data=remote_data
+            fields=remote_data
         )
         
         # Overwriting old cache
@@ -97,14 +97,14 @@ def check_json_version() -> list[UebungsbereichDto]:
 # Using the cache, the offline version can always be loaded,
 # which is then updated when the program starts with network access
 # Initially required to download the JSON
-def load_local_cache() -> list[UebungsbereichDto]:
+def load_local_cache() -> list[FieldDto]:
     cache_file = "json_cache.json"
     if os.path.exists(cache_file):
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:
                 cache = json.load(f)
-                cache = AufgabenkatalogDto.from_dict(cache)
-                data = cache.data if cache.data else []
+                cache = CatalogueDto.from_dict(cache)
+                data = cache.fields if cache.fields else []
                 anzahl = count_aufgaben(data)
                 print(f"⚪ Available Offline version: v{cache.version} ({anzahl} tasks)")
                 return data

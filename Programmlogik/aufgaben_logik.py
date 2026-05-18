@@ -20,10 +20,10 @@ class Aufgabe:
         aufgabe = aufgabe_lesen(uebung_id)
         if aufgabe is None:
             raise ValueError(f"Aufgabe mit ID '{uebung_id}' nicht gefunden.")
-        self.moeglichkeiten = aufgabe.moeglichkeiten
-        self.korrekt = aufgabe.korrekte_antwort
-        self.infotext = aufgabe.infotext
-        self.uebungs_beschreibung = aufgabe.uebungs_beschreibung
+        self.moeglichkeiten = aufgabe.answer_options
+        self.korrekt = aufgabe.correct_answer
+        self.infotext = aufgabe.information_text
+        self.uebungs_beschreibung = aufgabe.task_description
         self.speziell = self.speziell_check()
         self.aufgabenbeschreibung = self.beschreibung()
         if self.speziell == "Speziell Satz":

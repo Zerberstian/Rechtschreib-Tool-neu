@@ -1,11 +1,11 @@
-class CredentialsDto:
+class ConfigDto:
     def __init__(self, username: str | None, token: str | None):
         self.username = username
         self.token = token
     
     @staticmethod
-    def from_dict(data: dict[str, str]) -> "CredentialsDto":
-        return CredentialsDto(
+    def from_dict(data: dict[str, str]) -> "ConfigDto":
+        return ConfigDto(
             username=data.get("username"),
             token=data.get("token")
         )
