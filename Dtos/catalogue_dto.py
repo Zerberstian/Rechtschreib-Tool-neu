@@ -1,49 +1,49 @@
 from typing import Any
-from Dtos.uebungsbereich_dto import UebungsbereichDto
+from Dtos.field_dto import FieldDto
 
-class AufgabenkatalogDto:
+class CatalogueDto:
     def __init__(self,
                  version: int,
                  last_updated: str,
                  etag: str,
-                 total_aufgaben: int,
+                 total_tasks: int,
                  size: int,
-                 data: list[UebungsbereichDto]):
+                 fields: list[FieldDto]):
         self.version = version
         self.last_updated = last_updated
         self.etag = etag
-        self.total_aufgaben = total_aufgaben
+        self.total_tasks = total_tasks
         self.size = size
-        self.data = data
+        self.fields = fields
 
     @staticmethod
-    def from_dict(data: dict[str, Any]) -> "AufgabenkatalogDto":
-        uebungsbereiche: list[Any] | dict[str, Any] = data.get('data', [])
+    def from_dict(data: dict[str, Any]) -> "CatalogueDto":
+        fields: list[Any] | dict[str, Any] = data.get('data', [])
 
-        if not isinstance(uebungsbereiche, list):
-            uebungsbereiche = [uebungsbereiche]
+        if not isinstance(fields, list):
+            fields = [fields]
 
-        return AufgabenkatalogDto(
+        return CatalogueDto(
             version=data.get("version", 0),
             last_updated=data.get("lastUpdated", ""),
             etag=data.get("etag", ""),
-            total_aufgaben=data.get("totalAufgaben", 0),
+            total_tasks=data.get("totalAufgaben", 0),
             size=data.get("size", 0),
-            data=[UebungsbereichDto.from_dict(i)
-                  for i in uebungsbereiche]
-                  if uebungsbereiche
+            fields=[FieldDto.from_dict(i)
+                  for i in fields]
+                  if fields
                   else []
         )
     
     @staticmethod
     def create_empty():
-        return AufgabenkatalogDto(
+        return CatalogueDto(
             version=0,
             last_updated="",
             etag="",
-            total_aufgaben=0,
+            total_tasks=0,
             size=0,
-            data=[]
+            fields=[]
         )
     
     def to_dict(self) -> dict[str, Any]:
@@ -51,10 +51,10 @@ class AufgabenkatalogDto:
             "version": self.version,
             "lastUpdated": self.last_updated,
             "etag": self.etag,
-            "totalAufgaben": self.total_aufgaben,
+            "totalAufgaben": self.total_tasks,
             "size": self.size,
             "data": [i.to_dict()
-                     for i in self.data]
-                     if self.data
+                     for i in self.fields]
+                     if self.fields
                      else None
         }
