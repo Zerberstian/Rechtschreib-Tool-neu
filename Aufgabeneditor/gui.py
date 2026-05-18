@@ -26,7 +26,7 @@ class AufgabenGUI:
     This class manages the display of exercise categories (Bereiche), sub-categories (Teilgebiete),
     and the individual tasks within them.
     """
-    def __init__(self, master):
+    def __init__(self, master: tk.Tk):
         self.master = master 
         self.master.title("Aufgabeneditor v2.0")
         self.master.geometry("1400x900")
