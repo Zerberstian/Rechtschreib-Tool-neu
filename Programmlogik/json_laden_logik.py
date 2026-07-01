@@ -34,6 +34,38 @@ def list_teilgebiet_titels(bereich_input: str | list[str]) -> list[str]:
                     titels.extend(tg.title for tg in uebungsbereiche.subfields)
     return titels
 
+# Titles are not guaranteed unique across different Uebungsbereiche.
+def list_teilgebiete(bereich_input: str | list[str]) -> list[tuple[str, str]]:
+    teilgebiete: list[tuple[str, str]] = []
+    bereiche = bereich_input if isinstance(bereich_input, list) else [bereich_input]
+
+    if not aufgabenkatalog.fields:
+        return teilgebiete
+
+    for bereich in bereiche:
+        for uebungsbereiche in aufgabenkatalog.fields:
+            if bereich == uebungsbereiche.title and uebungsbereiche.subfields:
+                teilgebiete.extend((tg.title, tg.subfield_id)
+                                   for tg in uebungsbereiche.subfields)
+    return teilgebiete
+
+# Function to list "UebungenListe" of a "Teilgebiet", matched by its unique id
+def list_uebungen_by_id(teilgebiet_ids: str | list[str]) -> list[str]:
+    aufgaben_liste: list[str] = []
+    ids = teilgebiet_ids if isinstance(teilgebiet_ids, list) else [teilgebiet_ids]
+
+    if not aufgabenkatalog.fields:
+        return aufgaben_liste
+
+    id_set = set(ids)
+    for bereich in aufgabenkatalog.fields:
+        if not bereich.subfields:
+            continue
+        for teilgebiet in bereich.subfields:
+            if teilgebiet.subfield_id in id_set and teilgebiet.tasks:
+                aufgaben_liste.extend(u.task_id for u in teilgebiet.tasks)
+    return aufgaben_liste
+
 # Function to list "UebungenListe" of a "Teilgebiet"
 def list_uebungen(teilgebiet_titels: str | list[str]) -> list[str]:
     aufgaben_liste: list[str] = []

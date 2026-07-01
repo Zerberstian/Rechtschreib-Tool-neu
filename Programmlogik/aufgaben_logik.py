@@ -177,7 +177,8 @@ def list_aktive_aufgaben() -> None:
     # but GUI.BereichCheckbox needs aufgaben_logik
     from GUI.BereichCheckbox import get_active
 
-    for eintrag in list_uebungen(get_active()):
+    # get_active() now returns Teilgebiet ids, so resolve tasks by id
+    for eintrag in list_uebungen_by_id(get_active()):
         ausgewaehlte_aufgaben.append(eintrag)
 
 def aufgaben_initialisieren(aufgaben_limit: int) -> None:

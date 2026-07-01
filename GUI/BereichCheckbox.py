@@ -7,6 +7,7 @@ from Programmlogik import *
 
 ober_dict: dict[str, tk.IntVar] = {}
 unter_dict: dict[str, dict[str, tk.IntVar]] = {}
+unter_id_dict: dict[str, dict[str, str]] = {}
 
 class BereichCheckbox:
     def __init__(self, master: tk.Tk | tk.Frame):
@@ -79,6 +80,7 @@ class BereichCheckbox:
             # Ober-Checkbox
             ober_dict[f"{bereich}"] = tk.IntVar(value=0)
             unter_dict[f"{bereich}"] = {}
+            unter_id_dict[f"{bereich}"] = {}
             cb_ober = tk.Checkbutton(
                 frame,
                 fg="#000000",
@@ -124,9 +126,10 @@ class BereichCheckbox:
             cb_ober.config(command=ober_command)
 
             # Unter-Checkboxen
-            for _, titel in enumerate(list_teilgebiet_titels(bereich)):
+            for _, (titel, teil_id) in enumerate(list_teilgebiete(bereich)):
                 var = tk.IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
+                unter_id_dict[f"{bereich}"][f"{titel}"] = teil_id
                 cb_box = tk.Checkbutton(
                 self.frame_dict[f"{bereich}2"],
                 text=f"{titel}",
@@ -175,13 +178,13 @@ class BereichCheckbox:
             ober_dict[haupt].set(0)
 
 def get_active() -> list[str]:
+    # Returns the unique Teilgebiet ids of all checked sub-checkboxes,
+    # so tasks are resolved unambiguously even if two Teilgebiete share a title.
     aktiv: list[str] = []
-    for _, titel_var in unter_dict.items():
+    for bereich, titel_var in unter_dict.items():
         for titel, var in titel_var.items():
             if var.get() == 1:
-                aktiv.append(titel)
-    #for titel in aktiv:
-    #    print(titel)
+                aktiv.append(unter_id_dict[bereich][titel])
     return aktiv
 
 if __name__ == "__main__":
