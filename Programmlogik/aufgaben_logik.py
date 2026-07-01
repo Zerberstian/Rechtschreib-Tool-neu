@@ -80,16 +80,17 @@ def aufgaben_picken(limit: int) -> bool:
     if not ausgewaehlte_aufgaben:
         print("Sie haben nichts ausgewählt!")
         return False
+    verfuegbar = len(set(ausgewaehlte_aufgaben))
     x = 0
     while x < limit:
+        if len(zu_loesende_aufgaben_list) >= verfuegbar:
+            print("Alle Verfügbaren Aufgaben geladen.")
+            break
         uebung_id = random.choice(ausgewaehlte_aufgaben)
         if uebung_id not in zu_loesende_aufgaben_list:
             zu_loesende_aufgaben_list.append(uebung_id)
             print(zu_loesende_aufgaben_list[-1])
             x += 1
-        elif len(zu_loesende_aufgaben_list) == len(list(aufgaben_dict.keys())):
-            print("Alle Verfügbaren Aufgaben geladen.")
-            break
     return True
 
 def moeglichkeiten_listen(aufgabe: Aufgabe) -> None:
