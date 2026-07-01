@@ -11,6 +11,15 @@ from tkinter import messagebox, colorchooser
 
 BtnFontArt: str = "Arial"        #Button Font Style (all Btn)
 
+# Main style constants
+BG_Farbe: str = "#E0470A"     #Background Color Value (general)
+Btn_BG_Farbe: str = "#E0470A" #Background Color (all Btn except Spinbox & Buttons)
+Btn_FG_Farbe: str = "#FFFFFF" #BUtton fg Color
+
+BtnFontGroesse: int = 30        #Button Font size (all Btn)
+inside_Padding_Y: int = 0       #Button Inside pady Value (Main Menu)
+
+
 def on_value_change() -> str:
     try:
         print(f"{spinbox.get()} = Wert in Spinbox")  # Print for debugging purposes
@@ -60,14 +69,6 @@ def to_start() -> None:
         messagebox.showerror("Fehlende Auswahl",
                                 "Es wurde kein Aufgabenbereich ausgewählt.")
 
-
-# Main style constants
-BG_Farbe: str = "#E0470A"     #Background Color Value (general)
-Btn_BG_Farbe: str = "#E0470A" #Background Color (all Btn except Spinbox & Buttons)
-Btn_FG_Farbe: str = "#FFFFFF" #BUtton fg Color
-
-BtnFontGroesse: int = 30        #Button Font size (all Btn)
-inside_Padding_Y: int = 0       #Button Inside pady Value (Main Menu)
 
 # Defining window
 window: tk.Tk = tk.Tk()
@@ -362,7 +363,8 @@ def create_button(
         fg="#000000",
         activebackground="#f2f2f2",
         activeforeground="#000000",
-        bd=0,
+        relief="solid",   # flat border instead of the 3D raised bevel (no shadow)
+        bd=1,
         highlightthickness=0,
         padx=20,
         pady=10,
@@ -385,16 +387,14 @@ Button(MenuFrame,
         bg=Btn_BG_Farbe,
         command=show_color_picker
         ).pack(anchor="w",fill="x", pady=15)
-'''
-def not_ready():
-    messagebox.showinfo("Info", "Aus zeitlichen Gründen wird dieses Feature zu einem späteren Zeitpunkt implementiert.")
 
 # Button to open the color picker
 create_button(
     MenuFrame,
-    "Farbwah",
+    "Farbwahl",
     not_ready
 ).pack(anchor="w", fill="x", pady=8)
+'''
 
 # Button for going back to Main Menu
 create_button(
@@ -408,6 +408,12 @@ tk.Button(ColorPickerBackFrame,
         text="Zurück",
         font=(BtnFontArt, BtnFontGroesse),
         bg=Btn_BG_Farbe,
+        fg=Btn_FG_Farbe,
+        activebackground="#f2f2f2",
+        activeforeground="#000000",
+        relief="solid",
+        bd=1,
+        highlightthickness=0,
         command=back_to_main_frame,
         ).grid(row=0, column=0, pady=15, padx=5)
 
@@ -415,89 +421,27 @@ tk.Button(ColorPickerBackFrame,
 tk.Button(logicFrame,
         text="Abbrechen",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=BG_Farbe,
+        bg=Btn_BG_Farbe,
         fg=Btn_FG_Farbe,
-        bd=0,
+        activebackground="#f2f2f2",
+        activeforeground="#000000",
+        relief="solid",
+        bd=1,
         highlightthickness=0,
         command=back_to_main_frame,
         ).grid(row=0, column=0, padx=5, pady=15)
 
-tk.Button(ColorPickerButtonFrame,
-        text="Hintergrund",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=lambda: pick_color_test_bg()).pack(anchor="w",fill="x", pady=15, padx=5)
-
-tk.Button(ColorPickerButtonFrame,
-        text="Textfarbe",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=lambda: pick_color_test_fg()).pack(anchor="w",fill="x", pady=15, padx=5)
-
-tk.Button(ColorPickerButtonFrame,
-        text="reset color",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=lambda: reset_all_color()
-        ).pack(anchor="w",fill="x", pady=15, padx=5)
-
-tk.Button(ColorPickerButtonFrame,
-        text="anwenden",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        command=lambda: pick_color_all()
-        ).pack(anchor="w",fill="x", pady=15, padx=5)
-
-for widget in ColorPickerButtonFrame.winfo_children(): # disables all buttons in this frame
-    if isinstance(widget, tk.Button):
-        widget.config(state=tk.DISABLED)
-
-tk.Label(ColorExampleFrame,
-        text=f"Nomen-Verb-Adjektiv Teil 1\n",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg="#ffffff",
-        fg="#000000").pack(anchor="n", pady=15, padx=5)
-
-tk.Label(ColorExampleFrame,
-        text=f"Bitte die drei folgenden Wortarten unterscheiden:\n"
-            f"Nomen = geben den Begriffen einen Namen: Ewigkeit, Geist, Mathematik\n"
-            f"Verben = alles was man tun kann: essen, läuft, malt, denkst\n"
-            f"Adjektive = beschreiben wie etwas ist: rot, warm, lang, schwer, eklig\n",
-        font=(BtnFontArt, 20),
-        bg="#ffffff",
-        fg="#000000").pack(anchor="n", pady=15, padx=5)
-
-ColorExampleButtonFrame = tk.Frame(ColorExampleFrame, bg="#ffffff")
-ColorExampleButtonFrame.pack(anchor="n", pady=15, padx=5)
-
-button1 = tk.Button(
-    ColorExampleButtonFrame,
-    text="Nomen",
-    font=(BtnFontArt, BtnFontGroesse),
-)
-button1.pack(side="left", pady=15, padx=5)
-button1.config(state=tk.DISABLED)
-
-button2 = tk.Button(ColorExampleButtonFrame,
-        text="Verb",
-        font=(BtnFontArt, BtnFontGroesse),
-        )
-button2.pack(side="left", pady=15, padx=5)
-button2.config(state=tk.DISABLED)
-
-button3 = tk.Button(ColorExampleButtonFrame,
-        text="Adjektiv",
-        font=(BtnFontArt, BtnFontGroesse),
-        )
-button3.pack(side="left", pady=15, padx=5)
-button3.config(state=tk.DISABLED)
-
 # Max 10 questions -> quickselct (logic)
 tk.Button(SpinBoxFrame,
         text="10",
-        fg="#ffffff",
+        fg="#000000",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
+        bg="#ffffff",
+        activebackground="#f2f2f2",
+        activeforeground="#000000",
+        relief="solid",
+        bd=1,
+        highlightthickness=0,
         command=callback_value_10,
         ).grid(row=3, column=0, padx=5, pady=15, ipadx=15)
 
@@ -505,8 +449,13 @@ tk.Button(SpinBoxFrame,
 tk.Button(SpinBoxFrame,
         text="100",
         font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        fg="#ffffff",
+        bg="#ffffff",
+        fg="#000000",
+        activebackground="#f2f2f2",
+        activeforeground="#000000",
+        relief="solid",
+        bd=1,
+        highlightthickness=0,
         command=callback_value_100,
         ).grid(row=3,
             column=1,
@@ -559,10 +508,13 @@ spinbox.grid(row=2,
                 ipadx=23)
 
 tk.Button(SpinBoxFrame,
-        bg=BG_Farbe,
-        fg="#ffffff",
+        bg="#ffffff",
+        fg="#000000",
+        activebackground="#f2f2f2",
+        activeforeground="#000000",
         text="Start",
-        bd=0,
+        relief="solid",
+        bd=1,
         highlightthickness=0,
         font=(BtnFontArt, BtnFontGroesse),
         command=to_start).grid( row=4,
