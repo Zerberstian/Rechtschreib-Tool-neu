@@ -56,5 +56,5 @@ class CatalogueDto:
             "data": [i.to_dict()
                      for i in self.fields]
                      if self.fields
-                     else None
+                     else []
         }

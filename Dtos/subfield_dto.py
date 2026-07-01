@@ -61,5 +61,5 @@ class SubfieldDto:
             "UebungenListe": [i.to_dict()
                               for i in self.tasks]
                               if self.tasks
-                              else None
+                              else []
         }
