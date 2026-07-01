@@ -9,6 +9,22 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 aufgaben_frame_dict: dict[int, "AufgabenFrame"] = {}
 statistik_frame_list: list["StatistikFrame"] = []
 
+# Tracks the pending "next question" timer so it can be cancelled if the user
+# leaves the quiz (e.g. via "Abbrechen")
+_pending_after_id: str | None = None
+_pending_after_widget: "tk.Misc | None" = None
+
+
+def cancel_pending_after() -> None:
+    global _pending_after_id, _pending_after_widget
+    if _pending_after_id is not None and _pending_after_widget is not None:
+        try:
+            _pending_after_widget.after_cancel(_pending_after_id)
+        except Exception:
+            pass
+    _pending_after_id = None
+    _pending_after_widget = None
+
 class StatistikFrame:
     def __init__(self,
                  master: tk.Tk | tk.Frame,
@@ -147,6 +163,10 @@ class AufgabenFrame:
         self.frame.grid_forget()
 
     def warten(self) -> None:
+        global _pending_after_id, _pending_after_widget
+        # This timer has now fired; clear the handle so a later cancel is a no-op.
+        _pending_after_id = None
+        _pending_after_widget = None
         print("Fertig warten")
         self.hide()
         aufgaben_frame_generation(self.master, self.font)
@@ -173,7 +193,9 @@ class AufgabenFrame:
                 widget.config(state="disabled", disabledforeground="#ffffff")
                 print("Button disabled")
         frame.update()
-        self.master.after(1000, self.warten)
+        global _pending_after_id, _pending_after_widget
+        _pending_after_widget = self.master
+        _pending_after_id = self.master.after(1000, self.warten)
 
 def aufgaben_frame_generation(master: tk.Tk | tk.Frame, font: str) -> None:
     try:

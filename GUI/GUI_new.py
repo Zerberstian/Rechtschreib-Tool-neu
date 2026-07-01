@@ -122,6 +122,10 @@ def back_to_main_frame() -> None:
     logicFrame.grid_forget()
     ColorPickerFrame.grid_forget()
     
+    # Cancel any queued "next question" timer before tearing down the state,
+    # so it can't fire against the reset quiz and show an empty statistics frame.
+    Frame_Generation_Class.cancel_pending_after()
+
     try :
         Frame_Generation_Class.statistik_frame_list[-1].stats_hide()
     except IndexError:
