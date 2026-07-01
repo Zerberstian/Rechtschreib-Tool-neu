@@ -53,6 +53,9 @@ class Aufgabe:
         else:
             self.__wiederholt = False
 
+    def reset_wiederholt(self) -> None:
+        self.__wiederholt = False
+
     def get_wiederholt(self) -> bool:
         return self.__wiederholt
 
@@ -251,7 +254,7 @@ def button_start() -> None:
 
 def resetting() -> None:
     for eintrag in aufgaben_dict:
-        aufgaben_dict[eintrag].set_wiederholt()
+        aufgaben_dict[eintrag].reset_wiederholt()
     ausgewaehlte_aufgaben.clear()
     zu_loesende_aufgaben_list.clear()
     falsch_beantwortet.clear()
