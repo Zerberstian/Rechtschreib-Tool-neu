@@ -36,7 +36,7 @@ class TaskDto:
     def to_dict(self) -> dict[str, Any]:
         return {
             "Moeglichkeiten": self.answer_options,
-            "Korrekte_antwort": self.correct_answer,
+            "KorrekteAntwort": self.correct_answer,
             "Infotext": self.information_text,
             "UebungsBeschreibung": self.task_description,
             "Uebung_id": self.task_id
