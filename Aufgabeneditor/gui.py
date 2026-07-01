@@ -174,7 +174,7 @@ class AufgabenGUI:
         self.tree.column("Correct", width=150, anchor="center")
         self.tree.column("Options", width=120, anchor="center")
 
-        sb = ttk.Scrollbar(table_wrap, orient="vertical", command=self.tree.yview)
+        sb = ttk.Scrollbar(table_wrap, orient="vertical", command=self.tree.yview) # type: ignore
         self.tree.configure(yscrollcommand=sb.set)
         self.tree.pack(side="left", expand=True, fill="both")
         sb.pack(side="right", fill="y")
@@ -217,9 +217,9 @@ class AufgabenGUI:
         txt_box = tk.Text(view_frame, wrap="none", font=("Consolas", 10), bg="#FFFFFF", relief="flat", padx=10, pady=10)
         txt_box.pack(side="left", expand=True, fill="both")
 
-        sb_y = ttk.Scrollbar(view_frame, orient="vertical", command=txt_box.yview)
+        sb_y = ttk.Scrollbar(view_frame, orient="vertical", command=txt_box.yview) # type: ignore
         sb_y.pack(side="right", fill="y")
-        sb_x = ttk.Scrollbar(diff_win, orient="horizontal", command=txt_box.xview)
+        sb_x = ttk.Scrollbar(diff_win, orient="horizontal", command=txt_box.xview) # type: ignore
         sb_x.pack(fill="x", padx=25, pady=(0, 15))
 
         txt_box.configure(yscrollcommand=sb_y.set, xscrollcommand=sb_x.set)
@@ -263,7 +263,7 @@ class AufgabenGUI:
         self.stats_label.config(text=f"Aufgabensammlung: {count} Aufgaben")
 
     def on_bereich_select(self, event: "tk.Event | None") -> None:
-        selection = self.bereich_list.curselection()
+        selection = self.bereich_list.curselection() # type: ignore
         if not selection: return
         self.current_bereich_idx = selection[0]
         self.current_teil_idx = None
@@ -282,7 +282,7 @@ class AufgabenGUI:
             self.teil_list.insert(tk.END, f"{title} ({count})")
 
     def on_teil_select(self, event: "tk.Event | None") -> None:
-        selection = self.teil_list.curselection()
+        selection = self.teil_list.curselection() # type: ignore
         if not selection: return
         self.current_teil_idx = selection[0]
         self.refresh_tasks()
