@@ -1,12 +1,12 @@
 import json
-import os
 from Dtos import *
+from Programmlogik.paths import cache_path
 
 aufgabenkatalog: CatalogueDto
 
 # Function to load aufgaben.json
 def jsonladen() -> None:
-    with open(os.path.join(os.path.dirname(__file__), "json_cache.json"), "r", encoding="utf-8") as f:
+    with open(cache_path(), "r", encoding="utf-8") as f:
         global aufgabenkatalog
         raw = json.load(f)
         aufgabenkatalog = CatalogueDto.from_dict(raw)

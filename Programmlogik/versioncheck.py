@@ -8,6 +8,7 @@ import json
 import os
 from datetime import datetime
 from Dtos import *
+from Programmlogik.paths import cache_path
 
 def count_aufgaben(data: list[FieldDto]) -> int:
     total = 0
@@ -20,7 +21,7 @@ def count_aufgaben(data: list[FieldDto]) -> int:
 
 def check_json_version() -> list[FieldDto]:
     RAW_URL = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"
-    CACHE_FILE = "json_cache.json"
+    CACHE_FILE = cache_path()
     
     print("🌐 Checking for new task version...")
     
@@ -98,7 +99,7 @@ def check_json_version() -> list[FieldDto]:
 # which is then updated when the program starts with network access
 # Initially required to download the JSON
 def load_local_cache() -> list[FieldDto]:
-    cache_file = "json_cache.json"
+    cache_file = cache_path()
     if os.path.exists(cache_file):
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:

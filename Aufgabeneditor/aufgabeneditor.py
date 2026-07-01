@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import requests
 from datetime import datetime
 # used for pushing repo via subprocess
@@ -11,6 +13,7 @@ import time
 # regex pattern used for finding the predecessor id for auto-id generation
 import re
 from Dtos import *
+from Programmlogik.paths import cache_path
 
 # pip install GitPython (requirements.txt) - as Git is essential for automatically pushing the new version to GitHub
 
@@ -77,7 +80,7 @@ def load_credentials() -> ConfigDto:
         return ConfigDto(None, None)
 
 def load_local_data() -> CatalogueDto:
-    cache_file = os.path.join(os.path.dirname(__file__), '..', 'Programmlogik', 'json_cache.json')
+    cache_file = cache_path()
     if os.path.exists(cache_file):
         with open(cache_file, 'r', encoding='utf-8') as f:
             return CatalogueDto.from_dict(json.load(f))
@@ -128,10 +131,7 @@ def __write_to_json(katalog: CatalogueDto, path: str) -> None:
 
 def __save_local(katalog: CatalogueDto) -> None:
     print("⚠️  Keine GitHub-Credentials → Nur lokal speichern")
-    local_path = os.path.join(os.path.dirname(__file__),
-                                '..',
-                                'Programmlogik',
-                                'Aufgabenkatalog.json')
+    local_path = cache_path()
     os.makedirs(os.path.dirname(local_path), exist_ok=True)
 
     new_katalog = __create_new_katalog(katalog)
