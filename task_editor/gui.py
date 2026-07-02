@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from typing import Callable
-import aufgabeneditor as editor
+import task_editor.task_editor as editor
 from Dtos import FieldDto, SubfieldDto, TaskDto
 import os
 import difflib
