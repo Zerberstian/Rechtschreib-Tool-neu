@@ -1,8 +1,8 @@
-from GUI.FieldCheckbox import (
+from GUI.field_checkbox import (
     FieldCheckbox,
     get_active
 )
-from GUI.Frame_Generation_Class import (
+from GUI.frame_generation import (
     StatistikFrame,
     AufgabenFrame,
     aufgaben_frame_generation,

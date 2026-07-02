@@ -52,7 +52,7 @@ class FieldCheckbox:
         main_checkbox_frame.bind("<Configure>", on_configure)
 
         # Fills checkboxes with "Uebungsbereich"
-        for _, bereich in enumerate(list_fields()):
+        for _, bereich in enumerate(json_loader.list_fields()):
             frame = tk.Frame(main_checkbox_frame, bg=color)
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
@@ -126,7 +126,7 @@ class FieldCheckbox:
             cb_ober.config(command=ober_command)
 
             # Unter-Checkboxen
-            for _, (titel, teil_id) in enumerate(list_subfields(bereich)):
+            for _, (titel, teil_id) in enumerate(json_loader.list_subfields(bereich)):
                 var = tk.IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
                 unter_id_dict[f"{bereich}"][f"{titel}"] = teil_id
@@ -188,7 +188,7 @@ def get_active() -> list[str]:
     return aktiv
 
 if __name__ == "__main__":
-    load_json()
+    json_loader.load_json()
     root = tk.Tk()
     FieldCheckbox(root).create("#ffffff")
     root.mainloop()
