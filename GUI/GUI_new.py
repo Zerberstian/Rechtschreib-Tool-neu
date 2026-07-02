@@ -3,8 +3,8 @@ import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
 from Programmlogik import task_logic
-from GUI.FieldCheckbox import FieldCheckbox, get_active
-from GUI import Frame_Generation_Class
+from GUI.field_checkbox import FieldCheckbox, get_active
+from GUI import frame_generation
 from typing import Any, Callable
 import tkinter as tk
 from tkinter import messagebox, colorchooser
@@ -54,7 +54,7 @@ def start_logic() -> None:
     print(spinbox.get(), "= value check 2")
     task_logic.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
-    Frame_Generation_Class.aufgaben_frame_generation(logicFrame, BtnFontArt)
+    frame_generation.aufgaben_frame_generation(logicFrame, BtnFontArt)
 
     #aufgaben_logik.aufgaben_anfangen_konsole()
     #aufgaben_logik.statistik_ausgeben()
@@ -125,15 +125,15 @@ def back_to_main_frame() -> None:
     
     # Cancel any queued "next question" timer before tearing down the state,
     # so it can't fire against the reset quiz and show an empty statistics frame.
-    Frame_Generation_Class.cancel_pending_after()
+    frame_generation.cancel_pending_after()
 
     try :
-        Frame_Generation_Class.statistik_frame_list[-1].stats_hide()
+        frame_generation.statistik_frame_list[-1].stats_hide()
     except IndexError:
         pass
-    for frame in Frame_Generation_Class.aufgaben_frame_dict:
-        Frame_Generation_Class.aufgaben_frame_dict[frame].hide()
-    Frame_Generation_Class.reset()
+    for frame in frame_generation.aufgaben_frame_dict:
+        frame_generation.aufgaben_frame_dict[frame].hide()
+    frame_generation.reset()
     task_logic.resetting()
 
 def set_fullscreen(win: tk.Tk, state: bool) -> None:

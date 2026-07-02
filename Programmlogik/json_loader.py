@@ -2,124 +2,66 @@ import json
 from Dtos import *
 from Programmlogik.path import Path
 
-aufgabenkatalog: CatalogueDto
+class JsonLoader:
+    def __init__(self) -> None:
+        self.catalogue: CatalogueDto = CatalogueDto.create_empty()
 
-# Function to load aufgaben.json
-def load_json() -> None:
-    with open(Path().cache_path(), "r", encoding="utf-8") as f:
-        global aufgabenkatalog
-        raw = json.load(f)
-        aufgabenkatalog = CatalogueDto.from_dict(raw)
+    # Loads aufgaben.json from the local cache into memory
+    def load_json(self) -> None:
+        with open(Path().cache_path(), "r", encoding="utf-8") as f:
+            self.catalogue = CatalogueDto.from_dict(json.load(f))
 
-# Function to list every "Uebungsbereich"
-def list_fields() -> list[str]:
-    uebungsbereich_liste: list[str] = []
-    for uebungsbereich in aufgabenkatalog.fields if aufgabenkatalog.fields else []:
-        if uebungsbereich.title not in uebungsbereich_liste:
-            uebungsbereich_liste.append(uebungsbereich.title)
-    return uebungsbereich_liste
+    def _subfields(self) -> list[SubfieldDto]:
+        return [subfield
+                for field in self.catalogue.fields
+                for subfield in field.subfields]
 
-# Function to list every "Teilgebiet" of an "Uebungsbereich"
-def list_subfield_titles(bereich_input: str | list[str]) -> list[str]:
-    titels: list[str] = []
-    bereiche = bereich_input if isinstance(bereich_input, list) else [bereich_input]
-
-    if not aufgabenkatalog.fields:
-        return titels
-    
-    for bereich in bereiche:
-        for uebungsbereiche in aufgabenkatalog.fields:
-            if bereich == uebungsbereiche.title:
-                if uebungsbereiche.subfields:
-                    titels.extend(tg.title for tg in uebungsbereiche.subfields)
-    return titels
-
-# Titles are not guaranteed unique across different Uebungsbereiche.
-def list_subfields(bereich_input: str | list[str]) -> list[tuple[str, str]]:
-    teilgebiete: list[tuple[str, str]] = []
-    bereiche = bereich_input if isinstance(bereich_input, list) else [bereich_input]
-
-    if not aufgabenkatalog.fields:
-        return teilgebiete
-
-    for bereich in bereiche:
-        for uebungsbereiche in aufgabenkatalog.fields:
-            if bereich == uebungsbereiche.title and uebungsbereiche.subfields:
-                teilgebiete.extend((tg.title, tg.subfield_id)
-                                   for tg in uebungsbereiche.subfields)
-    return teilgebiete
-
-# Function to list "Tasks" of a "Subfield", matched by its unique id
-def list_tasks_by_subfield(subfield_ids: str | list[str]) -> list[str]:
-    aufgaben_liste: list[str] = []
-    ids = subfield_ids if isinstance(subfield_ids, list) else [subfield_ids]
-
-    if not aufgabenkatalog.fields:
-        return aufgaben_liste
-
-    id_set = set(ids)
-    for bereich in aufgabenkatalog.fields:
-        if not bereich.subfields:
-            continue
-        for teilgebiet in bereich.subfields:
-            if teilgebiet.subfield_id in id_set and teilgebiet.tasks:
-                aufgaben_liste.extend(u.task_id for u in teilgebiet.tasks)
-    return aufgaben_liste
-
-# Function to list "UebungenListe" of a "Teilgebiet"
-def list_tasks(teilgebiet_titels: str | list[str]) -> list[str]:
-    aufgaben_liste: list[str] = []
-    titels = teilgebiet_titels if isinstance(teilgebiet_titels, list) else [teilgebiet_titels]
-
-    if not aufgabenkatalog.fields:
-        return aufgaben_liste
-
-    for titel in titels:
-        for bereich in aufgabenkatalog.fields:
-            if not bereich.subfields:
-                continue
-            for teilgebiet in bereich.subfields:
-                if titel == teilgebiet.title:
-                    if not teilgebiet.tasks:
-                        continue
-                    aufgaben_liste.extend(u.task_id for u in teilgebiet.tasks)
-
-    print(len(aufgaben_liste), "= len(aufgaben_liste)")
-    return aufgaben_liste
-
-def get_task_by_id(uebung_id: str) -> TaskDto | None:
-    if not aufgabenkatalog.fields:
+    def _find_subfield(self, subfield_id: str) -> SubfieldDto | None:
+        for subfield in self._subfields():
+            if subfield.subfield_id == subfield_id:
+                return subfield
         return None
-    for bereich in aufgabenkatalog.fields:
-        if not bereich.subfields:
-            continue
-        for teilgebiet in bereich.subfields:
-            if not teilgebiet.tasks:
-                continue
-            for aufgabe in teilgebiet.tasks:
-                if uebung_id == aufgabe.task_id:
-                    return aufgabe
-    return None
 
-def get_special_status(teilgebiet_id: str) -> bool:
-    if not aufgabenkatalog.fields:
-        return False
-    for bereich in aufgabenkatalog.fields:
-        if not bereich.subfields:
-            continue
-        for teilgebiet in bereich.subfields:
-            if teilgebiet_id == teilgebiet.subfield_id:
-                return teilgebiet.is_special
-    return False
+    # Lists the title of every "Uebungsbereich"
+    def list_fields(self) -> list[str]:
+        return list(dict.fromkeys(field.title for field in self.catalogue.fields))
+
+    # Lists (title, id) of every "Teilgebiet" of the given "Uebungsbereiche".
+    # Titles are not guaranteed unique across different Uebungsbereiche.
+    def list_subfields(self, field_titles: str | list[str]) -> list[tuple[str, str]]:
+        titles = field_titles if isinstance(field_titles, list) else [field_titles]
+        return [(subfield.title, subfield.subfield_id)
+                for field in self.catalogue.fields if field.title in titles
+                for subfield in field.subfields]
+
+    # Lists the task ids of the "Teilgebiete" matched by their unique ids
+    def list_tasks_by_subfield(self, subfield_ids: str | list[str]) -> list[str]:
+        ids = set(subfield_ids if isinstance(subfield_ids, list) else [subfield_ids])
+        return [task.task_id
+                for subfield in self._subfields() if subfield.subfield_id in ids
+                for task in subfield.tasks]
+
+    # Lists the task ids of the whole catalogue
+    def list_all_tasks(self) -> list[str]:
+        return [task.task_id
+                for subfield in self._subfields()
+                for task in subfield.tasks]
+
+    def get_task_by_id(self, task_id: str) -> TaskDto | None:
+        for subfield in self._subfields():
+            for task in subfield.tasks:
+                if task.task_id == task_id:
+                    return task
+        return None
+
+    def get_special_status(self, subfield_id: str) -> bool:
+        subfield = self._find_subfield(subfield_id)
+        return subfield.is_special if subfield else False
+
+    def get_task_description(self, subfield_id: str) -> str:
+        subfield = self._find_subfield(subfield_id)
+        return subfield.task_description if subfield else ""
 
 
-def get_task_description(teilgebiet_id: str) -> str:
-    if not aufgabenkatalog.fields:
-        return ""
-    for bereich in aufgabenkatalog.fields:
-        if not bereich.subfields:
-            continue
-        for teilgebiet in bereich.subfields:
-            if teilgebiet_id == teilgebiet.subfield_id:
-                return teilgebiet.task_description
-    return ""
+# Shared instance: load_json() runs once at startup, all modules read from it
+json_loader = JsonLoader()
