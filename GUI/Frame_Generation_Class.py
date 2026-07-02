@@ -2,7 +2,7 @@ import tkinter as tk
 import sys, os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from Programmlogik import aufgaben_logik
+from Programmlogik import task_logic
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -103,7 +103,7 @@ class AufgabenFrame:
         self.uebung_id = uebung_id
         self.master = master
         self.font = font
-        self.moeglichkeiten = aufgaben_logik.aufgaben_dict[self.uebung_id].moeglichkeiten
+        self.moeglichkeiten = task_logic.aufgaben_dict[self.uebung_id].moeglichkeiten
 
         aufgaben_frame_dict[self.frame_id] = self
 
@@ -118,7 +118,7 @@ class AufgabenFrame:
         self.buttonframe = tk.Frame(self.frame2)
         self.buttonframe.pack()
 
-        aufgabe = aufgaben_logik.aufgaben_dict[self.uebung_id]
+        aufgabe = task_logic.aufgaben_dict[self.uebung_id]
         korrekte_antwort = aufgabe.korrekt
 
         for index, antwort_moeglichkeit in enumerate(self.moeglichkeiten):
@@ -158,8 +158,8 @@ class AufgabenFrame:
         self.aufgabenbeschreibung_textbox.insert(
             tk.END,
             self.uebung_id + "\n" +
-            aufgaben_logik.aufgaben_dict[self.uebung_id].aufgabenbeschreibung + "\n\n" +
-            aufgaben_logik.aufgaben_dict[self.uebung_id].uebungs_beschreibung)
+            task_logic.aufgaben_dict[self.uebung_id].aufgabenbeschreibung + "\n\n" +
+            task_logic.aufgaben_dict[self.uebung_id].uebungs_beschreibung)
         self.aufgabenbeschreibung_textbox.config(state="disabled")
         self.aufgabenbeschreibung_textbox.pack()
 
@@ -182,10 +182,10 @@ class AufgabenFrame:
             self,
             frame: tk.Frame,
             x: int,
-            aufgabe: aufgaben_logik.Aufgabe,
+            aufgabe: task_logic.Aufgabe,
             frame_id: int,
             korrekte_antwort: int) -> None:
-        aufgaben_logik.antwort_check(x, aufgabe, frame_id)
+        task_logic.antwort_check(x, aufgabe, frame_id)
         # Buttons einfärben
         for index, widget in enumerate(frame.winfo_children()):
             print(index)
@@ -206,7 +206,7 @@ class AufgabenFrame:
 
 def aufgaben_frame_generation(master: tk.Tk | tk.Frame, font: str) -> None:
     try:
-        aufgabe = aufgaben_logik.zu_loesende_aufgaben_list[len(aufgaben_frame_dict)]
+        aufgabe = task_logic.zu_loesende_aufgaben_list[len(aufgaben_frame_dict)]
     except IndexError:
         reset()
         statistik_frame_generation(master, font)
@@ -217,8 +217,8 @@ def aufgaben_frame_generation(master: tk.Tk | tk.Frame, font: str) -> None:
     return print("Deine Aufgabe wurde geladen")
 
 def statistik_frame_generation(master: tk.Tk | tk.Frame, font: str) -> None:
-    StatistikFrame(master, font, aufgaben_logik.statistik_ausgeben())
-    aufgaben_logik.resetting()
+    StatistikFrame(master, font, task_logic.statistik_ausgeben())
+    task_logic.resetting()
     statistik_frame_list[-1].stats_show()
 
 def reset() -> None:

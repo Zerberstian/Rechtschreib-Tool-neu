@@ -1,18 +1,18 @@
 import json
 from Dtos import *
-from Programmlogik.paths import Paths
+from Programmlogik.path import Path
 
 aufgabenkatalog: CatalogueDto
 
 # Function to load aufgaben.json
-def jsonladen() -> None:
-    with open(Paths().cache_path(), "r", encoding="utf-8") as f:
+def load_json() -> None:
+    with open(Path().cache_path(), "r", encoding="utf-8") as f:
         global aufgabenkatalog
         raw = json.load(f)
         aufgabenkatalog = CatalogueDto.from_dict(raw)
 
 # Function to list every "Uebungsbereich"
-def list_uebungsbereiche() -> list[str]:
+def list_fields() -> list[str]:
     uebungsbereich_liste: list[str] = []
     for uebungsbereich in aufgabenkatalog.fields if aufgabenkatalog.fields else []:
         if uebungsbereich.title not in uebungsbereich_liste:
@@ -20,7 +20,7 @@ def list_uebungsbereiche() -> list[str]:
     return uebungsbereich_liste
 
 # Function to list every "Teilgebiet" of an "Uebungsbereich"
-def list_teilgebiet_titels(bereich_input: str | list[str]) -> list[str]:
+def list_subfield_titles(bereich_input: str | list[str]) -> list[str]:
     titels: list[str] = []
     bereiche = bereich_input if isinstance(bereich_input, list) else [bereich_input]
 
@@ -35,7 +35,7 @@ def list_teilgebiet_titels(bereich_input: str | list[str]) -> list[str]:
     return titels
 
 # Titles are not guaranteed unique across different Uebungsbereiche.
-def list_teilgebiete(bereich_input: str | list[str]) -> list[tuple[str, str]]:
+def list_subfields(bereich_input: str | list[str]) -> list[tuple[str, str]]:
     teilgebiete: list[tuple[str, str]] = []
     bereiche = bereich_input if isinstance(bereich_input, list) else [bereich_input]
 
@@ -49,10 +49,10 @@ def list_teilgebiete(bereich_input: str | list[str]) -> list[tuple[str, str]]:
                                    for tg in uebungsbereiche.subfields)
     return teilgebiete
 
-# Function to list "UebungenListe" of a "Teilgebiet", matched by its unique id
-def list_uebungen_by_id(teilgebiet_ids: str | list[str]) -> list[str]:
+# Function to list "Tasks" of a "Subfield", matched by its unique id
+def list_tasks_by_subfield(subfield_ids: str | list[str]) -> list[str]:
     aufgaben_liste: list[str] = []
-    ids = teilgebiet_ids if isinstance(teilgebiet_ids, list) else [teilgebiet_ids]
+    ids = subfield_ids if isinstance(subfield_ids, list) else [subfield_ids]
 
     if not aufgabenkatalog.fields:
         return aufgaben_liste
@@ -67,7 +67,7 @@ def list_uebungen_by_id(teilgebiet_ids: str | list[str]) -> list[str]:
     return aufgaben_liste
 
 # Function to list "UebungenListe" of a "Teilgebiet"
-def list_uebungen(teilgebiet_titels: str | list[str]) -> list[str]:
+def list_tasks(teilgebiet_titels: str | list[str]) -> list[str]:
     aufgaben_liste: list[str] = []
     titels = teilgebiet_titels if isinstance(teilgebiet_titels, list) else [teilgebiet_titels]
 
@@ -87,7 +87,7 @@ def list_uebungen(teilgebiet_titels: str | list[str]) -> list[str]:
     print(len(aufgaben_liste), "= len(aufgaben_liste)")
     return aufgaben_liste
 
-def aufgabe_lesen(uebung_id: str) -> TaskDto | None:
+def get_task_by_id(uebung_id: str) -> TaskDto | None:
     if not aufgabenkatalog.fields:
         return None
     for bereich in aufgabenkatalog.fields:
@@ -101,7 +101,7 @@ def aufgabe_lesen(uebung_id: str) -> TaskDto | None:
                     return aufgabe
     return None
 
-def get_spezial_status(teilgebiet_id: str) -> bool:
+def get_special_status(teilgebiet_id: str) -> bool:
     if not aufgabenkatalog.fields:
         return False
     for bereich in aufgabenkatalog.fields:
@@ -113,7 +113,7 @@ def get_spezial_status(teilgebiet_id: str) -> bool:
     return False
 
 
-def get_aufgabenbeschreibung(teilgebiet_id: str) -> str:
+def get_task_description(teilgebiet_id: str) -> str:
     if not aufgabenkatalog.fields:
         return ""
     for bereich in aufgabenkatalog.fields:

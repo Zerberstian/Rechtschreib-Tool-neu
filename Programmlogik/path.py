@@ -2,7 +2,7 @@ import os
 import sys
 import shutil
 
-class Paths:
+class Path:
     CACHE_FILENAME = "json_cache.json"
 
     def _frozen(self) -> bool:
@@ -18,13 +18,21 @@ class Paths:
             return os.path.dirname(sys.executable)
         return os.path.join(self._project_root(), "Programmlogik")
 
-    def _bundled_cache(self) -> str | None:
+    def base_dir(self) -> str:
+        # dynamic base-path (important when trying to create .exe):
+        # PyInstaller extracts bundled files to _MEIPASS, otherwise the project root is used
         if self._frozen():
-            meipass = getattr(sys, "_MEIPASS", None)
-            if not meipass:
-                return None
-            return os.path.join(meipass, "Programmlogik", self.CACHE_FILENAME)
-        return os.path.join(self._project_root(), "Programmlogik", self.CACHE_FILENAME)
+            return getattr(sys, "_MEIPASS", os.path.dirname(sys.executable))
+        return self._project_root()
+
+    def setup_sys_path(self) -> None:
+        # relative import of the modules (relative regarding base_dir)
+        for folder in ("GUI", "Programmlogik", "Aufgabeneditor", "Dtos"):
+            sys.path.insert(0, os.path.join(self.base_dir(), folder))
+        sys.path.insert(0, self.base_dir())
+
+    def _bundled_cache(self) -> str:
+        return os.path.join(self.base_dir(), "Programmlogik", self.CACHE_FILENAME)
 
     def cache_path(self) -> str:
         # Absolute path to the writable task cache used by every module.

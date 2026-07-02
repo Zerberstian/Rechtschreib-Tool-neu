@@ -17,7 +17,7 @@ class Aufgabe:
     def __init__(self, uebung_id: str) -> None:
         self.__wiederholt = False
         self.uebung_id = uebung_id
-        aufgabe = aufgabe_lesen(uebung_id)
+        aufgabe = get_task_by_id(uebung_id)
         if aufgabe is None:
             raise ValueError(f"Aufgabe mit ID '{uebung_id}' nicht gefunden.")
         self.moeglichkeiten = aufgabe.answer_options
@@ -34,11 +34,11 @@ class Aufgabe:
 
     def beschreibung(self) -> str:
         gekuerzte_uebung_id: str = self.uebung_id.rsplit(".", 1)[0]
-        return get_aufgabenbeschreibung(gekuerzte_uebung_id)
+        return get_task_description(gekuerzte_uebung_id)
 
     def speziell_check(self) -> str:
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
-        speziell = get_spezial_status(gekuerzte_uebung_id)
+        speziell = get_special_status(gekuerzte_uebung_id)
         if not speziell:
             return "Nicht Speziell"
         if len(self.moeglichkeiten[0].split()) == 1:
@@ -168,17 +168,17 @@ def aufgabe_bearbeiten_konsole(index: int, aufgabe: Aufgabe) -> None:
     antwort_check(antwort, aufgabe, index)
 
 def aufgaben_objekte_erstellen() -> None:
-    for eintrag in list_uebungen(list_teilgebiet_titels(list_uebungsbereiche())):
+    for eintrag in list_tasks(list_subfield_titles(list_fields())):
         Aufgabe(eintrag)
 
 def list_aktive_aufgaben() -> None:
     # Delayed import to avoid circular import at module load.
     # get_active() needs GUI.BereichCheckbox,
     # but GUI.BereichCheckbox needs aufgaben_logik
-    from GUI.BereichCheckbox import get_active
+    from GUI.FieldCheckbox import get_active
 
     # get_active() now returns Teilgebiet ids, so resolve tasks by id
-    for eintrag in list_uebungen_by_id(get_active()):
+    for eintrag in list_tasks_by_subfield(get_active()):
         ausgewaehlte_aufgaben.append(eintrag)
 
 def aufgaben_initialisieren(aufgaben_limit: int) -> None:

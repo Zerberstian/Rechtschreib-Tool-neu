@@ -1,13 +1,13 @@
-from Programmlogik.json_laden_logik import *
+from Programmlogik.json_loader import *
 
 __all__ = [
-    "jsonladen",
-    "list_uebungsbereiche",
-    "list_teilgebiet_titels",
-    "list_teilgebiete",
-    "list_uebungen",
-    "list_uebungen_by_id",
-    "aufgabe_lesen",
-    "get_spezial_status",
-    "get_aufgabenbeschreibung",
+    "load_json",
+    "list_fields",
+    "list_subfield_titles",
+    "list_subfields",
+    "list_tasks",
+    "list_tasks_by_subfield",
+    "get_task_by_id",
+    "get_special_status",
+    "get_task_description",
     ]

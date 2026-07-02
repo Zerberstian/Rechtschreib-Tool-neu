@@ -1,30 +1,22 @@
 # type: ignore
-import sys
-import os
-import Programmlogik.json_laden_logik
-import Programmlogik.aufgaben_logik
+from Programmlogik.path import Path
+
+# relative import of the modules (relative regarding base_dir)
+Path().setup_sys_path()
+
+import Programmlogik.json_loader
+import Programmlogik.task_logic
 
 # Load JSON data into memory
-Programmlogik.json_laden_logik.jsonladen()
+Programmlogik.json_loader.load_json()
 # Create Aufgabe objects for all tasks
-Programmlogik.aufgaben_logik.aufgaben_objekte_erstellen()
-
-# dynamic base-path (important when trying to create .exe)
-BASE_DIR: str = (sys._MEIPASS if getattr(sys, 'frozen', False)
-                 else os.path.dirname(os.path.abspath(__file__)))
-
-# relative import of the modules (relative regarding BASE_DIR)
-sys.path.insert(0, os.path.join(BASE_DIR, 'GUI'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'Programmlogik'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'Aufgabeneditor'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'Dtos'))
-sys.path.insert(0, BASE_DIR)
+Programmlogik.task_logic.aufgaben_objekte_erstellen()
 
 from GUI.GUI_new import *  # importing GUI completely
-from GUI.BereichCheckbox import BereichCheckbox
+from GUI.FieldCheckbox import FieldCheckbox
 try:
-    import Programmlogik.aufgaben_logik as aufgaben_logik
-    from Programmlogik.json_laden_logik import list_uebungen
+    import Programmlogik.task_logic as task_logic
+    from Programmlogik.json_loader import list_tasks
 except ImportError:
     print("Warnung: Programmlogik Module nicht gefunden")
 

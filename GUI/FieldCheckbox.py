@@ -9,7 +9,7 @@ ober_dict: dict[str, tk.IntVar] = {}
 unter_dict: dict[str, dict[str, tk.IntVar]] = {}
 unter_id_dict: dict[str, dict[str, str]] = {}
 
-class BereichCheckbox:
+class FieldCheckbox:
     def __init__(self, master: tk.Tk | tk.Frame):
         self.master: tk.Tk | tk.Frame = master
         self.frame_dict: dict[str, tk.Frame] = {}
@@ -52,7 +52,7 @@ class BereichCheckbox:
         main_checkbox_frame.bind("<Configure>", on_configure)
 
         # Fills checkboxes with "Uebungsbereich"
-        for _, bereich in enumerate(list_uebungsbereiche()):
+        for _, bereich in enumerate(list_fields()):
             frame = tk.Frame(main_checkbox_frame, bg=color)
             self.frame_dict[f"{bereich}"] = frame
             frame.columnconfigure(1, weight=1)
@@ -72,7 +72,7 @@ class BereichCheckbox:
                 variable=self.ausgeklappt_dict[f"{bereich}"],
                 onvalue=1,
                 offvalue=0,
-                command=partial(BereichCheckbox.ausklappen, self, bereich),
+                command=partial(FieldCheckbox.ausklappen, self, bereich),
                 indicatoron=False,
             )
             cb_ausklappen.grid(pady=5, padx=5, sticky=tk.NSEW, column=1, row=0)
@@ -126,7 +126,7 @@ class BereichCheckbox:
             cb_ober.config(command=ober_command)
 
             # Unter-Checkboxen
-            for _, (titel, teil_id) in enumerate(list_teilgebiete(bereich)):
+            for _, (titel, teil_id) in enumerate(list_subfields(bereich)):
                 var = tk.IntVar(value=0)
                 unter_dict[f"{bereich}"][f"{titel}"] = var
                 unter_id_dict[f"{bereich}"][f"{titel}"] = teil_id
@@ -188,7 +188,7 @@ def get_active() -> list[str]:
     return aktiv
 
 if __name__ == "__main__":
-    jsonladen()
+    load_json()
     root = tk.Tk()
-    BereichCheckbox(root).create("#ffffff")
+    FieldCheckbox(root).create("#ffffff")
     root.mainloop()

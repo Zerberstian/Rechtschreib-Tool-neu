@@ -1,5 +1,5 @@
-from GUI.BereichCheckbox import (
-    BereichCheckbox,
+from GUI.FieldCheckbox import (
+    FieldCheckbox,
     get_active
 )
 from GUI.Frame_Generation_Class import (
@@ -11,7 +11,7 @@ from GUI.Frame_Generation_Class import (
 )
 
 __all__ = [
-    "BereichCheckbox",
+    "FieldCheckbox",
     "get_active",
     "StatistikFrame",
     "AufgabenFrame",

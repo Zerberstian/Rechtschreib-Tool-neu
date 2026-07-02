@@ -2,8 +2,8 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
-from Programmlogik import aufgaben_logik
-from GUI.BereichCheckbox import BereichCheckbox, get_active
+from Programmlogik import task_logic
+from GUI.FieldCheckbox import FieldCheckbox, get_active
 from GUI import Frame_Generation_Class
 from typing import Any, Callable
 import tkinter as tk
@@ -52,7 +52,7 @@ def callback_value_100() -> None:
 def start_logic() -> None:
     print("Start der logik")
     print(spinbox.get(), "= value check 2")
-    aufgaben_logik.aufgaben_initialisieren(int(on_value_change()))
+    task_logic.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
     Frame_Generation_Class.aufgaben_frame_generation(logicFrame, BtnFontArt)
 
@@ -134,7 +134,7 @@ def back_to_main_frame() -> None:
     for frame in Frame_Generation_Class.aufgaben_frame_dict:
         Frame_Generation_Class.aufgaben_frame_dict[frame].hide()
     Frame_Generation_Class.reset()
-    aufgaben_logik.resetting()
+    task_logic.resetting()
 
 def set_fullscreen(win: tk.Tk, state: bool) -> None:
     win.attributes("-fullscreen", state) # type: ignore
@@ -525,7 +525,7 @@ tk.Button(SpinBoxFrame,
                                 pady=15,)
 
 # Creating checkboxes
-BereichCheckbox(CheckBoxFrameS).create("#ffffff")
+FieldCheckbox(CheckBoxFrameS).create("#ffffff")
 
 '''
 Franzosen Grrr

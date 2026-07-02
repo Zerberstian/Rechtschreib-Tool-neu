@@ -8,13 +8,13 @@ import json
 import os
 from datetime import datetime
 from Dtos import *
-from Programmlogik.paths import Paths
+from Programmlogik.path import Path
 
 class VersionCheck:
     RAW_URL = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"
 
     def __init__(self):
-        self.cache_file = Paths().cache_path()
+        self.cache_file = Path().cache_path()
 
     # Using the cache, the offline version can always be loaded,
     # which is then updated when the program starts with network access

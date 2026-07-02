@@ -13,7 +13,7 @@ import time
 # regex pattern used for finding the predecessor id for auto-id generation
 import re
 from Dtos import *
-from Programmlogik.paths import Paths
+from Programmlogik.path import Path
 
 # pip install GitPython (requirements.txt) - as Git is essential for automatically pushing the new version to GitHub
 
@@ -80,7 +80,7 @@ def load_credentials() -> ConfigDto:
         return ConfigDto(None, None)
 
 def load_local_data() -> CatalogueDto:
-    cache_file = Paths().cache_path()
+    cache_file = Path().cache_path()
     if os.path.exists(cache_file):
         with open(cache_file, 'r', encoding='utf-8') as f:
             return CatalogueDto.from_dict(json.load(f))
@@ -131,7 +131,7 @@ def __write_to_json(katalog: CatalogueDto, path: str) -> None:
 
 def __save_local(katalog: CatalogueDto) -> None:
     print("⚠️  Keine GitHub-Credentials → Nur lokal speichern")
-    local_path = Paths().cache_path()
+    local_path = Path().cache_path()
     os.makedirs(os.path.dirname(local_path), exist_ok=True)
 
     new_katalog = __create_new_katalog(katalog)
