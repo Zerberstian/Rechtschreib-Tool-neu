@@ -13,7 +13,7 @@ import time
 # regex pattern used for finding the predecessor id for auto-id generation
 import re
 from Dtos import *
-from Programmlogik.paths import cache_path
+from Programmlogik.paths import Paths
 
 # pip install GitPython (requirements.txt) - as Git is essential for automatically pushing the new version to GitHub
 
@@ -40,11 +40,11 @@ def find_task_by_id(katalog: CatalogueDto, aufgabe_id: str) -> FoundTaskDto | No
                     return FoundTaskDto(bereich_idx, teil_idx, aufgabe_idx, aufgabe)
     return None
 
-def count_aufgaben(katalog: CatalogueDto) -> int:
+def count_tasks(catalogue: CatalogueDto) -> int:
     total = 0
-    for bereich in katalog.fields:
-        for teil in bereich.subfields:
-            total += len(teil.tasks)
+    for field in catalogue.fields:
+        for subfield in field.subfields:
+            total += len(subfield.tasks)
     return total
 
 def load_credentials() -> ConfigDto:
@@ -80,7 +80,7 @@ def load_credentials() -> ConfigDto:
         return ConfigDto(None, None)
 
 def load_local_data() -> CatalogueDto:
-    cache_file = cache_path()
+    cache_file = Paths().cache_path()
     if os.path.exists(cache_file):
         with open(cache_file, 'r', encoding='utf-8') as f:
             return CatalogueDto.from_dict(json.load(f))
@@ -119,7 +119,7 @@ def __create_new_katalog(katalog: CatalogueDto,
         version=new_version,
         last_updated=datetime.now().isoformat(),
         etag="local-only" if local_only else f'W/"{hash(str(katalog))}"',
-        total_tasks=count_aufgaben(katalog),
+        total_tasks=count_tasks(katalog),
         size=len(json.dumps(katalog.to_dict()).encode('utf-8')),
         fields=katalog.fields
     )
@@ -131,7 +131,7 @@ def __write_to_json(katalog: CatalogueDto, path: str) -> None:
 
 def __save_local(katalog: CatalogueDto) -> None:
     print("⚠️  Keine GitHub-Credentials → Nur lokal speichern")
-    local_path = cache_path()
+    local_path = Paths().cache_path()
     os.makedirs(os.path.dirname(local_path), exist_ok=True)
 
     new_katalog = __create_new_katalog(katalog)
@@ -139,7 +139,7 @@ def __save_local(katalog: CatalogueDto) -> None:
     __write_to_json(new_katalog, local_path)
 
     print(f"🟢 Lokal gespeichert: {local_path}")
-    print(f"📊 {count_aufgaben(new_katalog)} Aufgaben")
+    print(f"📊 {count_tasks(new_katalog)} Aufgaben")
 
 def __get_current_katalog() -> CatalogueDto | None:
     remote_url = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"
@@ -192,7 +192,7 @@ def __upload_github(katalog: CatalogueDto,
     json_path = os.path.join(repo_path, 'Aufgabenkatalog.json')
     __write_to_json(new_katalog, json_path)
 
-    aufgaben_count = count_aufgaben(new_katalog)
+    aufgaben_count = count_tasks(new_katalog)
     commit_msg = f"Update Aufgabenkatalog v{new_katalog.version} - {aufgaben_count} Aufgaben"
     __commit_git_repo(repo_path, username, commit_msg)
     __push_git_repo(repo_path, username, token)

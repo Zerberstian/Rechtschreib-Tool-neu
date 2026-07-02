@@ -259,7 +259,7 @@ class AufgabenGUI:
         self.update_stats_label()
 
     def update_stats_label(self) -> None:
-        count = editor.count_aufgaben(self.data)
+        count = editor.count_tasks(self.data)
         self.stats_label.config(text=f"Aufgabensammlung: {count} Aufgaben")
 
     def on_bereich_select(self, event: "tk.Event | None") -> None:
@@ -530,7 +530,7 @@ class AufgabenGUI:
         s = tk.Toplevel(self.master); s.title("Stats"); s.geometry("500x600"); s.configure(bg=COLOR_BG_MAIN)
         tk.Label(s, text="KATALOG ÜBERSICHT", font=FONT_HEADER, bg=COLOR_BG_MAIN).pack(pady=20)
 
-        total = editor.count_aufgaben(self.data)
+        total = editor.count_tasks(self.data)
         cats = len(self.data.fields)
 
         f = tk.Frame(s, bg=COLOR_BG_MAIN); f.pack(pady=10, padx=40, fill="x")
