@@ -2,7 +2,7 @@ from functools import partial
 import tkinter as tk
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from Programmlogik import *
+from program_logic import *
 
 
 ober_dict: dict[str, tk.IntVar] = {}

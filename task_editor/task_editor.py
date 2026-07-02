@@ -13,31 +13,31 @@ import time
 # regex pattern used for finding the predecessor id for auto-id generation
 import re
 from Dtos import *
-from Programmlogik.path import Path
+from program_logic.path import Path
 
 # pip install GitPython (requirements.txt) - as Git is essential for automatically pushing the new version to GitHub
 
-def generate_auto_id(bereich_idx: int, teilgebiet_idx: int, uebungen_liste: list[TaskDto]) -> str:
+def generate_auto_id(field_idx: int, subfield_idx: int, task_list: list[TaskDto]) -> str:
     # generating new ids based on the predecessor id
-    bereich_num = bereich_idx + 1
-    teil_num = teilgebiet_idx + 1
+    field_num = field_idx + 1
+    subfield_num = subfield_idx + 1
 
     # getting the highest id (predecessor) from the selection
     max_num = 0
-    for aufgabe in uebungen_liste:
-        if aufgabe.task_id:
-            match = re.match(rf'^{bereich_num}\.{teil_num}\.(\d+)$', aufgabe.task_id)
+    for task in task_list:
+        if task.task_id:
+            match = re.match(rf'^{field_num}\.{subfield_num}\.(\d+)$', task.task_id)
             if match:
                 max_num = max(max_num, int(match.group(1)))
 
-    return f"{bereich_num}.{teil_num}.{max_num + 1}"
+    return f"{field_num}.{subfield_num}.{max_num + 1}"
 
-def find_task_by_id(katalog: CatalogueDto, aufgabe_id: str) -> FoundTaskDto | None:
-    for bereich_idx, bereich in enumerate(katalog.fields):
-        for teil_idx, teil in enumerate(bereich.subfields):
-            for aufgabe_idx, aufgabe in enumerate(teil.tasks):
-                if aufgabe.task_id == aufgabe_id:
-                    return FoundTaskDto(bereich_idx, teil_idx, aufgabe_idx, aufgabe)
+def find_task_by_id(catalogue: CatalogueDto, task_id: str) -> FoundTaskDto | None:
+    for field_idx, field in enumerate(catalogue.fields):
+        for subfield_idx, subfield in enumerate(field.subfields):
+            for task_idx, task in enumerate(subfield.tasks):
+                if task.task_id == task_id:
+                    return FoundTaskDto(field_idx, subfield_idx, task_idx, task)
     return None
 
 def count_tasks(catalogue: CatalogueDto) -> int:
@@ -86,7 +86,7 @@ def load_local_data() -> CatalogueDto:
             return CatalogueDto.from_dict(json.load(f))
     return CatalogueDto.create_empty()
 
-def save_and_commit(katalog: CatalogueDto,
+def save_and_commit(catalogue: CatalogueDto,
                     repo_path_base: str ="temp_repo"
                     ) -> bool:
     creds = load_credentials()
@@ -94,13 +94,13 @@ def save_and_commit(katalog: CatalogueDto,
     # Fallback - but in this case the automatic distribution of
     # the updated version does not work, as the katalog is only stored locally
     if not creds.username or not creds.token:
-        __save_local(katalog)
+        __save_local(catalogue)
         return True
 
     username = creds.username
     token = creds.token
     try:
-        __upload_github(katalog, username, token, repo_path_base)
+        __upload_github(catalogue, username, token, repo_path_base)
         return True
     except subprocess.CalledProcessError as e:
         print(f"🔴 Git Error: {e.stderr or str(e)}")
@@ -129,17 +129,17 @@ def __write_to_json(katalog: CatalogueDto, path: str) -> None:
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(katalog.to_dict(), f, indent=2, ensure_ascii=False)
 
-def __save_local(katalog: CatalogueDto) -> None:
+def __save_local(catalogue: CatalogueDto) -> None:
     print("⚠️  Keine GitHub-Credentials → Nur lokal speichern")
     local_path = Path().cache_path()
     os.makedirs(os.path.dirname(local_path), exist_ok=True)
 
-    new_katalog = __create_new_katalog(katalog)
+    new_catalogue = __create_new_katalog(catalogue)
 
-    __write_to_json(new_katalog, local_path)
+    __write_to_json(new_catalogue, local_path)
 
     print(f"🟢 Lokal gespeichert: {local_path}")
-    print(f"📊 {count_tasks(new_katalog)} Aufgaben")
+    print(f"📊 {count_tasks(new_catalogue)} Aufgaben")
 
 def __get_current_katalog() -> CatalogueDto | None:
     remote_url = "https://raw.githubusercontent.com/orphcvs/Aufgabenkatalog/main/Aufgabenkatalog.json"

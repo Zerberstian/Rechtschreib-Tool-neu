@@ -2,7 +2,7 @@ import tkinter as tk
 import sys, os
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from Programmlogik import task_logic
+from program_logic import task_logic
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 

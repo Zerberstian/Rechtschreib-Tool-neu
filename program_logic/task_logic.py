@@ -3,7 +3,7 @@ import os
 import random
 import tkinter as tk
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from Programmlogik import *
+from program_logic import *
 
 aufgaben_dict: dict[str, "Aufgabe"] = {} # Contains "Uebung_id"s to load exercises
 ausgewaehlte_aufgaben: list[str] = []
@@ -175,7 +175,7 @@ def list_aktive_aufgaben() -> None:
     # Delayed import to avoid circular import at module load.
     # get_active() needs GUI.BereichCheckbox,
     # but GUI.BereichCheckbox needs aufgaben_logik
-    from GUI.field_checkbox import get_active
+    from gui.field_checkbox import get_active
 
     # get_active() now returns Teilgebiet ids, so resolve tasks by id
     for eintrag in json_loader.list_tasks_by_subfield(get_active()):

@@ -2,22 +2,22 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
-from Programmlogik import task_logic
-from GUI.field_checkbox import FieldCheckbox, get_active
-from GUI import frame_generation
+from program_logic import task_logic
+from gui.field_checkbox import FieldCheckbox, get_active
+from gui import frame_generation
 from typing import Any, Callable
 import tkinter as tk
 from tkinter import messagebox, colorchooser
 
-BtnFontArt: str = "Arial"        #Button Font Style (all Btn)
+BTN_FONT: str = "Arial"        #Button Font Style (all Btn)
 
 # Main style constants
-BG_Farbe: str = "#E0470A"     #Background Color Value (general)
-Btn_BG_Farbe: str = "#E0470A" #Background Color (all Btn except Spinbox & Buttons)
-Btn_FG_Farbe: str = "#FFFFFF" #BUtton fg Color
+BG_COLOR: str = "#E0470A"     #Background Color Value (general)
+BTN_BG_COLOR: str = "#E0470A" #Background Color (all Btn except Spinbox & Buttons)
+BTN_FG_COLOR: str = "#FFFFFF" #BUtton fg Color
 
-BtnFontGroesse: int = 30        #Button Font size (all Btn)
-inside_Padding_Y: int = 0       #Button Inside pady Value (Main Menu)
+BTN_FRONT_SIZE: int = 30        #Button Font size (all Btn)
+INSIDE_PADDING_Y: int = 0       #Button Inside pady Value (Main Menu)
 
 
 def on_value_change() -> str:
@@ -54,7 +54,7 @@ def start_logic() -> None:
     print(spinbox.get(), "= value check 2")
     task_logic.aufgaben_initialisieren(int(on_value_change()))
     show_start_frame()
-    frame_generation.aufgaben_frame_generation(logicFrame, BtnFontArt)
+    frame_generation.aufgaben_frame_generation(logicFrame, BTN_FONT)
 
     #aufgaben_logik.aufgaben_anfangen_konsole()
     #aufgaben_logik.statistik_ausgeben()
@@ -90,7 +90,7 @@ window.minsize(1100, 650)
 window.bind("<Escape>", lambda e: set_fullscreen(window, False))
 window.bind("<F12>", lambda e: set_fullscreen(window, True))
 window.title("Rechtschreibtool")
-window.configure(bg=BG_Farbe) # backround Color to SRH Color
+window.configure(bg=BG_COLOR) # backround Color to SRH Color
 
 icon_window_path = os.path.join(project_root, "Assets", "srhIcon.ico" \
 "")
@@ -204,10 +204,10 @@ def pick_color_all():
     if selected_bg_color is not None:
         print("oi oi")
         apply_color(window, bg=selected_bg_color)
-        print(BG_Farbe, "bg in all")
+        print(BG_COLOR, "bg in all")
     elif selected_fg_color is not None:
         apply_color(window, fg=selected_fg_color)
-        headline.config(fg=BG_Farbe)
+        headline.config(fg=BG_COLOR)
     else:
         print("omegalul")
 '''
@@ -248,8 +248,8 @@ def reset_and_default(widget):
         reset_to_default_design(widget)
 '''
 def reset_all_color():
-    global BG_Farbe
-    default_bg = BG_Farbe
+    global BG_COLOR
+    default_bg = BG_COLOR
     print(default_bg, "default")
     headline.config(bg=default_bg, fg=default_bg)
     def update_widgets_in_reset(widget):
@@ -281,37 +281,37 @@ def reset_and_default(widget):
 # Frames
 ##############################################################################
 # Main window frame
-MenuFrame = tk.Frame(window, bg=BG_Farbe)
+MenuFrame = tk.Frame(window, bg=BG_COLOR)
 MenuFrame.grid(row=0, column=0, rowspan=2, sticky=tk.NW, ipadx=5)
 
 # Window for taskselection
-SelectFrame = tk.Frame(window, bg=BG_Farbe)
+SelectFrame = tk.Frame(window, bg=BG_COLOR)
 
 # Frame for managing grid
-CheckBoxFrameS = tk.Frame(SelectFrame, bg=BG_Farbe)
+CheckBoxFrameS = tk.Frame(SelectFrame, bg=BG_COLOR)
 CheckBoxFrameS.grid(row=1, column=1,  sticky=tk.N)
 
 # Frame for managing grid
-ButtonFrameSB = tk.Frame(SelectFrame, bg=BG_Farbe)
+ButtonFrameSB = tk.Frame(SelectFrame, bg=BG_COLOR)
 ButtonFrameSB.grid(row=0, column=0, sticky=tk.NW)
 
 # Frame for spinbox and buttons
-SpinBoxFrame: tk.Frame = tk.Frame(SelectFrame, bg=BG_Farbe)
+SpinBoxFrame: tk.Frame = tk.Frame(SelectFrame, bg=BG_COLOR)
 SpinBoxFrame.grid(row=1, column=2, rowspan=1, sticky=tk.NW)
 
-logicFrame  =   tk.Frame(window, bg=BG_Farbe)
+logicFrame  =   tk.Frame(window, bg=BG_COLOR)
 
-AufgabenFrameSeite = tk.Frame(window, bg=BG_Farbe)
+AufgabenFrameSeite = tk.Frame(window, bg=BG_COLOR)
 
-ColorPickerFrame = tk.Frame(window, bg=BG_Farbe)
+ColorPickerFrame = tk.Frame(window, bg=BG_COLOR)
 
-ColorPickerButtonFrame = tk.Frame(ColorPickerFrame, bg=BG_Farbe)
+ColorPickerButtonFrame = tk.Frame(ColorPickerFrame, bg=BG_COLOR)
 
-ColorPickerBackFrame = tk.Frame(ColorPickerFrame, bg=BG_Farbe)
+ColorPickerBackFrame = tk.Frame(ColorPickerFrame, bg=BG_COLOR)
 
 ColorExampleFrame = tk.Frame(ColorPickerFrame, bg="#ffffff")
 
-statisticFrame = tk.Frame(window, bg=BG_Farbe)
+statisticFrame = tk.Frame(window, bg=BG_COLOR)
 ##############################################################################
 
 SelectFrame.grid_rowconfigure(0, weight=1)
@@ -324,19 +324,19 @@ SelectFrame.grid_rowconfigure(2, weight=1)
 SelectFrame.grid_columnconfigure(2, weight=0)
 
 # Label for spacing
-voidLabel = tk.Label(SelectFrame, bg=BG_Farbe)
+voidLabel = tk.Label(SelectFrame, bg=BG_COLOR)
 voidLabel.grid(row=0, column=1, sticky=tk.NW)
 
 # Iconlabel
-iconLabel = tk.Label(MenuFrame, image=icon, bg=BG_Farbe)
+iconLabel = tk.Label(MenuFrame, image=icon, bg=BG_COLOR)
 iconLabel.pack(anchor="w", pady=(5, 15), fill="x")
 
 # Adding a big title
 headline = tk.Label(window,
                 text="",
-                font=(BtnFontArt, BtnFontGroesse),
-                bg=BG_Farbe,
-                fg=BG_Farbe)
+                font=(BTN_FONT, BTN_FRONT_SIZE),
+                bg=BG_COLOR,
+                fg=BG_COLOR)
 
 headline.grid(row=0,column=1, sticky=tk.N)
 
@@ -345,8 +345,8 @@ MenuText = tk.Label(window,
                         f"verbesserte Version\n"
                         f"des Rechtschreibtools\n"
                         f"der SRH Dresden",
-                font=(BtnFontArt, 35),
-                bg=BG_Farbe,
+                font=(BTN_FONT, 35),
+                bg=BG_COLOR,
                 fg="#ffffff")
 
 MenuText.grid(row=1,column=1, sticky=tk.NW)
@@ -358,7 +358,7 @@ def create_button(
     return tk.Button(
         parent,
         text=text,
-        font=(BtnFontArt, BtnFontGroesse),
+        font=(BTN_FONT, BTN_FRONT_SIZE),
         bg="#ffffff",
         fg="#000000",
         activebackground="#f2f2f2",
@@ -406,9 +406,9 @@ create_button(
 # Button for going back to Main Menu
 tk.Button(ColorPickerBackFrame,
         text="Zurück",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        fg=Btn_FG_Farbe,
+        font=(BTN_FONT, BTN_FRONT_SIZE),
+        bg=BTN_BG_COLOR,
+        fg=BTN_FG_COLOR,
         activebackground="#f2f2f2",
         activeforeground="#000000",
         relief="solid",
@@ -420,9 +420,9 @@ tk.Button(ColorPickerBackFrame,
 # Button for going back to Main Menu
 tk.Button(logicFrame,
         text="Abbrechen",
-        font=(BtnFontArt, BtnFontGroesse),
-        bg=Btn_BG_Farbe,
-        fg=Btn_FG_Farbe,
+        font=(BTN_FONT, BTN_FRONT_SIZE),
+        bg=BTN_BG_COLOR,
+        fg=BTN_FG_COLOR,
         activebackground="#f2f2f2",
         activeforeground="#000000",
         relief="solid",
@@ -435,7 +435,7 @@ tk.Button(logicFrame,
 tk.Button(SpinBoxFrame,
         text="10",
         fg="#000000",
-        font=(BtnFontArt, BtnFontGroesse),
+        font=(BTN_FONT, BTN_FRONT_SIZE),
         bg="#ffffff",
         activebackground="#f2f2f2",
         activeforeground="#000000",
@@ -448,7 +448,7 @@ tk.Button(SpinBoxFrame,
 # Max 100 questions -> quickselct (logic)
 tk.Button(SpinBoxFrame,
         text="100",
-        font=(BtnFontArt, BtnFontGroesse),
+        font=(BTN_FONT, BTN_FRONT_SIZE),
         bg="#ffffff",
         fg="#000000",
         activebackground="#f2f2f2",
@@ -516,7 +516,7 @@ tk.Button(SpinBoxFrame,
         relief="solid",
         bd=1,
         highlightthickness=0,
-        font=(BtnFontArt, BtnFontGroesse),
+        font=(BTN_FONT, BTN_FRONT_SIZE),
         command=to_start).grid( row=4,
                                 column=0,
                                 columnspan=2,
@@ -526,12 +526,6 @@ tk.Button(SpinBoxFrame,
 
 # Creating checkboxes
 FieldCheckbox(CheckBoxFrameS).create("#ffffff")
-
-'''
-Franzosen Grrr
-щ(゜ロ゜щ)
-jk
-'''
 
 
 if __name__ == "__main__":

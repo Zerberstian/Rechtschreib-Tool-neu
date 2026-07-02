@@ -1,6 +1,6 @@
 import json
 from Dtos import *
-from Programmlogik.path import Path
+from program_logic.path import Path
 
 class JsonLoader:
     def __init__(self) -> None:

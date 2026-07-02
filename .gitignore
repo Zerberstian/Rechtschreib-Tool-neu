@@ -11,12 +11,12 @@ dist/
 
 # Aufgabeneditor
 # --------------------
-Aufgabeneditor/credentials.json
-Aufgabeneditor/temp_repo_*/
+task_editor/credentials.json
+task_editor/temp_repo_*/
 
 # Programmlogik
 # --------------------
-Programmlogik/json_cache.json
+program_logic/json_cache.json
 # local cache, not intented to be shared, as it is generated when initializing the program and can be easily recreated
 
 # Other files

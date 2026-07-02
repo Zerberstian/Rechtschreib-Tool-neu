@@ -22,7 +22,7 @@ FONT_NORMAL = ("Segoe UI", 10)
 FONT_HEADER = ("Segoe UI", 15, "bold")
 FONT_SMALL = ("Segoe UI", 9)
 
-class AufgabenGUI:
+class TaskGUI:
     """
     The main interface for the Task Editor.
     This class manages the display of exercise categories (Bereiche), sub-categories (Teilgebiete),
@@ -47,11 +47,11 @@ class AufgabenGUI:
         self.create_widgets()
 
         # Track the currently selected category and sub-category
-        self.current_bereich_idx: int | None = None
-        self.current_teil_idx: int | None = None
+        self.current_field_idx: int | None = None
+        self.current_subfield_idx: int | None = None
 
         # Initial population of the category list
-        self.refresh_bereiche()
+        self.refresh_fields()
 
 
         style = ttk.Style()
@@ -118,12 +118,12 @@ class AufgabenGUI:
         # -- Section: Main Categories (Uebungsbereiche) --
         self.create_sidebar_header("KATEGORIEN")
 
-        self.bereich_list = tk.Listbox(self.left_sidebar, height=8, font=FONT_NORMAL,
+        self.field_list = tk.Listbox(self.left_sidebar, height=8, font=FONT_NORMAL,
                                        bg=COLOR_BG_SIDEBAR, fg=COLOR_TEXT_DARK,
                                        selectbackground=COLOR_SECONDARY, selectforeground=COLOR_TEXT_LIGHT,
                                        borderwidth=0, highlightthickness=0, activestyle='none')
-        self.bereich_list.pack(fill="x", padx=15, pady=5)
-        self.bereich_list.bind("<<ListboxSelect>>", self.on_bereich_select)
+        self.field_list.pack(fill="x", padx=15, pady=5)
+        self.field_list.bind("<<ListboxSelect>>", self.on_bereich_select)
 
         # Category Control Buttons
         b_btn_frame = tk.Frame(self.left_sidebar, bg=COLOR_BG_SIDEBAR)
@@ -135,12 +135,12 @@ class AufgabenGUI:
         # -- Section: Sub-Categories (Teilgebiete) --
         self.create_sidebar_header("Teilgebiete")
 
-        self.teil_list = tk.Listbox(self.left_sidebar, height=22, font=FONT_NORMAL,
+        self.subfield_list = tk.Listbox(self.left_sidebar, height=22, font=FONT_NORMAL,
                                      bg=COLOR_BG_SIDEBAR, fg=COLOR_TEXT_DARK,
                                      selectbackground=COLOR_SECONDARY, selectforeground=COLOR_TEXT_LIGHT,
                                      borderwidth=0, highlightthickness=0, activestyle='none')
-        self.teil_list.pack(fill="x", padx=15, pady=5)
-        self.teil_list.bind("<<ListboxSelect>>", self.on_teil_select)
+        self.subfield_list.pack(fill="x", padx=15, pady=5)
+        self.subfield_list.bind("<<ListboxSelect>>", self.on_teil_select)
 
         # Sub-Category Control Buttons
         t_btn_frame = tk.Frame(self.left_sidebar, bg=COLOR_BG_SIDEBAR)
@@ -252,10 +252,10 @@ class AufgabenGUI:
 
     # --- Navigation & UI Refresh ---
 
-    def refresh_bereiche(self) -> None:
-        self.bereich_list.delete(0, tk.END)
+    def refresh_fields(self) -> None:
+        self.field_list.delete(0, tk.END)
         for i, b in enumerate(self.data.fields):
-            self.bereich_list.insert(tk.END, b.title or f"Category {i+1}")
+            self.field_list.insert(tk.END, b.title or f"Category {i+1}")
         self.update_stats_label()
 
     def update_stats_label(self) -> None:
@@ -263,36 +263,36 @@ class AufgabenGUI:
         self.stats_label.config(text=f"Aufgabensammlung: {count} Aufgaben")
 
     def on_bereich_select(self, event: "tk.Event | None") -> None:
-        selection = self.bereich_list.curselection() # type: ignore
+        selection = self.field_list.curselection() # type: ignore
         if not selection: return
-        self.current_bereich_idx = selection[0]
-        self.current_teil_idx = None
-        self.refresh_teilgebiete()
+        self.current_field_idx = selection[0]
+        self.current_subfield_idx = None
+        self.refresh_subfields()
         self.refresh_tasks()
         self.update_breadcrumb()
 
-    def refresh_teilgebiete(self) -> None:
-        self.teil_list.delete(0, tk.END)
-        if self.current_bereich_idx is None: return
+    def refresh_subfields(self) -> None:
+        self.subfield_list.delete(0, tk.END)
+        if self.current_field_idx is None: return
 
-        subs = self.data.fields[self.current_bereich_idx].subfields
+        subs = self.data.fields[self.current_field_idx].subfields
         for s in subs:
             title = s.title or "Untitled"
             count = len(s.tasks)
-            self.teil_list.insert(tk.END, f"{title} ({count})")
+            self.subfield_list.insert(tk.END, f"{title} ({count})")
 
     def on_teil_select(self, event: "tk.Event | None") -> None:
-        selection = self.teil_list.curselection() # type: ignore
+        selection = self.subfield_list.curselection() # type: ignore
         if not selection: return
-        self.current_teil_idx = selection[0]
+        self.current_subfield_idx = selection[0]
         self.refresh_tasks()
         self.update_breadcrumb()
 
     def update_breadcrumb(self) -> None:
-        if self.current_bereich_idx is not None:
-            b_name = self.data.fields[self.current_bereich_idx].title or "Unknown"
-            if self.current_teil_idx is not None:
-                sub = self.data.fields[self.current_bereich_idx].subfields[self.current_teil_idx]
+        if self.current_field_idx is not None:
+            b_name = self.data.fields[self.current_field_idx].title or "Unknown"
+            if self.current_subfield_idx is not None:
+                sub = self.data.fields[self.current_field_idx].subfields[self.current_subfield_idx]
                 s_name = sub.title or "Untitled"
                 self.path_label.config(text=f" {b_name}  ›  {s_name}")
             else:
@@ -303,10 +303,10 @@ class AufgabenGUI:
     def refresh_tasks(self) -> None:
         # Populates the main task table
         self.tree.delete(*self.tree.get_children())
-        if self.current_bereich_idx is None or self.current_teil_idx is None:
+        if self.current_field_idx is None or self.current_subfield_idx is None:
             return
 
-        tasks = self.data.fields[self.current_bereich_idx].subfields[self.current_teil_idx].tasks
+        tasks = self.data.fields[self.current_field_idx].subfields[self.current_subfield_idx].tasks
         for task in tasks:
             tid = task.task_id
             desc = task.task_description
@@ -329,41 +329,41 @@ class AufgabenGUI:
         name = simpledialog.askstring("Neu", "Kategoriename:")
         if name and name.strip():
             self.data.fields.append(FieldDto(title=name.strip(), subfields=[], field_id=0))
-            self.refresh_bereiche()
+            self.refresh_fields()
 
     def edit_bereich(self) -> None:
-        if self.current_bereich_idx is None: return
-        old = self.data.fields[self.current_bereich_idx].title
+        if self.current_field_idx is None: return
+        old = self.data.fields[self.current_field_idx].title
         new = simpledialog.askstring("Bearbeiten", "Neuer Kategoriename:", initialvalue=old)
         if new and new.strip():
-            self.data.fields[self.current_bereich_idx].title = new.strip()
-            self.refresh_bereiche()
+            self.data.fields[self.current_field_idx].title = new.strip()
+            self.refresh_fields()
             self.update_breadcrumb()
 
     def delete_bereich(self) -> None:
-        if self.current_bereich_idx is None: return
-        name = self.data.fields[self.current_bereich_idx].title
+        if self.current_field_idx is None: return
+        name = self.data.fields[self.current_field_idx].title
         if messagebox.askyesno("Bestätigen", f"Lösche '{name}' und ALL seine Inhalte?"):
-            self.data.fields.pop(self.current_bereich_idx)
-            self.current_bereich_idx = self.current_teil_idx = None
-            self.refresh_bereiche(); self.refresh_teilgebiete(); self.refresh_tasks(); self.update_breadcrumb()
+            self.data.fields.pop(self.current_field_idx)
+            self.current_field_idx = self.current_subfield_idx = None
+            self.refresh_fields(); self.refresh_subfields(); self.refresh_tasks(); self.update_breadcrumb()
 
     def add_teil(self) -> None:
-        if self.current_bereich_idx is None: return
+        if self.current_field_idx is None: return
         t = simpledialog.askstring("Neu", "Teilgebiet-Titel:")
         if t and t.strip():
             d = simpledialog.askstring("Neu", "Beschreibungstext:")
-            bereich = self.data.fields[self.current_bereich_idx]
+            bereich = self.data.fields[self.current_field_idx]
             bereich.subfields.append(SubfieldDto(
                 title=t.strip(), task_description=d or "", tasks=[],
                 is_special=False, is_checked=False, is_expanded=False,
-                subfield_id=f"{self.current_bereich_idx+1}.{len(bereich.subfields)+1}"
+                subfield_id=f"{self.current_field_idx+1}.{len(bereich.subfields)+1}"
             ))
-            self.refresh_teilgebiete()
+            self.refresh_subfields()
 
     def edit_teil(self) -> None:
-        if self.current_bereich_idx is None or self.current_teil_idx is None: return
-        sub = self.data.fields[self.current_bereich_idx].subfields[self.current_teil_idx]
+        if self.current_field_idx is None or self.current_subfield_idx is None: return
+        sub = self.data.fields[self.current_field_idx].subfields[self.current_subfield_idx]
 
         old_view = f"Title: {sub.title}\nIntro: {sub.task_description}"
 
@@ -382,7 +382,7 @@ class AufgabenGUI:
 
             def finish() -> None:
                 sub.title = new_title; sub.task_description = new_intro
-                self.refresh_teilgebiete(); self.update_breadcrumb(); diag.destroy()
+                self.refresh_subfields(); self.update_breadcrumb(); diag.destroy()
 
             if old_view != new_view: self.show_diff_dialog("Teilgebiet", old_view, new_view, finish)
             else: diag.destroy()
@@ -390,29 +390,29 @@ class AufgabenGUI:
         ttk.Button(diag, text="Änderungen speichern", command=commit, style="Success.TButton").pack(pady=10)
 
     def delete_teil(self) -> None:
-        if self.current_bereich_idx is None or self.current_teil_idx is None: return
-        bereich = self.data.fields[self.current_bereich_idx]
-        sub = bereich.subfields[self.current_teil_idx]
+        if self.current_field_idx is None or self.current_subfield_idx is None: return
+        bereich = self.data.fields[self.current_field_idx]
+        sub = bereich.subfields[self.current_subfield_idx]
         if messagebox.askyesno("Bestätigen", f"Lösche Teilgebiet '{sub.title}'?"):
-            bereich.subfields.pop(self.current_teil_idx)
-            self.current_teil_idx = None
-            self.refresh_teilgebiete(); self.refresh_tasks(); self.update_breadcrumb()
+            bereich.subfields.pop(self.current_subfield_idx)
+            self.current_subfield_idx = None
+            self.refresh_subfields(); self.refresh_tasks(); self.update_breadcrumb()
 
     # --- Task Management Logic ---
 
     def add_task(self) -> None:
-        if self.current_bereich_idx is None or self.current_teil_idx is None: return
-        sub = self.data.fields[self.current_bereich_idx].subfields[self.current_teil_idx]
-        tid = editor.generate_auto_id(self.current_bereich_idx, self.current_teil_idx, sub.tasks)
-        self.task_dialog(f"Neue Aufgabe in {sub.title}", tid, sub.tasks)
+        if self.current_field_idx is None or self.current_subfield_idx is None: return
+        sub = self.data.fields[self.current_field_idx].subfields[self.current_subfield_idx]
+        task_id = editor.generate_auto_id(self.current_field_idx, self.current_subfield_idx, sub.tasks)
+        self.task_dialog(f"Neue Aufgabe in {sub.title}", task_id, sub.tasks)
 
     def edit_task_full(self) -> None:
         sel = self.tree.focus() or (self.tree.selection()[0] if self.tree.selection() else None)
         if not sel: return
 
-        tid = self.tree.item(sel, 'values')[0]
-        res = editor.find_task_by_id(self.data, tid)
-        if res: self.task_dialog(f"✏️ Bearbeite Aufgabe {tid}", tid, None, res.task)
+        task_id = self.tree.item(sel, 'values')[0]
+        res = editor.find_task_by_id(self.data, task_id)
+        if res: self.task_dialog(f"✏️ Bearbeite Aufgabe {task_id}", task_id, None, res.task)
 
     def format_task_for_preview(self, t: TaskDto) -> str:
         opts = t.answer_options
@@ -516,8 +516,8 @@ class AufgabenGUI:
         res = editor.find_task_by_id(self.data, tid)
         if res:
             # Navigate to it
-            self.bereich_list.selection_clear(0, tk.END); self.bereich_list.selection_set(res.field_idx); self.on_bereich_select(None)
-            self.teil_list.selection_clear(0, tk.END); self.teil_list.selection_set(res.subfield_idx); self.on_teil_select(None)
+            self.field_list.selection_clear(0, tk.END); self.field_list.selection_set(res.field_idx); self.on_bereich_select(None)
+            self.subfield_list.selection_clear(0, tk.END); self.subfield_list.selection_set(res.subfield_idx); self.on_teil_select(None)
             self.master.update_idletasks()
             for item in self.tree.get_children():
                 if str(self.tree.item(item, 'values')[0]) == str(tid):
@@ -555,4 +555,4 @@ if __name__ == "__main__":
         icon_p = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Assets", "srhIcon.png")
         if os.path.exists(icon_p): root.iconphoto(True, tk.PhotoImage(file=icon_p))
     except: pass
-    AufgabenGUI(root); root.mainloop()
+    TaskGUI(root); root.mainloop()

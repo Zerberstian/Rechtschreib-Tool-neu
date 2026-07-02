@@ -1,21 +1,21 @@
 # type: ignore
-from Programmlogik.path import Path
+from program_logic.path import Path
 
 # relative import of the modules (relative regarding base_dir)
 Path().setup_sys_path()
 
-from Programmlogik.json_loader import json_loader
-import Programmlogik.task_logic
+from program_logic.json_loader import json_loader
+import program_logic.task_logic
 
 # Load JSON data into memory
 json_loader.load_json()
 # Create Aufgabe objects for all tasks
-Programmlogik.task_logic.aufgaben_objekte_erstellen()
+program_logic.task_logic.aufgaben_objekte_erstellen()
 
-from GUI.gui_new import *  # importing GUI completely
-from GUI.field_checkbox import FieldCheckbox
+from gui.gui_new import *  # importing GUI completely
+from gui.field_checkbox import FieldCheckbox
 try:
-    import Programmlogik.task_logic as task_logic
+    import program_logic.task_logic as task_logic
 except ImportError:
     print("Warnung: Programmlogik Module nicht gefunden")
 
