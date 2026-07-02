@@ -12,7 +12,7 @@ json_loader.load_json()
 # Create Aufgabe objects for all tasks
 Programmlogik.task_logic.aufgaben_objekte_erstellen()
 
-from GUI.GUI_new import *  # importing GUI completely
+from GUI.gui_new import *  # importing GUI completely
 from GUI.field_checkbox import FieldCheckbox
 try:
     import Programmlogik.task_logic as task_logic
