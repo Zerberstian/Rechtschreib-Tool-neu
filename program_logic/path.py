@@ -16,7 +16,7 @@ class Path:
     def data_dir(self) -> str:
         if self._frozen():
             return os.path.dirname(sys.executable)
-        return os.path.join(self._project_root(), "Programmlogik")
+        return os.path.join(self._project_root(), "program_logic")
 
     def base_dir(self) -> str:
         # dynamic base-path (important when trying to create .exe):
@@ -27,12 +27,12 @@ class Path:
 
     def setup_sys_path(self) -> None:
         # relative import of the modules (relative regarding base_dir)
-        for folder in ("GUI", "Programmlogik", "Aufgabeneditor", "Dtos"):
+        for folder in ("gui", "program_logic", "task_editor", "Dtos"):
             sys.path.insert(0, os.path.join(self.base_dir(), folder))
         sys.path.insert(0, self.base_dir())
 
     def _bundled_cache(self) -> str:
-        return os.path.join(self.base_dir(), "Programmlogik", self.CACHE_FILENAME)
+        return os.path.join(self.base_dir(), "program_logic", self.CACHE_FILENAME)
 
     def cache_path(self) -> str:
         # Absolute path to the writable task cache used by every module.
