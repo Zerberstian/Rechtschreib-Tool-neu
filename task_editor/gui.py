@@ -1,9 +1,11 @@
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from typing import Callable
 import task_editor.task_editor as editor
 from dtos import FieldDto, SubfieldDto, TaskDto
-import os
 import difflib
 
 COLOR_PRIMARY = "#01386E"    # Deep Navy
@@ -93,7 +95,7 @@ class TaskGUI:
         self.top_bar.pack(side="top", fill="x")
         self.top_bar.pack_propagate(False)
 
-        ttk.Label(self.top_bar, text="AUFGENEDITOR", style="Header.TLabel").pack(side="left", padx=20)
+        ttk.Label(self.top_bar, text="AUFGABENEDITOR", style="Header.TLabel").pack(side="left", padx=20)
 
         self.stats_label = ttk.Label(self.top_bar, text="Berechne...", style="Stat.TLabel")
         self.stats_label.pack(side="right", padx=30)
