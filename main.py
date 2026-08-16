@@ -23,6 +23,8 @@ if __name__ == "__main__":
     window.mainloop()  # starting GUI only testing...
 
 
-# to create the executable simply install pyinstaller via 'pip install pyinstaller' and then run the following command in the terminal; same directory as main.py:
+# to create the executable simply install pyinstaller
+# via 'pip install pyinstaller' and then run the
+# following command in the terminal; same directory as main.py:
 
 '''python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data "Assets;Assets" --add-data "../Aufgabenkatalog;Aufgabenkatalog" --add-data "GUI;GUI" --add-data "Programmlogik;Programmlogik" --add-data "Aufgabeneditor;Aufgabeneditor" --add-data "Dtos;Dtos" --icon "Assets/srhIcon.png" --hidden-import "GUI.BereichCheckbox" --hidden-import "Programmlogik.logic_der_zweite" main.py'''

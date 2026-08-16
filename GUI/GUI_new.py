@@ -10,14 +10,12 @@ import tkinter as tk
 from tkinter import messagebox, colorchooser
 
 BTN_FONT: str = "Arial"        #Button Font Style (all Btn)
+BTN_FRONT_SIZE: int = 30        #Button Font size (all Btn)
 
 # Main style constants
 BG_COLOR: str = "#E0470A"     #Background Color Value (general)
-BTN_BG_COLOR: str = "#E0470A" #Background Color (all Btn except Spinbox & Buttons)
-BTN_FG_COLOR: str = "#FFFFFF" #BUtton fg Color
-
-BTN_FRONT_SIZE: int = 30        #Button Font size (all Btn)
-INSIDE_PADDING_Y: int = 0       #Button Inside pady Value (Main Menu)
+BTN_BG_COLOR: str = "#FFFFFF" #Background Color (all Btn except Spinbox & Buttons)
+BTN_FG_COLOR: str = "#000000" #BButton fg Color
 
 
 def on_value_change() -> str:
@@ -252,17 +250,17 @@ def reset_all_color():
     default_bg = BG_COLOR
     print(default_bg, "default")
     headline.config(bg=default_bg, fg=default_bg)
-    def update_widgets_in_reset(widget):
-        if isinstance(widget, (tk.Label, tk.Frame)) or widget == window:
+    def update_widgets_in_reset(widget: tk.Widget) -> None:
+        if isinstance(widget, (tk.Label, tk.Frame)) or widget == window: # type: ignore
             try:
-                widget.config(bg=default_bg)
+                widget.config(bg=default_bg) # type: ignore
             except Exception:
                 pass
-        for child in widget.winfo_children():
-            update_widgets_in_reset(child)
-    update_widgets_in_reset(window)
+        for child in widget.winfo_children(): # type: ignore
+            update_widgets_in_reset(child) # type: ignore
+    update_widgets_in_reset(window) # type: ignore
 
-def reset_to_default_design(widget):
+def reset_to_default_design(widget: tk.Widget) -> None:
     default_bg_white = "#ffffff"
     ColorExampleFrame.config(bg=default_bg_white)
     if isinstance(widget, (tk.Label, tk.Frame)):
@@ -270,13 +268,13 @@ def reset_to_default_design(widget):
             widget.config(bg=default_bg_white)
         except Exception:
             pass
-    for child in widget.winfo_children():
-        reset_to_default_design(child)
+    for child in widget.winfo_children(): # type: ignore
+        reset_to_default_design(child) # type: ignore
 
-def reset_and_default(widget):
+def reset_and_default(widget: tk.Widget) -> None:
     reset_all_color()
     for child in ColorExampleFrame.winfo_children():
-        reset_to_default_design(child)
+        reset_to_default_design(child) # type: ignore
 
 # Frames
 ##############################################################################
@@ -359,8 +357,8 @@ def create_button(
         parent,
         text=text,
         font=(BTN_FONT, BTN_FRONT_SIZE),
-        bg="#ffffff",
-        fg="#000000",
+        bg=BTN_BG_COLOR,
+        fg=BTN_FG_COLOR,
         activebackground="#f2f2f2",
         activeforeground="#000000",
         relief="solid",   # flat border instead of the 3D raised bevel (no shadow)
@@ -434,9 +432,9 @@ tk.Button(logicFrame,
 # Max 10 questions -> quickselct (logic)
 tk.Button(SpinBoxFrame,
         text="10",
-        fg="#000000",
         font=(BTN_FONT, BTN_FRONT_SIZE),
-        bg="#ffffff",
+        fg=BTN_FG_COLOR,
+        bg=BTN_BG_COLOR,
         activebackground="#f2f2f2",
         activeforeground="#000000",
         relief="solid",
@@ -449,8 +447,8 @@ tk.Button(SpinBoxFrame,
 tk.Button(SpinBoxFrame,
         text="100",
         font=(BTN_FONT, BTN_FRONT_SIZE),
-        bg="#ffffff",
-        fg="#000000",
+        bg=BTN_BG_COLOR,
+        fg=BTN_FG_COLOR,
         activebackground="#f2f2f2",
         activeforeground="#000000",
         relief="solid",
@@ -496,6 +494,9 @@ spinbox = tk.Spinbox(SpinBoxFrame,
                     increment=1,
                     width=10,
                     font=("Arial", 20),
+                    relief="solid",   # flat border instead of the sunken 3D shadow
+                    bd=1,
+                    highlightthickness=0,
                     command=on_value_change)
 
 spinbox.delete(0, tk.END) # type: ignore
@@ -508,8 +509,8 @@ spinbox.grid(row=2,
                 ipadx=23)
 
 tk.Button(SpinBoxFrame,
-        bg="#ffffff",
-        fg="#000000",
+        bg=BTN_BG_COLOR,
+        fg=BTN_FG_COLOR,
         activebackground="#f2f2f2",
         activeforeground="#000000",
         text="Start",

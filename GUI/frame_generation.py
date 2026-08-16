@@ -50,6 +50,9 @@ class StatistikFrame:
                                      font=self.font,
                                      fg="#ff1111",
                                      bg="#000000",
+                                     relief="solid",   # flat border instead of the sunken 3D shadow
+                                     bd=1,
+                                     highlightthickness=0,
                                      wrap="word")
         self.falschen_text.pack(padx=5, pady=5)
         for stat in self.stats_der_falschen:
@@ -153,6 +156,9 @@ class AufgabenFrame:
         self.aufgabenbeschreibung_textbox = tk.Text(self.frame2,
                                                   height=11,
                                                   font=(self.font, 20),
+                                                  relief="solid",   # flat border instead of the sunken 3D shadow
+                                                  bd=1,
+                                                  highlightthickness=0,
                                                   wrap="word")
         
         self.aufgabenbeschreibung_textbox.insert(

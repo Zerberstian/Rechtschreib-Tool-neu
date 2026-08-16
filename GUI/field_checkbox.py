@@ -67,7 +67,9 @@ class FieldCheckbox:
                 text=f"{bereich}",
                 font=("Arial", 30),
                 bg="#ffffff",
-                highlightthickness=1,
+                relief="solid",
+                offrelief="solid",
+                highlightthickness=0,
                 bd=1,
                 variable=self.ausgeklappt_dict[f"{bereich}"],
                 onvalue=1,
@@ -97,7 +99,7 @@ class FieldCheckbox:
                 padx=20,
                 pady=1
             )
-            cb_ober.config(highlightbackground="red", highlightcolor="red", highlightthickness=10, relief=tk.SOLID)
+            cb_ober.config(highlightbackground="red", highlightcolor="red", highlightthickness=10, relief=tk.SOLID, offrelief=tk.SOLID)
 
             cb_ober.grid(pady=8, padx=8, sticky=tk.NSEW, column=0, row=0)
 
@@ -136,6 +138,10 @@ class FieldCheckbox:
                 font=("Arial", 15),
                 bg="#ffffff",
                 fg="#000000",  # <<< schwarz starten
+                relief="solid",      # selected state: flat border
+                offrelief="solid",   # deselected state (indicatoron=False): flat border, not the raised 3D shadow
+                bd=1,
+                highlightthickness=0,
                 variable=var,
                 indicatoron=False,
                 onvalue=1,
