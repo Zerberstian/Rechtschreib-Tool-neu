@@ -124,8 +124,9 @@ class FieldCheckbox:
                         self.update_checkbox_color(wid, var)
 
                 # Hauptkategorie aktualisieren
-                self.ausgeklappt_dict[bereich].set(1)
-                self.ausklappen(bereich)
+                if selected:
+                    self.ausgeklappt_dict[bereich].set(1)
+                    self.ausklappen(bereich)
             cb_ober.config(command=ober_command)
 
             # Unter-Checkboxen
