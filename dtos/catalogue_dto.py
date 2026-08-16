@@ -1,5 +1,5 @@
 from typing import Any
-from Dtos.field_dto import FieldDto
+from dtos.field_dto import FieldDto
 
 class CatalogueDto:
     def __init__(self,

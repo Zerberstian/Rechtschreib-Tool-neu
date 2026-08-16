@@ -12,7 +12,7 @@ import stat
 import time
 # regex pattern used for finding the predecessor id for auto-id generation
 import re
-from Dtos import *
+from dtos import *
 from program_logic.path import Path
 
 # pip install GitPython (requirements.txt) - as Git is essential for automatically pushing the new version to GitHub

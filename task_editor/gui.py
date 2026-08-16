@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
 from typing import Callable
 import task_editor.task_editor as editor
-from Dtos import FieldDto, SubfieldDto, TaskDto
+from dtos import FieldDto, SubfieldDto, TaskDto
 import os
 import difflib
 
@@ -552,7 +552,7 @@ class TaskGUI:
 if __name__ == "__main__":
     root = tk.Tk()
     try:
-        icon_p = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Assets", "srhIcon.png")
+        icon_p = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "srhIcon.png")
         if os.path.exists(icon_p): root.iconphoto(True, tk.PhotoImage(file=icon_p))
     except: pass
     TaskGUI(root); root.mainloop()

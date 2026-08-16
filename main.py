@@ -17,7 +17,7 @@ from gui.field_checkbox import FieldCheckbox
 try:
     import program_logic.task_logic as task_logic
 except ImportError:
-    print("Warnung: Programmlogik Module nicht gefunden")
+    print("Warnung: Program Logic Module nicht gefunden")
 
 if __name__ == "__main__":
     window.mainloop()  # starting GUI only testing...
@@ -27,4 +27,4 @@ if __name__ == "__main__":
 # via 'pip install pyinstaller' and then run the
 # following command in the terminal; same directory as main.py:
 
-'''python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data "Assets;Assets" --add-data "../Aufgabenkatalog;Aufgabenkatalog" --add-data "GUI;GUI" --add-data "Programmlogik;Programmlogik" --add-data "Aufgabeneditor;Aufgabeneditor" --add-data "Dtos;Dtos" --icon "Assets/srhIcon.png" --hidden-import "GUI.BereichCheckbox" --hidden-import "Programmlogik.logic_der_zweite" main.py'''
+'''python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data "assets;assets" --add-data "../Aufgabenkatalog;Aufgabenkatalog" --add-data "gui;gui" --add-data "program_logic;program_logic" --add-data "task_editor;task_editor" --add-data "dtos;dtos" --icon "assets/srhIcon.png" --hidden-import "gui.field_checkbox" --hidden-import "program_logic.task_logic" main.py'''

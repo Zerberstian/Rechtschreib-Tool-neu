@@ -1,4 +1,4 @@
-from Dtos.task_dto import TaskDto
+from dtos.task_dto import TaskDto
 
 class FoundTaskDto:
     def __init__(self, field_idx: int, subfield_idx: int, task_idx: int, task: TaskDto):

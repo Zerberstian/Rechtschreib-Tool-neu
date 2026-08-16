@@ -27,7 +27,7 @@ class Path:
 
     def setup_sys_path(self) -> None:
         # relative import of the modules (relative regarding base_dir)
-        for folder in ("gui", "program_logic", "task_editor", "Dtos"):
+        for folder in ("gui", "program_logic", "task_editor", "dtos"):
             sys.path.insert(0, os.path.join(self.base_dir(), folder))
         sys.path.insert(0, self.base_dir())
 

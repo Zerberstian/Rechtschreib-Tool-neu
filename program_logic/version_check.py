@@ -7,7 +7,7 @@ import requests
 import json
 import os
 from datetime import datetime
-from Dtos import *
+from dtos import *
 from program_logic.path import Path
 
 class VersionCheck:

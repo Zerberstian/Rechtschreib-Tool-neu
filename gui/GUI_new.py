@@ -1,6 +1,6 @@
 import sys
 import os
-sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Programmlogik import logic2"
+sys.path.insert(0, os.path.dirname(__file__) + "/..")  # Used for imports like "from Program Logic import logic2"
 project_root = os.path.dirname(os.path.dirname(__file__))  # Used for defining file directories
 from program_logic import task_logic
 from gui.field_checkbox import FieldCheckbox, get_active
@@ -90,11 +90,11 @@ window.bind("<F12>", lambda e: set_fullscreen(window, True))
 window.title("Rechtschreibtool")
 window.configure(bg=BG_COLOR) # backround Color to SRH Color
 
-icon_window_path = os.path.join(project_root, "Assets", "srhIcon.ico" \
+icon_window_path = os.path.join(project_root, "assets", "srhIcon.ico" \
 "")
 window.iconbitmap(icon_window_path) # type: ignore
 
-icon_path = os.path.join(project_root, "Assets", "srhIcon2.png")
+icon_path = os.path.join(project_root, "assets", "srhIcon2.png")
 icon = tk.PhotoImage(file=icon_path)
 '''
 window.bind("<F4>", lambda event: show_color_picker())
@@ -139,7 +139,7 @@ def set_fullscreen(win: tk.Tk, state: bool) -> None:
 
 def open_instruction_pdf() -> None:
     project_root = os.path.dirname(os.path.dirname(__file__))
-    pdf_path = os.path.join(project_root, "Assets", "A.pdf")
+    pdf_path = os.path.join(project_root, "assets", "A.pdf")
     if sys.platform.startswith("win"):
         os.startfile(pdf_path)
 
