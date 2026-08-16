@@ -52,9 +52,12 @@ class FieldCheckbox:
         main_checkbox_frame.bind("<Configure>", on_configure)
 
         def on_mousewheel(event: tk.Event) -> None:
-            canvas_for_checkbox.yview_scroll(-event.delta // 120, "units")
-        canvas_for_checkbox.bind("<Enter>", lambda _: canvas_for_checkbox.bind_all("<MouseWheel>", on_mousewheel))
-        canvas_for_checkbox.bind("<Leave>", lambda _: canvas_for_checkbox.unbind_all("<MouseWheel>"))
+            target = canvas_for_checkbox.winfo_containing(*canvas_for_checkbox.winfo_pointerxy())
+            while target is not None and target is not canvas_for_checkbox:
+                target = target.master
+            if target is canvas_for_checkbox:
+                canvas_for_checkbox.yview_scroll(-event.delta // 120, "units")
+        canvas_for_checkbox.bind_all("<MouseWheel>", on_mousewheel)
 
         # Fills checkboxes with "Uebungsbereich"
         for _, bereich in enumerate(json_loader.list_fields()):
