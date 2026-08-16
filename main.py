@@ -26,5 +26,16 @@ if __name__ == "__main__":
 # to create the executable simply install pyinstaller
 # via 'pip install pyinstaller' and then run the
 # following command in the terminal; same directory as main.py:
+'''
+python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data "assets;assets" --add-data "../Aufgabenkatalog;Aufgabenkatalog" --add-data "gui;gui" --add-data "program_logic;program_logic" --add-data "task_editor;task_editor" --add-data "dtos;dtos" --icon "assets/srhIcon.png" --hidden-import "gui.field_checkbox" --hidden-import "program_logic.task_logic" main.py
+'''
 
-'''python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data "assets;assets" --add-data "../Aufgabenkatalog;Aufgabenkatalog" --add-data "gui;gui" --add-data "program_logic;program_logic" --add-data "task_editor;task_editor" --add-data "dtos;dtos" --icon "assets/srhIcon.png" --hidden-import "gui.field_checkbox" --hidden-import "program_logic.task_logic" main.py'''
+
+# In order to create a virtual environment and install the required dependencies,
+# run the following commands in the terminal:
+'''
+python -m venv venv
+venv/Scripts/activate  # on Windows
+pip install PyInstaller
+pip install matplotlib
+'''
