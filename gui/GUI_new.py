@@ -461,11 +461,11 @@ tk.Button(SpinBoxFrame,
             pady=15)
 
 # Button for explaination of the programm (it opens the PDF in same folder as the files)
-create_button(
-    MenuFrame,
-    "Erklärung",
-    open_instruction_pdf
-).pack(anchor="w", fill="x", pady=8)
+#create_button(
+#    MenuFrame,
+#    "Erklärung",
+#    open_instruction_pdf
+#).pack(anchor="w", fill="x", pady=8)
 
 
 
