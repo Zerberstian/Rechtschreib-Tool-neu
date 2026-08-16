@@ -36,7 +36,5 @@ python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data 
 '''
 python -m venv venv
 venv/Scripts/activate  # on Windows
-pip install PyInstaller
-pip install requests
-pip install matplotlib
+pip install -r requirements.txt
 '''
