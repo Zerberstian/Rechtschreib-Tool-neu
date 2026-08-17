@@ -1,30 +1,40 @@
-import sys
-import os
+# type: ignore
+from program_logic.path import Path
 
-# dynamic base-path (important when trying to create .exe)
-if getattr(sys, 'frozen', False):
-    BASE_DIR = sys._MEIPASS
-else:
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# relative import of the modules (relative regarding base_dir)
+Path().setup_sys_path()
 
-# relative import of the modules (relative regarding BASE_DIR)
-sys.path.insert(0, os.path.join(BASE_DIR, 'GUI'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'Programmlogik'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'Aufgabeneditor'))
-sys.path.insert(0, BASE_DIR)
+from program_logic.json_loader import json_loader
+import program_logic.task_logic
 
-from GUI.GUI_new import *  # importing GUI completely
-from GUI.BereichCheckbox import BereichCheckbox
+# Load JSON data into memory
+json_loader.load_json()
+# Create Aufgabe objects for all tasks
+program_logic.task_logic.aufgaben_objekte_erstellen()
+
+from gui.gui_new import *  # importing GUI completely
+from gui.field_checkbox import FieldCheckbox
 try:
-    from Programmlogik.json_laden_logik import list_uebungen
-    from Programmlogik.aufgaben_logik import *
+    import program_logic.task_logic as task_logic
 except ImportError:
-    print("Warnung: Programmlogik Module nicht gefunden")
+    print("Warnung: Program Logic Module nicht gefunden")
 
 if __name__ == "__main__":
     window.mainloop()  # starting GUI only testing...
 
 
-# to create the executable simply install pyinstaller via 'pip install pyinstaller' and then run the following command in the terminal; same directory as main.py:
+# to create the executable simply install pyinstaller
+# via 'pip install pyinstaller' and then run the
+# following command in the terminal; same directory as main.py:
+'''
+python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data "assets;assets" --add-data "../Aufgabenkatalog;Aufgabenkatalog" --add-data "gui;gui" --add-data "program_logic;program_logic" --add-data "task_editor;task_editor" --add-data "dtos;dtos" --icon "assets/srhIcon.png" --hidden-import "gui.field_checkbox" --hidden-import "program_logic.task_logic" main.py
+'''
 
-'''python -m PyInstaller --onefile --windowed --name "RechtschreibTool" --add-data "Assets;Assets" --add-data "../Aufgabenkatalog;Aufgabenkatalog" --add-data "GUI;GUI" --add-data "Programmlogik;Programmlogik" --add-data "Aufgabeneditor;Aufgabeneditor" --icon "Assets/srhIcon.png" --hidden-import "GUI.BereichCheckbox" --hidden-import "Programmlogik.logic_der_zweite" main.py'''
+
+# In order to create a virtual environment and install the required dependencies,
+# run the following commands in the terminal:
+'''
+python -m venv venv
+venv/Scripts/activate  # on Windows
+pip install -r requirements.txt
+'''

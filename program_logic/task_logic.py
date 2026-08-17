@@ -1,42 +1,44 @@
 import sys
 import os
 import random
+import tkinter as tk
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from GUI.BereichCheckbox import *
-from Programmlogik.json_laden_logik import *
+from program_logic import *
 
-aufgaben_dict = {} # Contains "Uebung_id"s to load exercises
-ausgewaehlte_aufgaben = []
-zu_loesende_aufgaben_list = []
-falsche_antwort_dict = {}
-falsch_beantwortet = []
-richtig_beantwortet = []
-korrigiert_beantwortet = []
+aufgaben_dict: dict[str, "Aufgabe"] = {} # Contains "Uebung_id"s to load exercises
+ausgewaehlte_aufgaben: list[str] = []
+zu_loesende_aufgaben_list: list[str] = []
+falsche_antwort_dict: dict[str, "FalscheAntwort"] = {}
+falsch_beantwortet: list[str] = []
+richtig_beantwortet: list[str] = []
+korrigiert_beantwortet: list[str] = []
 
 class Aufgabe:
-    def __init__(self, uebung_id):
+    def __init__(self, uebung_id: str) -> None:
         self.__wiederholt = False
         self.uebung_id = uebung_id
-        aufgabe = aufgabe_lesen(uebung_id)
-        self.moeglichkeiten = aufgabe["Moeglichkeiten"]
-        self.korrekt = aufgabe["KorrekteAntwort"]
-        self.infotext = aufgabe["Infotext"]
-        self.uebungs_beschreibung = aufgabe["UebungsBeschreibung"]
+        aufgabe = json_loader.get_task_by_id(uebung_id)
+        if aufgabe is None:
+            raise ValueError(f"Aufgabe mit ID '{uebung_id}' nicht gefunden.")
+        self.moeglichkeiten = aufgabe.answer_options
+        self.korrekt = aufgabe.correct_answer
+        self.infotext = aufgabe.information_text
+        self.uebungs_beschreibung = aufgabe.task_description
         self.speziell = self.speziell_check()
-        self.aufgabenbeschreibung = self.aufgabenbeschreibung()
+        self.aufgabenbeschreibung = self.beschreibung()
         if self.speziell == "Speziell Satz":
             self.moeglichkeiten = self.moeglichkeiten.copy()[0].split()
         elif self.speziell == "Speziell Wort":
             self.moeglichkeiten = list(self.moeglichkeiten.copy()[0])
         aufgaben_dict[self.uebung_id] = self
 
-    def aufgabenbeschreibung(self):
-        gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
-        return get_aufgabenbeschreibung(gekuerzte_uebung_id)
+    def beschreibung(self) -> str:
+        gekuerzte_uebung_id: str = self.uebung_id.rsplit(".", 1)[0]
+        return json_loader.get_task_description(gekuerzte_uebung_id)
 
-    def speziell_check(self):
+    def speziell_check(self) -> str:
         gekuerzte_uebung_id = self.uebung_id.rsplit(".", 1)[0]
-        speziell = get_spezial_status(gekuerzte_uebung_id)
+        speziell = json_loader.get_special_status(gekuerzte_uebung_id)
         if not speziell:
             return "Nicht Speziell"
         if len(self.moeglichkeiten[0].split()) == 1:
@@ -45,17 +47,24 @@ class Aufgabe:
             return "Speziell Satz"
 
 # Skulldunno warum ich das Privat gemacht habe
-    def set_wiederholt(self):
+    def set_wiederholt(self) -> None:
         if not self.__wiederholt:
             self.__wiederholt = True
         else:
             self.__wiederholt = False
 
-    def get_wiederholt(self):
+    def reset_wiederholt(self) -> None:
+        self.__wiederholt = False
+
+    def get_wiederholt(self) -> bool:
         return self.__wiederholt
 
 class FalscheAntwort:
-    def __init__(self, uebung_id, antwort, korrekte_antwort, wiederholt):
+    def __init__(self,
+                 uebung_id: str,
+                 antwort: str,
+                 korrekte_antwort: str,
+                 wiederholt: bool) -> None:
         self.__wiederholt = wiederholt
         if not self.__wiederholt:
             self.uebung_id = uebung_id
@@ -66,40 +75,43 @@ class FalscheAntwort:
 
         falsche_antwort_dict[self.uebung_id] = self
 
-    def get_wiederholt(self):
+    def get_wiederholt(self) -> bool:
         return self.__wiederholt
+    
 # Randomly picks exercises from chosen "Teilgebiet" until limit is reached
-def aufgaben_picken(limit):
+def aufgaben_picken(limit: int) -> bool:
     if not ausgewaehlte_aufgaben:
-        return False, print("Haben Sie nichts ausgewählt?")
+        print("Sie haben nichts ausgewählt!")
+        return False
+    verfuegbar = len(set(ausgewaehlte_aufgaben))
     x = 0
     while x < limit:
+        if len(zu_loesende_aufgaben_list) >= verfuegbar:
+            print("Alle Verfügbaren Aufgaben geladen.")
+            break
         uebung_id = random.choice(ausgewaehlte_aufgaben)
         if uebung_id not in zu_loesende_aufgaben_list:
             zu_loesende_aufgaben_list.append(uebung_id)
             print(zu_loesende_aufgaben_list[-1])
             x += 1
-        elif len(zu_loesende_aufgaben_list) == len(list(aufgaben_dict.keys())):
-            print("Alle Verfügbaren Aufgaben geladen")
-            break
-    return None
+    return True
 
-def moeglichkeiten_listen(aufgabe):
-    for index, entry in enumerate(aufgabe.moeglichkeiten):
+def moeglichkeiten_listen(aufgabe: Aufgabe) -> None:
+    for _, entry in enumerate(aufgabe.moeglichkeiten):
         print(entry)
 
-def int_input():
+def int_input() -> int:
     while True:
         try :
-            antwort = input("Schreiben Sie die Zahl der richtigen Antwort")
+            antwort = input("Schreiben Sie die Zahl der richtigen Antwort.")
             return int(antwort)
         except ValueError:
             print("Die Antwort ist nicht gültig!")
 
-def antwort_check(antwort, aufgabe, index):
+def antwort_check(antwort: int, aufgabe: Aufgabe, index: int) -> bool:
     if aufgabe.get_wiederholt():
         if antwort == aufgabe.korrekt:
-            print("\nDie Antwort wurde korrigiert")
+            print("\nDie Antwort wurde korrigiert.")
             korrigierte_merken(aufgabe)
             return True
         else:
@@ -116,19 +128,19 @@ def antwort_check(antwort, aufgabe, index):
             falsch_merken(index, aufgabe, antwort)
             return False
 
-def korrigierte_merken(aufgabe):
+def korrigierte_merken(aufgabe: Aufgabe) -> None:
     korrigiert_beantwortet.append(aufgabe.uebung_id)
 
-def richtig_merken(aufgabe):
+def richtig_merken(aufgabe: Aufgabe) -> None:
     richtig_beantwortet.append(aufgabe.uebung_id)
 
-def antwort_finden(aufgabe, antwort):
+def antwort_finden(aufgabe: Aufgabe, antwort: int) -> str:
     try:
         return aufgabe.moeglichkeiten[antwort-1]
     except IndexError:
-        return "Antwort außerhalb des gültigen Mengenbereiches"
+        return "Antwort außerhalb des gültigen Mengenbereiches."
 
-def falsch_merken(index, aufgabe, antwort):
+def falsch_merken(index: int, aufgabe: Aufgabe, antwort: int) -> None:
     FalscheAntwort(aufgabe.uebung_id,
                    antwort_finden(aufgabe,antwort),
                    aufgabe.moeglichkeiten[(aufgabe.korrekt-1)],
@@ -139,14 +151,14 @@ def falsch_merken(index, aufgabe, antwort):
         falsch_beantwortet_einfuegen(index, aufgabe.uebung_id)
 
 # Inserts exercises that were  answered wrong at a random spot in "aufgaben_liste"
-def falsch_beantwortet_einfuegen(index, aufgabe):
+def falsch_beantwortet_einfuegen(index: int, aufgabe: str) -> None:
     try:
         random_index = random.randint(index + 3, len(zu_loesende_aufgaben_list))
         zu_loesende_aufgaben_list.insert(random_index, aufgabe)
     except ValueError:
         print("Der Index ist nicht gefunden!")
 
-def aufgabe_bearbeiten_konsole(index, aufgabe):
+def aufgabe_bearbeiten_konsole(index: int, aufgabe: Aufgabe) -> None:
     if aufgabe.get_wiederholt():
         print("WIEDERHOLUNG_________!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! deutlich genug?")
     print(aufgabe.aufgabenbeschreibung, '\n')
@@ -155,25 +167,31 @@ def aufgabe_bearbeiten_konsole(index, aufgabe):
     antwort = int_input()
     antwort_check(antwort, aufgabe, index)
 
-def aufgaben_obejekte_erstellen():
-    for eintrag in list_uebungen(list_titels(list_uebungsbereiche())):
+def aufgaben_objekte_erstellen() -> None:
+    for eintrag in json_loader.list_all_tasks():
         Aufgabe(eintrag)
 
-def list_aktive_aufgaben():
-    for eintrag in list_uebungen(get_active()):
+def list_aktive_aufgaben() -> None:
+    # Delayed import to avoid circular import at module load.
+    # get_active() needs GUI.BereichCheckbox,
+    # but GUI.BereichCheckbox needs aufgaben_logik
+    from gui.field_checkbox import get_active
+
+    # get_active() now returns Teilgebiet ids, so resolve tasks by id
+    for eintrag in json_loader.list_tasks_by_subfield(get_active()):
         ausgewaehlte_aufgaben.append(eintrag)
 
-def aufgaben_initialisieren(aufgaben_limit):
+def aufgaben_initialisieren(aufgaben_limit: int) -> None:
     list_aktive_aufgaben()
     if aufgaben_picken(aufgaben_limit):
         return
 
-def aufgaben_anfangen_konsole():
+def aufgaben_anfangen_konsole() -> None:
     for index, aufgabe in enumerate(zu_loesende_aufgaben_list):
         print(aufgabe)
         aufgabe_bearbeiten_konsole(index, aufgaben_dict[aufgabe])
 
-def statistik_ausgeben():
+def statistik_ausgeben() -> tuple[list[str], list[str], list[str], str]:
     """
     stats_der_richtigen()
     stats_der_falschen()
@@ -181,24 +199,31 @@ def statistik_ausgeben():
     stats_gesamt()
     resetting()
     """
-    return stats_der_richtigen(),stats_der_falschen(),stats_der_korrigierten(),stats_gesamt()#,resetting()
+    return (stats_der_richtigen(),
+            stats_der_falschen(),
+            stats_der_korrigierten(),
+            stats_gesamt())
+            #,resetting())
 
-def stats_gesamt():
+def stats_gesamt() -> str:
     return(f"Aus {len(zu_loesende_aufgaben_list)} Aufgaben hast du "
-          f"{len(richtig_beantwortet)} Richtig, "
-          f"{len(falsch_beantwortet) + (len(zu_loesende_aufgaben_list) - len(richtig_beantwortet) - len(falsch_beantwortet) - len(korrigiert_beantwortet))} Falsch und "
-          f"{len(korrigiert_beantwortet)} Korrigiert")
+           f"{len(richtig_beantwortet)} Richtig, "
+           f"{len(falsch_beantwortet)
+              + (len(zu_loesende_aufgaben_list)
+                - len(richtig_beantwortet)
+                - len(falsch_beantwortet)
+                - len(korrigiert_beantwortet))}"
+            f" Falsch und {len(korrigiert_beantwortet)} Korrigiert")
 
-def stats_der_richtigen():
-    antworten_liste = []
+def stats_der_richtigen() -> list[str]:
+    antworten_liste: list[str] = []
     print(len(richtig_beantwortet), " Richtige Antworten")
     for antwort in richtig_beantwortet:
-        #print(antwort)
         antworten_liste.append(antwort)
     return antworten_liste
 
-def stats_der_falschen():
-    antworten_liste = []
+def stats_der_falschen() -> list[str]:
+    antworten_liste: list[str] = []
     print(len(falsch_beantwortet), " Falsche Antworten")
     for antwort in falsche_antwort_dict:
         antwort_stripped = antwort.strip("+")
@@ -206,29 +231,31 @@ def stats_der_falschen():
         string_antwort = (f"{antwort_stripped}\n"
                           f"{aufgaben_dict[antwort_stripped].aufgabenbeschreibung}\n"
                           f"{aufgaben_dict[antwort_stripped].uebungs_beschreibung}\n"
-                          f"Die richtige Antwort ist: {falsche_antwort_dict[antwort].korrekte_antwort}\n"
+                          f"Die richtige Antwort ist: "
+                          f"{falsche_antwort_dict[antwort].korrekte_antwort}\n"
                           f"Du hast: {falsche_antwort_dict[antwort].antwort} ausgewählt\n\n")
         #print(string_antwort)
         antworten_liste.append(string_antwort)
     return antworten_liste
-def stats_der_korrigierten():
-    antworten_liste = []
+
+def stats_der_korrigierten() -> list[str]:
+    antworten_liste: list[str] = []
     print(len(korrigiert_beantwortet), "Korrigiert")
     for antwort in korrigiert_beantwortet:
         #print(antwort)
         antworten_liste.append(antwort)
     return antworten_liste
 
-def button_start():
+def button_start() -> None:
     aufgaben_initialisieren(5)
     aufgaben_anfangen_konsole()
     statistik_ausgeben()
 
 # Clears all dictionaries
 
-def resetting():
+def resetting() -> None:
     for eintrag in aufgaben_dict:
-        aufgaben_dict[eintrag].set_wiederholt()
+        aufgaben_dict[eintrag].reset_wiederholt()
     ausgewaehlte_aufgaben.clear()
     zu_loesende_aufgaben_list.clear()
     falsch_beantwortet.clear()
@@ -236,11 +263,10 @@ def resetting():
     korrigiert_beantwortet.clear()
     falsche_antwort_dict.clear()
 
-aufgaben_obejekte_erstellen()
 
 if __name__ == "__main__":
-    root = Tk()
+    root: tk.Tk = tk.Tk()
     #BereichCheckbox(root).create("#ffffff")
-    start = Button(root, text="Start", command=button_start)
+    start = tk.Button(root, text="Start", command=button_start)
     start.pack()
     root.mainloop()
