@@ -89,6 +89,21 @@ The result is written to `dist\RechtschreibTool.exe`. The writable catalogue
 cache is stored beside the executable. If the bundled cache is not available,
 the executable starts without tasks and displays a warning.
 
+### Build the task editor
+
+Build the editor as a separate executable. Run this command from the project
+directory:
+
+```powershell
+python -m PyInstaller --onefile --windowed --name "Aufgabeneditor" --add-data "assets;assets" --add-data "program_logic;program_logic" --add-data "gui;gui" --add-data "task_editor;task_editor" --add-data "dtos;dtos" --icon "assets\srhIcon.ico" --hidden-import "task_editor.gui" --hidden-import "task_editor.task_editor" task_editor\gui.py
+```
+
+The result is written to `dist\Aufgabeneditor.exe`. The editor needs a
+catalogue cache to load tasks. Git must be installed and available on `PATH`
+to publish changes. For publishing, place `credentials.json` in the
+`task_editor` directory used by the application and **do not distribute that
+file with the executable.**
+
 ## Project structure
 
 ### assets

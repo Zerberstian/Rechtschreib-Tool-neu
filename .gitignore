@@ -21,4 +21,4 @@ program_logic/json_cache.json
 
 # Other files
 # --------------------
-RechtschreibTool.spec
+*.spec
