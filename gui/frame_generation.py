@@ -60,7 +60,7 @@ class StatistikFrame:
         self.falschen_text.config(state="disabled")
         self.fig = Figure(figsize=(1, 5), dpi=100)
         self.diagramm = self.fig.add_subplot()
-        self.diagramm.title.set_text("Antworten")
+        self.diagramm.set_title("Antworten", pad=15)
         self.diagramm.xaxis.set_ticks([]) # type: ignore
         self.diagramm.yaxis.set_ticks([]) # type: ignore
         bottom = 0
@@ -72,7 +72,7 @@ class StatistikFrame:
                                  bottom=bottom,
                                  color="green")
         bottom += len(self.stats_der_richtigen)
-        self.diagramm.bar_label(part, label_type="center") # type: ignore
+        self.diagramm.bar_label(part, label_type="center", padding=8) # type: ignore
         part = self.diagramm.bar(0, # type: ignore
                                  len(self.stats_der_korrigierten),
                                  width=width,
@@ -80,14 +80,14 @@ class StatistikFrame:
                                  bottom=bottom,
                                  color="yellow")
         bottom += len(self.stats_der_korrigierten)
-        self.diagramm.bar_label(part, label_type="center") # type: ignore
+        self.diagramm.bar_label(part, label_type="center", padding=8) # type: ignore
         part = self.diagramm.bar(0, # type: ignore
                                  len(self.stats_der_falschen),
                                  width=width,
                                  label="Falsch",
                                  bottom=bottom,
                                  color="red")
-        self.diagramm.bar_label(part, label_type="center") # type: ignore
+        self.diagramm.bar_label(part, label_type="center", padding=8) # type: ignore
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame3)
         self.canvas.get_tk_widget().config()
         self.canvas.draw()
