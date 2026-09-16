@@ -1,15 +1,28 @@
 import json
+import os
 from dtos import *
 from program_logic.path import Path
 
 class JsonLoader:
     def __init__(self) -> None:
         self.catalogue: CatalogueDto = CatalogueDto.create_empty()
+        self.load_error: str | None = None
 
     # Loads aufgaben.json from the local cache into memory
     def load_json(self) -> None:
-        with open(Path().cache_path(), "r", encoding="utf-8") as f:
-            self.catalogue = CatalogueDto.from_dict(json.load(f))
+        cache_path = Path().cache_path()
+        self.load_error = None
+        if not cache_path or not os.path.exists(cache_path):
+            self.catalogue = CatalogueDto.create_empty()
+            self.load_error = "Der Aufgabenkatalog konnte nicht geladen werden. Kein Git Fetch durchgeführt oder kein Cache vorhanden."
+            return
+
+        try:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                self.catalogue = CatalogueDto.from_dict(json.load(f))
+        except (OSError, json.JSONDecodeError) as error:
+            self.catalogue = CatalogueDto.create_empty()
+            self.load_error = f"Der Aufgabenkatalog konnte nicht verwendet werden:\n{error}"
 
     def _subfields(self) -> list[SubfieldDto]:
         return [subfield

@@ -14,10 +14,14 @@ program_logic.task_logic.aufgaben_objekte_erstellen()
 
 from gui.gui_new import *  # importing GUI completely
 from gui.field_checkbox import FieldCheckbox
+from tkinter import messagebox
 try:
     import program_logic.task_logic as task_logic
 except ImportError:
     print("Warnung: Program Logic Module nicht gefunden")
+
+if json_loader.load_error:
+    messagebox.showwarning("Cache nicht verfügbar", json_loader.load_error)
 
 if __name__ == "__main__":
     window.mainloop()  # starting GUI only testing...
