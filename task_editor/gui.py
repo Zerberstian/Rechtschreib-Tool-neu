@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import tkinter as tk
 from tkinter import ttk, messagebox, simpledialog
@@ -45,6 +46,10 @@ class TaskGUI:
 
         # Perform cleanup of old temporary directories to keep the workspace clean
         editor.cleanup_old_temps(os.path.dirname(editor.__file__), 'temp_repo')
+
+        # Snapshot of the last saved state, used to warn about unsaved changes on close
+        self.saved_snapshot = self.snapshot()
+        self.master.protocol("WM_DELETE_WINDOW", self.on_close)
 
         self.create_widgets()
 
@@ -546,10 +551,35 @@ class TaskGUI:
             c = sum(len(t.tasks) for t in b.subfields)
             l.insert(tk.END, f" • {b.title}: {c} tasks")
 
-    def save_data(self) -> None:
-        if messagebox.askyesno("Speichern", "Lokal speichern und Version verteilen?"):
-            if editor.save_and_commit(self.data): messagebox.showinfo("Fertig", "Erfolgreich überall aktualisiert!")
-            else: messagebox.showwarning("Achtung", "Nur Lokal gespeichert, Cloudspeicher nicht möglich.")
+    def snapshot(self) -> str:
+        return json.dumps(self.data.to_dict(), ensure_ascii=False)
+
+    def on_close(self) -> None:
+        if self.snapshot() != self.saved_snapshot:
+            answer = messagebox.askyesnocancel("Ungespeicherte Änderungen",
+                                               "Es gibt ungespeicherte Änderungen. Vor dem Schließen speichern?")
+            if answer is None: return
+            if answer and not self.save_data(): return
+        self.master.destroy()
+
+    def save_data(self) -> bool:
+        if not messagebox.askyesno("Speichern", "Lokal speichern und Version verteilen?"):
+            return False
+
+        result = editor.save_and_commit(self.data)
+        self.saved_snapshot = self.snapshot()
+
+        if result == "online":
+            messagebox.showinfo("Fertig", "Neue Version veröffentlicht. Alle Lernenden erhalten sie beim nächsten Start des Rechtschreibtools.")
+        elif result == "local":
+            messagebox.showwarning("Nur lokal gespeichert",
+                                   "Keine Zugangsdaten eingerichtet. Die Änderungen sind nur auf diesem Computer gespeichert "
+                                   "und werden beim nächsten Start des Rechtschreibtools mit Internet überschrieben.")
+        else:
+            messagebox.showwarning("Hochladen fehlgeschlagen",
+                                   "Die Änderungen sind nur auf diesem Computer gespeichert. "
+                                   "Bitte Internetverbindung prüfen und erneut speichern.")
+        return True
 
 if __name__ == "__main__":
     root = tk.Tk()

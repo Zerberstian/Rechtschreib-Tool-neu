@@ -88,26 +88,30 @@ def load_local_data() -> CatalogueDto:
 
 def save_and_commit(catalogue: CatalogueDto,
                     repo_path_base: str ="temp_repo"
-                    ) -> bool:
+                    ) -> str:
+    # returns "online" (published), "local" (no credentials)
+    # or "local_fallback" (upload failed, saved locally instead)
     creds = load_credentials()
 
     # Fallback - but in this case the automatic distribution of
     # the updated version does not work, as the katalog is only stored locally
     if not creds.username or not creds.token:
         __save_local(catalogue)
-        return True
+        return "local"
 
     username = creds.username
     token = creds.token
     try:
         __upload_github(catalogue, username, token, repo_path_base)
-        return True
+        return "online"
     except subprocess.CalledProcessError as e:
         print(f"🔴 Git Error: {e.stderr or str(e)}")
-        return False
     except Exception as e:
         print(f"🔴 Error: {e}")
-        return False
+
+    # keeping the changes on this computer, so they are not lost when the editor is closed
+    __save_local(catalogue)
+    return "local_fallback"
 
 def __create_new_katalog(katalog: CatalogueDto,
                   local_only: bool = True,
@@ -197,6 +201,9 @@ def __upload_github(katalog: CatalogueDto,
     __commit_git_repo(repo_path, username, commit_msg)
     __push_git_repo(repo_path, username, token)
     print(f"🟢 SUCCESS v{new_katalog.version}! ({aufgaben_count} tasks)")
+
+    # updating the local cache as well, otherwise the editor would load the old version on its next start
+    __write_to_json(new_katalog, Path().cache_path())
 
     # now cleaning up old temp_repos, but keeping the latest 2 locally for safety
     cleanup_old_temps(os.path.dirname(repo_path), repo_path_base)
