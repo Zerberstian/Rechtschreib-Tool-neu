@@ -40,7 +40,7 @@ class TaskGUI:
         # Load the task database via the editor logic module
         self.data = editor.load_local_data()
         if not self.data.fields:
-            messagebox.showerror("Error", "Keine Daten gefunden! Bitte führen Sie versioncheck.py zuerst aus.")
+            messagebox.showerror("Fehler", "Keine Daten gefunden! Bitte führen Sie versioncheck.py zuerst aus.")
             self.master.destroy()
             return
 
@@ -204,7 +204,7 @@ class TaskGUI:
 
     def show_diff_dialog(self, title: str, old_text: str, new_text: str, on_confirm: Callable[[], None]) -> None:
         diff_win = tk.Toplevel(self.master)
-        diff_win.title(f"Review: {title}")
+        diff_win.title(f"Prüfen: {title}")
         diff_win.geometry("1000x800")
         diff_win.configure(bg=COLOR_BG_MAIN)
         diff_win.grab_set()
@@ -214,8 +214,8 @@ class TaskGUI:
         # Color Legend
         legend = tk.Frame(diff_win, bg=COLOR_BG_MAIN)
         legend.pack(fill="x", padx=25)
-        tk.Label(legend, text="Red = Entfernt", fg=COLOR_DANGER, bg=COLOR_BG_MAIN, font=FONT_SMALL).pack(side="left", padx=10)
-        tk.Label(legend, text="Green = Hinzugefügt", fg=COLOR_SUCCESS, bg=COLOR_BG_MAIN, font=FONT_SMALL).pack(side="left")
+        tk.Label(legend, text="Rot = Entfernt", fg=COLOR_DANGER, bg=COLOR_BG_MAIN, font=FONT_SMALL).pack(side="left", padx=10)
+        tk.Label(legend, text="Grün = Hinzugefügt", fg=COLOR_SUCCESS, bg=COLOR_BG_MAIN, font=FONT_SMALL).pack(side="left")
 
         # Diff View
         view_frame = tk.Frame(diff_win, bg=COLOR_BG_MAIN)
@@ -262,7 +262,7 @@ class TaskGUI:
     def refresh_fields(self) -> None:
         self.field_list.delete(0, tk.END)
         for i, b in enumerate(self.data.fields):
-            self.field_list.insert(tk.END, b.title or f"Category {i+1}")
+            self.field_list.insert(tk.END, b.title or f"Kategorie {i+1}")
         self.update_stats_label()
 
     def update_stats_label(self) -> None:
@@ -284,7 +284,7 @@ class TaskGUI:
 
         subs = self.data.fields[self.current_field_idx].subfields
         for s in subs:
-            title = s.title or "Untitled"
+            title = s.title or "Ohne Titel"
             count = len(s.tasks)
             self.subfield_list.insert(tk.END, f"{title} ({count})")
 
@@ -297,10 +297,10 @@ class TaskGUI:
 
     def update_breadcrumb(self) -> None:
         if self.current_field_idx is not None:
-            b_name = self.data.fields[self.current_field_idx].title or "Unknown"
+            b_name = self.data.fields[self.current_field_idx].title or "Unbekannt"
             if self.current_subfield_idx is not None:
                 sub = self.data.fields[self.current_field_idx].subfields[self.current_subfield_idx]
-                s_name = sub.title or "Untitled"
+                s_name = sub.title or "Ohne Titel"
                 self.path_label.config(text=f" {b_name}  ›  {s_name}")
             else:
                 self.path_label.config(text=f" {b_name}  ›  Wähle ein Teilgebiet")
@@ -350,7 +350,7 @@ class TaskGUI:
     def delete_bereich(self) -> None:
         if self.current_field_idx is None: return
         name = self.data.fields[self.current_field_idx].title
-        if messagebox.askyesno("Bestätigen", f"Lösche '{name}' und ALL seine Inhalte?"):
+        if messagebox.askyesno("Bestätigen", f"Lösche '{name}' und ALLE seine Inhalte?"):
             self.data.fields.pop(self.current_field_idx)
             self.current_field_idx = self.current_subfield_idx = None
             self.refresh_fields(); self.refresh_subfields(); self.refresh_tasks(); self.update_breadcrumb()
@@ -372,20 +372,20 @@ class TaskGUI:
         if self.current_field_idx is None or self.current_subfield_idx is None: return
         sub = self.data.fields[self.current_field_idx].subfields[self.current_subfield_idx]
 
-        old_view = f"Title: {sub.title}\nIntro: {sub.task_description}"
+        old_view = f"Titel: {sub.title}\nEinleitung: {sub.task_description}"
 
         diag = tk.Toplevel(self.master); diag.title("Bearbeite Teilgebiet"); diag.geometry("600x450")
 
-        tk.Label(diag, text="Title:", font=FONT_BOLD).pack(pady=5)
+        tk.Label(diag, text="Titel:", font=FONT_BOLD).pack(pady=5)
         title_in = ttk.Entry(diag, width=60); title_in.insert(0, sub.title); title_in.pack(pady=5)
 
-        tk.Label(diag, text="Intro Text:", font=FONT_BOLD).pack(pady=5)
+        tk.Label(diag, text="Einleitungstext:", font=FONT_BOLD).pack(pady=5)
         intro_in = tk.Text(diag, height=10, width=60, font=FONT_NORMAL); intro_in.insert("1.0", sub.task_description); intro_in.pack(pady=10)
 
         def commit() -> None:
             new_title = title_in.get().strip()
             new_intro = intro_in.get("1.0", tk.END).strip()
-            new_view = f"Title: {new_title}\nIntro: {new_intro}"
+            new_view = f"Titel: {new_title}\nEinleitung: {new_intro}"
 
             def finish() -> None:
                 sub.title = new_title; sub.task_description = new_intro
@@ -424,13 +424,13 @@ class TaskGUI:
     def format_task_for_preview(self, t: TaskDto) -> str:
         opts = t.answer_options
         opt_str = "\n".join([f"  {i+1}. {m}" for i, m in enumerate(opts)])
-        return f"Q: {t.task_description}\nAntwortmöglichkeiten:\n{opt_str}\nKorrekt: {t.correct_answer}\nInfo: {t.information_text or 'None'}"
+        return f"Frage: {t.task_description}\nAntwortmöglichkeiten:\n{opt_str}\nKorrekt: {t.correct_answer}\nInfo: {t.information_text or 'Keine'}"
 
     def task_dialog(self, title: str, tid: str, target_list: list[TaskDto] | None, task: TaskDto | None = None) -> None:
         # Universal dialog for adding/editing tasks
         d = tk.Toplevel(self.master); d.title(title); d.geometry("800x850"); d.configure(bg=COLOR_BG_SIDEBAR); d.grab_set()
 
-        tk.Label(d, text=f"Task ID: {tid}", font=FONT_HEADER, bg=COLOR_BG_SIDEBAR, fg=COLOR_PRIMARY).pack(pady=15)
+        tk.Label(d, text=f"Aufgaben-ID: {tid}", font=FONT_HEADER, bg=COLOR_BG_SIDEBAR, fg=COLOR_PRIMARY).pack(pady=15)
 
         tk.Label(d, text="Frage / Beschreibung:", font=FONT_BOLD, bg=COLOR_BG_SIDEBAR).pack(anchor="w", padx=30)
         q_in = tk.Text(d, height=4, font=FONT_NORMAL, relief="flat", highlightbackground=COLOR_BORDER, highlightthickness=1)
@@ -470,14 +470,14 @@ class TaskGUI:
         def save() -> None:
             opts = [e.get("1.0", tk.END).strip() for e in self.entries if e.get("1.0", tk.END).strip()]
             if not opts:
-                messagebox.showwarning("Error", "Es wird mindestens eine Antwortmöglichkeit benötigt!")
+                messagebox.showwarning("Fehler", "Es wird mindestens eine Antwortmöglichkeit benötigt!")
                 return
 
             try:
                 idx = int(idx_in.get().strip())
                 if not (1 <= idx <= len(opts)): raise ValueError()
             except:
-                messagebox.showwarning("Error", "Ungültiger Index für korrekte Antwort!")
+                messagebox.showwarning("Fehler", "Ungültiger Index für korrekte Antwort!")
                 return
 
             new_data = TaskDto(
@@ -486,7 +486,7 @@ class TaskGUI:
                 task_description=q_in.get("1.0", tk.END).strip(), task_id=tid
             )
 
-            old_p = self.format_task_for_preview(task) if task else "--- New Task ---"
+            old_p = self.format_task_for_preview(task) if task else "--- Neue Aufgabe ---"
             new_p = self.format_task_for_preview(new_data)
 
             def finalize() -> None:
@@ -529,12 +529,12 @@ class TaskGUI:
             for item in self.tree.get_children():
                 if str(self.tree.item(item, 'values')[0]) == str(tid):
                     self.tree.selection_set(item); self.tree.focus(item); self.tree.see(item); break
-        else: messagebox.showinfo("Search", f"Aufgabe {tid} nicht gefunden.")
+        else: messagebox.showinfo("Suche", f"Aufgabe {tid} nicht gefunden.")
 
     # --- System Actions ---
 
     def show_statistics(self) -> None:
-        s = tk.Toplevel(self.master); s.title("Stats"); s.geometry("500x600"); s.configure(bg=COLOR_BG_MAIN)
+        s = tk.Toplevel(self.master); s.title("Statistik"); s.geometry("500x600"); s.configure(bg=COLOR_BG_MAIN)
         tk.Label(s, text="KATALOG ÜBERSICHT", font=FONT_HEADER, bg=COLOR_BG_MAIN).pack(pady=20)
 
         total = editor.count_tasks(self.data)
@@ -549,7 +549,7 @@ class TaskGUI:
         l = tk.Listbox(s, font=FONT_NORMAL, relief="flat", highlightthickness=1); l.pack(fill="both", expand=True, padx=40, pady=10)
         for b in self.data.fields:
             c = sum(len(t.tasks) for t in b.subfields)
-            l.insert(tk.END, f" • {b.title}: {c} tasks")
+            l.insert(tk.END, f" • {b.title}: {c} Aufgaben")
 
     def snapshot(self) -> str:
         return json.dumps(self.data.to_dict(), ensure_ascii=False)
